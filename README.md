@@ -6,8 +6,13 @@ npm install
 ```
 
 ### Compiles and hot-reloads for development
+In browser
 ```
 npm run serve
+```
+In electron window
+```
+npm run electron:serve
 ```
 
 ### Compiles and minifies for production
@@ -19,6 +24,3 @@ npm run build
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
