@@ -1,5 +1,21 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import './assets/tailwind.css'
+/* Set up using Vue 3 */
+import { createApp } from "vue";
+import App from "./App.vue";
+/* Add tailwindcss */
+import "./assets/tailwind.css";
+/* import the fontawesome core */
+import { library } from "@fortawesome/fontawesome-svg-core";
 
-createApp(App).mount('#app')
+/* import font awesome icon component */
+import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+/* import specific icons */
+import { fas } from "@fortawesome/free-solid-svg-icons";
+import { fab } from "@fortawesome/free-brands-svg-icons";
+
+/* add icons to the library */
+library.add(fas, fab);
+
+createApp(App)
+  .component("font-awesome-icon", FontAwesomeIcon)
+  .mount("#app");
