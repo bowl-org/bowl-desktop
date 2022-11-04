@@ -12,10 +12,9 @@ import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 /* import specific icons */
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
+import { far } from "@fortawesome/free-regular-svg-icons";
 
 /* add icons to the library */
-library.add(fas, fab);
+library.add(fas, fab, far);
 
-createApp(App)
-  .component("font-awesome-icon", FontAwesomeIcon)
-  .mount("#app");
+createApp(App).component("font-awesome-icon", FontAwesomeIcon).mount("#app");
