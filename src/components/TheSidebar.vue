@@ -15,17 +15,21 @@
       </div>
     </div>
     <SearchSidebar/>
+    <ConversationTypeMenu/>
   </div>
 </template>
 
 <script>
 import ConversationAvatar from "./ConversationAvatar.vue";
 import SearchSidebar from "./SearchSidebar.vue";
+import ConversationTypeMenu from "./ConversationTypeMenu.vue";
+
 export default {
   name: "TheSidebar",
   components: {
     ConversationAvatar,
-    SearchSidebar
+    SearchSidebar,
+    ConversationTypeMenu
   },
   props: {
     msg: String,
