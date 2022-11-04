@@ -4,7 +4,21 @@
       <div class="current-chat-box flex items-center">
         <ConversationAvatar letter="M" class="rounded-md" />
         <div class="chat-box-info">
-          <p class="font-medium">Mehmet Ümit Özden</p>
+          <div class="flex items-center">
+            <p class="font-medium">Mehmet Ümit Özden</p>
+            <button class="fav-btn" @click="addOrRemoveFav">
+              <font-awesome-icon
+                v-if="isInFav"
+                icon="fa-solid fa-heart"
+                class="pl-3 text-lg fav"
+              />
+              <font-awesome-icon
+                v-else
+                icon="fa-regular fa-heart"
+                class="pl-3 text-lg fav"
+              />
+            </button>
+          </div>
           <div class="active-info flex items-center">
             <OnlineDot :status="status" />
             <p class="text-sm ml-3 text-gray-500">Online</p>
@@ -44,6 +58,7 @@ export default {
   data() {
     return {
       messages: [],
+      isInFav: true,
     };
   },
   props: {
@@ -53,9 +68,16 @@ export default {
     },
   },
   methods: {
+    addOrRemoveFav() {
+      this.isInFav = !this.isInFav;
+    },
     add() {},
     open_options() {},
   },
 };
 </script>
-<style></style>
+<style>
+.fav {
+  color: #a499b3;
+}
+</style>

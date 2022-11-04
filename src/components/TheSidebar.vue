@@ -48,7 +48,7 @@ export default {
   data() {
     return {
       conversationType: String,
-      showMore: true,
+      showMore: false,
     };
   },
   methods: {
