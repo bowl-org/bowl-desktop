@@ -1,6 +1,6 @@
 <template>
-  <div class="the-sidebar bg-blue-900">
-    <div class="upper-sidebar flex justify-between">
+  <div class="the-sidebar bg-blue-900 flex flex-col w-75">
+    <div class="upper-sidebar flex items-center justify-between">
       <ConversationAvatar letter="O" />
       <div class="upper-rigth-sidebar flex flex-col items-center">
         <button class="w-12 h-12 text-4xl m-3 text-center text-white">
@@ -62,8 +62,6 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .the-sidebar {
-  min-width: 60vh;
-  min-height: 100vh;
   background-color: #516088;
 }
 .chat-btn {

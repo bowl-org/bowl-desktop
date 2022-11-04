@@ -1,6 +1,6 @@
 <template>
     <TheSidebar/>
-    <TheChat class="grow" status="online"/>
+    <TheChat class="grow" :status="status"/>
 </template>
 
 <script>
@@ -16,11 +16,20 @@ export default {
   data() {
     return {
       messages: [],
+      status: "online"
     };
   },
   methods: {
     add() {},
   },
+  created(){
+    setInterval(() =>{
+      if(this.status == "online")
+        this.status = "offline"
+      else
+        this.status = "online"
+    }, 3000)
+  }
 };
   //background-color: #2d202c;
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="the-chat bg-neutral-100">
+  <div class="the-chat bg-neutral-100 flex flex-col justify-between">
     <div class="upper-chat bg-neutral-300 flex justify-between items-center">
       <div class="current-chat-box flex items-center">
         <ConversationAvatar letter="M" class="rounded-md" />
@@ -21,7 +21,7 @@
           </div>
           <div class="active-info flex items-center">
             <OnlineDot :status="status" />
-            <p class="text-sm ml-3 text-gray-500">Online</p>
+            <p class="text-sm ml-3 text-gray-500">{{status}}</p>
           </div>
         </div>
       </div>
@@ -29,13 +29,35 @@
         <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
     </div>
-    <p class="m-5 p-2 bg-indigo-900 text-gray-300 rounded-tr-lg">Hello world</p>
-    <p class="m-5 p-2 bg-indigo-900 text-gray-300 rounded-tr-lg">Hello world</p>
-    <div class="bottom-chat bg-neutral-300 flex justify-center items-center p-3 pl-0 ">
-      <EmojiSelection class="mr-auto ml-3"/>
-      <input class="bg-neutral-200 text-gray-300 rounded-lg p-2 w-full ml-3" placeholder="Enter message" />
+    <div class="message-container flex flex-col">
+      <div class="flex  justify-between items-start">
+        <p
+          class="m-5 p-2 bg-neutral-200 text-black rounded-tr-xl  rounded-br-xl rounded-bl-xl"
+
+
+        >
+          Received message
+        </p>
+      </div>
+      <div class="flex flex-col justify-between items-end">
+        <p
+          class="m-5 p-2  bg-neutral-200 text-black rounded-bl-xl rounded-tr-xl rounded-tl-xl"
+        >
+          Sent message
+        </p>
+
+      </div>
+    </div>
+    <div
+      class="bottom-chat bg-neutral-300 flex justify-center items-center p-4 pl-0"
+    >
+      <EmojiSelection class="mr-auto ml-3" />
+      <input
+        class="bg-white text-neutral-800 rounded-lg p-2 w-full ml-3"
+        placeholder="Enter message"
+      />
       <button
-        class="w-10 h-10 ml-5  mr-2 rounded-full bg-sky-500 hover:bg-slate-600 text-center text-white"
+        class="w-12 h-10 ml-5 mr-5 rounded-full btn-send hover:bg-slate-600 text-center text-white"
         @click="add"
       >
         <font-awesome-icon icon="fa-regular fa-paper-plane" />
@@ -54,7 +76,7 @@ export default {
   components: {
     ConversationAvatar,
     OnlineDot,
-    EmojiSelection
+    EmojiSelection,
   },
   data() {
     return {
@@ -80,5 +102,8 @@ export default {
 <style>
 .fav {
   color: #a499b3;
+}
+.btn-send{
+  background-color: #A499B3;
 }
 </style>
