@@ -6,7 +6,7 @@
         <div class="chat-box-info">
           <p class="font-medium">Mehmet Ümit Özden</p>
           <div class="active-info flex items-center">
-            <OnlineDot online="true" />
+            <OnlineDot :status="status" />
             <p class="text-sm ml-3 text-gray-500">Online</p>
           </div>
         </div>
@@ -47,7 +47,10 @@ export default {
     };
   },
   props: {
-    online: Boolean,
+    status: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
     add() {},

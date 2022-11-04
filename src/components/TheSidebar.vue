@@ -14,7 +14,7 @@
         </button>
       </div>
     </div>
-    <SearchSidebar></SearchSidebar>
+    <SearchSidebar/>
   </div>
 </template>
 

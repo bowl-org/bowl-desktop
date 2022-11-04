@@ -1,6 +1,6 @@
 <template>
     <TheSidebar/>
-    <TheChat class="grow"/>
+    <TheChat class="grow" status="online"/>
 </template>
 
 <script>
