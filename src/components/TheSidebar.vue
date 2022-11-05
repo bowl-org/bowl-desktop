@@ -3,8 +3,8 @@
     <div class="upper-sidebar flex items-center justify-between">
       <ConversationAvatar letter="O" />
       <div class="upper-rigth-sidebar flex flex-col items-center">
-        <button class="w-12 h-12 text-4xl m-3 text-center text-white">
-          <font-awesome-icon icon="fa-solid fa-gear" />
+        <button class="w-12 h-12 text-4xl m-3 text-center text-white ">
+          <font-awesome-icon icon="fa-solid fa-gear " class="hover:animate-spin" />
         </button>
       </div>
     </div>

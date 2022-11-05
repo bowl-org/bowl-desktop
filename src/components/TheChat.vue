@@ -6,7 +6,7 @@
         <div class="chat-box-info">
           <div class="flex items-center">
             <p class="font-medium">Mehmet Ümit Özden</p>
-            <button class="fav-btn" @click="addOrRemoveFav">
+            <button class="fav-btn active:animate-ping" @click="addOrRemoveFav">
               <font-awesome-icon
                 v-if="isInFav"
                 icon="fa-solid fa-heart"
