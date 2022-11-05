@@ -29,15 +29,7 @@
         <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
     </div>
-    <div class="message-container overflow-auto max-h-screen  ">
-    <ChatMessage  message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. " time="11:40"/>
-    <ChatMessage messageType="sent" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." time="9.40"/>
-    <ChatMessage  message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. " time="11:40"/>
-    <ChatMessage  message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. " time="11:40"/>
-    <ChatMessage  message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. " time="11:40"/>
-    <ChatMessage  message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. " time="11:40"/>
-    </div>
+    <ChatMessageList/>
     <div
       class="bottom-chat bg-neutral-300 flex justify-center items-center p-4 pl-0"
     >
@@ -60,7 +52,7 @@ sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." time="9.40"/
 import ConversationAvatar from "./ConversationAvatar.vue";
 import OnlineDot from "./OnlineDot.vue";
 import EmojiSelection from "./modals/EmojiSelection.vue";
-import ChatMessage from "./ChatMessage.vue"
+import ChatMessageList from "./ChatMessageList.vue"
 
 export default {
   name: "TheChat",
@@ -68,7 +60,7 @@ export default {
     ConversationAvatar,
     OnlineDot,
     EmojiSelection,
-    ChatMessage
+    ChatMessageList
   },
   data() {
     return {
