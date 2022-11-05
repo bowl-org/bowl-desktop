@@ -46,4 +46,18 @@ export default {
   text-align: center;
   color: #2c3e50;
 }
+body {
+  -webkit-app-region: drag;
+}
+button {
+  -webkit-app-region: no-drag;
+}
+::-webkit-scrollbar{
+  background-color: gray;
+  width: .65rem;
+}
+::-webkit-scrollbar-thumb {
+  background: #483E5B;
+  border-radius: 10px;
+}
 </style>

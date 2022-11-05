@@ -13,8 +13,10 @@ protocol.registerSchemesAsPrivileged([
 async function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
-    width: 1920,
-    height: 1080,
+    width: 1500,
+    height: 800,
+    titleBarStyle: "hiddenInset",
+    icon: __dirname + "./assets/logo.png",
     webPreferences: {
       // Use pluginOptions.nodeIntegration, leave this alone
       // See nklayman.github.io/vue-cli-plugin-electron-builder/guide/security.html#node-integration for more info
@@ -24,6 +26,7 @@ async function createWindow() {
   });
   // Remove upper menu bar
   win.removeMenu();
+  win.setOpacity(0.98);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
