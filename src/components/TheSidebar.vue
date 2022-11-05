@@ -1,5 +1,5 @@
 <template>
-  <div class="the-sidebar bg-blue-900 flex flex-col w-75">
+  <div class="the-sidebar bg-blue-900 flex flex-col w-75 max-h-screen">
     <div class="upper-sidebar flex items-center justify-between">
       <ConversationAvatar letter="O" />
       <div class="upper-rigth-sidebar flex flex-col items-center">
