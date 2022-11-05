@@ -4,6 +4,7 @@
       message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. "
       time="11:40"
     />
+    <ChatDateSpan date="15 October 2022"/>
     <ChatMessage
       messageType="sent"
       message="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
@@ -19,6 +20,7 @@ sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
       message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. "
       time="11:40"
     />
+    <ChatDateSpan date="01 November 2022"/>
     <ChatMessage
       message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. "
       time="11:40"
@@ -32,10 +34,12 @@ sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 </template>
 <script>
 import ChatMessage from "./ChatMessage.vue"
+import ChatDateSpan from "./ChatDateSpan.vue"
 export default{
   name: "ChatMessageList",
   components:{
-    ChatMessage
+    ChatMessage,
+    ChatDateSpan
   },
   methos:{
     addNewMessage(){
