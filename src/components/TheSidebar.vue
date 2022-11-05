@@ -1,5 +1,5 @@
 <template>
-  <div class="the-sidebar bg-blue-900 flex flex-col w-75 max-h-screen">
+  <div class="the-sidebar flex flex-col w-75 max-h-screen">
     <div class="upper-sidebar flex items-center justify-between">
       <ConversationAvatar letter="O" />
       <div class="upper-rigth-sidebar flex flex-col items-center">
@@ -10,7 +10,7 @@
     </div>
     <SearchSidebar />
     <ConversationTypeMenu @getConversationType="setConversationType($event)" />
-    <p class="white">Selected conversation type is: {{ conversationType }}</p>
+    <ConversationList :conversationType="conversationType"/>
 
     <div class="more-options-container flex  justify-end items-center ">
       <button
@@ -34,6 +34,7 @@
 import ConversationAvatar from "./ConversationAvatar.vue";
 import SearchSidebar from "./SearchSidebar.vue";
 import ConversationTypeMenu from "./ConversationTypeMenu.vue";
+import ConversationList from "./ConversationList.vue"
 
 export default {
   name: "TheSidebar",
@@ -41,6 +42,7 @@ export default {
     ConversationAvatar,
     SearchSidebar,
     ConversationTypeMenu,
+    ConversationList
   },
   props: {
     msg: String,
