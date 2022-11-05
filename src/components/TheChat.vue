@@ -30,23 +30,9 @@
       </button>
     </div>
     <div class="message-container flex flex-col">
-      <div class="flex  justify-between items-start">
-        <p
-          class="m-5 p-2 bg-neutral-200 text-black rounded-tr-xl  rounded-br-xl rounded-bl-xl"
-
-
-        >
-          Received message
-        </p>
-      </div>
-      <div class="flex flex-col justify-between items-end">
-        <p
-          class="m-5 p-2  bg-neutral-200 text-black rounded-bl-xl rounded-tr-xl rounded-tl-xl"
-        >
-          Sent message
-        </p>
-
-      </div>
+    <ChatMessage  message="Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt. " time="11:40"/>
+    <ChatMessage messageType="sent" message="Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+sed do eiusmod tempor incididunt ut labore et dolore magna aliqua." time="9.40"/>
     </div>
     <div
       class="bottom-chat bg-neutral-300 flex justify-center items-center p-4 pl-0"
@@ -70,6 +56,7 @@
 import ConversationAvatar from "./ConversationAvatar.vue";
 import OnlineDot from "./OnlineDot.vue";
 import EmojiSelection from "./modals/EmojiSelection.vue";
+import ChatMessage from "./ChatMessage.vue"
 
 export default {
   name: "TheChat",
@@ -77,6 +64,7 @@ export default {
     ConversationAvatar,
     OnlineDot,
     EmojiSelection,
+    ChatMessage
   },
   data() {
     return {
