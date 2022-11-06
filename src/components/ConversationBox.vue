@@ -1,7 +1,8 @@
 <template>
-  <div class="conversation-box flex pt-5 pb-5 mt-5 mb-5 rounded-xl ">
-    <ConversationAvatar letter="G" />
-    <div class="flex flex-col justify-center">
+  <div class="conversation-box flex justify-between items-center mt-5  rounded-xl max-w-[90%] ">
+<!--flex-none means don't shrink or grow-->
+    <ConversationAvatar letter="G" class="flex-none rounded-lg m-3 w-16 h-16 grow"/>
+    <div class="flex flex-col justify-center  ">
       <p class="text-center">
         {{ lastMessage }}
       </p>

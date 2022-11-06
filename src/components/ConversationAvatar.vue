@@ -1,6 +1,6 @@
 <template>
   <button
-    class="w-12 h-12 m-5 text-xl font-semibold rounded-full text-center hover:contrast-125"
+    class="w-12 h-12 text-xl font-semibold rounded-full text-center hover:contrast-125"
   >
     {{ letter }}
   </button>
