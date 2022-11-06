@@ -51,9 +51,11 @@ body {
 }
 button {
   -webkit-app-region: no-drag;
+  user-select: none;
 }
 ::-webkit-scrollbar{
   background-color: gray;
+  border-radius: 10px;
   width: .65rem;
 }
 ::-webkit-scrollbar-thumb {

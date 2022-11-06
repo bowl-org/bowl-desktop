@@ -1,5 +1,5 @@
 <template>
-  <div class="w-12 h-12 relative avatar-container rounded-full hover:contrast-125">
+  <div class="select-none w-12 h-12 relative avatar-container rounded-full hover:contrast-125">
   <button
     class="w-12 h-12 text-xl font-semibold  text-center"
   >

@@ -1,10 +1,10 @@
 <template>
   <div
-    class="flex justify-between items-center mt-5 rounded-xl min-w-[95%] max-w-[95%]"
+    class="select-none flex justify-between items-center mt-5 rounded-xl min-w-[95%] max-w-[95%]"
     :class="
       isActive == 'true'
-        ? 'conversation-box-active'
-        : 'conversation-box-default'
+        ? 'conversation-box-active hover:bg-green-100'
+        : 'conversation-box-default hover:bg-black/60'
     "
   >
     <!--flex-none means don't shrink or grow in flex box-->
