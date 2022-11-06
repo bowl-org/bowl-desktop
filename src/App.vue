@@ -22,14 +22,14 @@ export default {
   methods: {
     add() {},
   },
-  created(){
-    setInterval(() =>{
-      if(this.status == "online")
-        this.status = "offline"
-      else
-        this.status = "online"
-    }, 3000)
-  }
+//  created(){
+//    setInterval(() =>{
+//      if(this.status == "online")
+//        this.status = "offline"
+//      else
+//        this.status = "online"
+//    }, 3000)
+//  }
 };
   //background-color: #2d202c;
 </script>

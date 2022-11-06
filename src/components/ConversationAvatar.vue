@@ -9,9 +9,6 @@
 <script>
 export default {
   name: "ConversationAvatar",
-  //  components: {
-  //    ConversationList
-  //  },
   props: {
     letter: String,
   },
