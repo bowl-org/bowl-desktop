@@ -14,7 +14,7 @@
     </div>
     <SearchSidebar />
     <ConversationTypeMenu @getConversationType="setConversationType($event)" />
-    <div class="conversations-container overflow-auto max-h-screen ">
+    <div class="conversations-container overflow-auto max-h-screen max-w-sm ">
 
       <div class="more-options-container flex justify-end items-center absolute right-0 bottom-0 ">
         <button
