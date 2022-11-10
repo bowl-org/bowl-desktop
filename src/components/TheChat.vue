@@ -1,5 +1,5 @@
 <template>
-  <div class="the-chat bg-neutral-100 flex flex-col justify-between max-h-screen">
+  <div class="the-chat bg-neutral-100 flex flex-col  justify-between max-h-screen">
     <div class="upper-chat bg-neutral-300 flex justify-between items-center">
       <div class="current-chat-box flex items-center">
         <ConversationAvatar letter="M" class="m-5 rounded-md" />
