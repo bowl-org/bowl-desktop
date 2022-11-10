@@ -1,11 +1,13 @@
 <template>
-    <TheSidebar/>
-    <TheChat class="grow" :status="status"/>
+  <TheSidebar />
+  <TheChat class="grow" :status="status" />
 </template>
 
 <script>
 import TheSidebar from "./components/TheSidebar.vue";
 import TheChat from "./components/TheChat.vue";
+import io from "socket.io-client"
+
 
 export default {
   name: "App",
@@ -15,6 +17,9 @@ export default {
   },
   data() {
     return {
+      socket: {},
+      senderData: {},
+      msgData: {},
       messages: [],
       status: "online"
     };
@@ -22,6 +27,21 @@ export default {
   methods: {
     add() {},
   },
+  created(){
+    this.socket = io("http://localhost:3000")
+    this.senderData = "Mehmet"
+    this.msgData = "Merhaba dünya!"
+    this.socket.emit("data",{
+      sender: this.senderData,
+      data: this.msgData
+    });
+
+  },
+  mounted(){
+    this.socket.on("data", (data) =>{
+      console.log(data)
+    })
+  }
 //  created(){
 //    setInterval(() =>{
 //      if(this.status == "online")
@@ -39,7 +59,7 @@ export default {
   flex-direction: row;
   display: flex;
   justify-content: space-between;
-  min-height:100vh;
+  min-height: 100vh;
   font-family: Inter, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -53,13 +73,13 @@ button {
   -webkit-app-region: no-drag;
   user-select: none;
 }
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   background-color: gray;
   border-radius: 10px;
-  width: .65rem;
+  width: 0.65rem;
 }
 ::-webkit-scrollbar-thumb {
-  background: #483E5B;
+  background: #483e5b;
   border-radius: 10px;
 }
 </style>
