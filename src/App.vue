@@ -2,7 +2,8 @@
   <TheSidebar class="hidden" />
   <TheChat class="grow hidden" :status="status" />
   <!--Testing without router-->
-  <SignUp/>
+  <SignUp class="hidden"/>
+  <ForgotPassword class=""/>
 
 </template>
 
@@ -10,6 +11,7 @@
 import TheSidebar from "./components/TheSidebar.vue";
 import TheChat from "./components/TheChat.vue";
 import SignUp from "./components/SignUp.vue";
+import ForgotPassword from "./components/ForgotPassword.vue"
 
 
 export default {
@@ -17,7 +19,8 @@ export default {
   components: {
     TheSidebar,
     TheChat,
-    SignUp
+    SignUp, 
+    ForgotPassword
   },
   data() {
     return {

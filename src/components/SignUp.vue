@@ -1,10 +1,10 @@
 <template>
   <div class="bg-neutral-300 grow flex flex-col justify-center items-center">
-    <div class="flex flex-col">
       <h1 class="text-6xl text-center font-medium light-purple">Sign Up</h1>
       <h2 class="font-medium m-4 mt-10">
         Fill your information to sign up now!
       </h2>
+    <div class="flex flex-col w-96 ">
       <UserField FieldType="Name" @fieldData="getNameInp" />
       <UserField FieldType="Email" @fieldData="getEmailInp" />
       <UserField FieldType="Password" @fieldData="getPasswdInp" />
@@ -15,10 +15,10 @@
         Sign Up
       </button>
       <div class="log-in-info-container flex justify-center mu-5">
-        <p class="text-black">Do you have a account?</p>
+        <p class="text-black">Do you have an account?</p>
         <a href="" class="">
           <p
-            class="hover:underline underline-offset-4 light-purple font-medium"
+            class="hover:underline underline-offset-4  ml-2 light-purple font-medium"
           >
             Log in here
           </p>
