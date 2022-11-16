@@ -29,18 +29,20 @@
         <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
     </div>
-    <ChatMessageList/>
+    <ChatMessageList ref="chatMessageList"/>
     <div
       class="bottom-chat bg-neutral-300 flex justify-center items-center p-4 pl-0"
     >
       <EmojiSelection class="mr-auto ml-3" />
       <input
+        type="text"
+        v-model="inputVal"
         class="bg-white text-neutral-800 rounded-lg p-2 w-full ml-3"
         placeholder="Enter message"
       />
       <button
         class="w-12 h-10 ml-5 mr-5 rounded-full btn-send hover:bg-slate-600 text-center text-white"
-        @click="add"
+        @click="sendMessage"
       >
         <font-awesome-icon icon="fa-regular fa-paper-plane" />
       </button>
@@ -66,6 +68,7 @@ export default {
     return {
       messages: [],
       isInFav: true,
+      inputval: ''
     };
   },
   props: {
@@ -78,7 +81,9 @@ export default {
     addOrRemoveFav() {
       this.isInFav = !this.isInFav;
     },
-    add() {},
+    sendMessage(){
+      this.$refs.chatMessageList.sendMessage(this.inputVal);
+    },
     open_options() {},
   },
 };

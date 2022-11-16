@@ -4,8 +4,8 @@
     :class="messageType === 'sent' ? 'items-end' : 'items-start'"
   >
     <p
-      class="w-2/3 m-5 p-5 bg-neutral-200 text-black rounded-tr-xl rounded-bl-xl text-left"
-      :class="messageType == 'sent' ?  'rounded-tl-xl' : 'rounded-br-xl'"
+      class="w-2/3 m-5 p-5  text-black rounded-tr-xl rounded-bl-xl text-left"
+      :class="messageType == 'sent' ?  'rounded-tl-xl sent-msg' : 'rounded-br-xl bg-neutral-200'"
     >
       {{ message }}
     </p>
@@ -32,3 +32,8 @@ export default {
   },
 };
 </script>
+<style>
+.sent-msg{
+  background-color: #A499B3;
+}
+</style>

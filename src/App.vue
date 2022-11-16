@@ -6,7 +6,6 @@
 <script>
 import TheSidebar from "./components/TheSidebar.vue";
 import TheChat from "./components/TheChat.vue";
-import io from "socket.io-client"
 
 
 export default {
@@ -27,21 +26,15 @@ export default {
   methods: {
     add() {},
   },
-  created(){
-    this.socket = io("http://localhost:3000")
-    this.senderData = "Mehmet"
-    this.msgData = "Merhaba dünya!"
-    this.socket.emit("data",{
-      sender: this.senderData,
-      data: this.msgData
-    });
-
-  },
-  mounted(){
-    this.socket.on("data", (data) =>{
-      console.log(data)
-    })
-  }
+//  created(){
+//    this.socket = io("http://localhost:3000")
+//    this.senderData = "Mehmet"
+//    this.msgData = "Merhaba dünya!"
+//    this.socket.emit("data",{
+//      sender: this.senderData,
+//      data: this.msgData
+//    });
+  //},
 //  created(){
 //    setInterval(() =>{
 //      if(this.status == "online")
