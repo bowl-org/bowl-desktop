@@ -1,18 +1,23 @@
 <template>
-  <TheSidebar />
-  <TheChat class="grow" :status="status" />
+  <TheSidebar class="hidden" />
+  <TheChat class="grow hidden" :status="status" />
+  <!--Testing without router-->
+  <SignUp/>
+
 </template>
 
 <script>
 import TheSidebar from "./components/TheSidebar.vue";
 import TheChat from "./components/TheChat.vue";
+import SignUp from "./components/SignUp.vue";
 
 
 export default {
   name: "App",
   components: {
     TheSidebar,
-    TheChat
+    TheChat,
+    SignUp
   },
   data() {
     return {
