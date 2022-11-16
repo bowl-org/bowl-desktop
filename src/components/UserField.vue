@@ -2,7 +2,9 @@
   <div
     class="user-field-container m-5 flex bg-slate-800 rounded-xl justify-center"
   >
-    <div class="flex items-center justify-center pl-3 text-neutral-400 text-xl text-center">
+    <div
+      class="flex items-center justify-center pl-3 text-neutral-400 text-xl text-center"
+    >
       <font-awesome-icon v-if="FieldType == 'Name'" icon="fa-solid fa-user" />
       <font-awesome-icon
         v-if="FieldType == 'Password'"
@@ -14,19 +16,25 @@
       />
     </div>
     <input
+      v-model="fieldData"
+      @change="$emit('fieldData', fieldData)"
       v-if="FieldType == 'Name'"
       type="text"
       placeholder="Name"
       class="rounded-r-xl bg-slate-800 text-neutral-300 p-3 grow"
     />
     <input
+      v-model="fieldData"
+      @change="$emit('fieldData', fieldData)"
       v-if="FieldType == 'Email'"
-      type="text"
+      type="email"
       placeholder="Email Address"
       class="rounded-r-xl bg-slate-800 text-neutral-300 p-3 grow"
     />
     <div v-if="FieldType == 'Password'" class="passwd-container">
       <input
+        v-model="fieldData"
+        @change="$emit('fieldData', fieldData)"
         :type="!showPasswd ? 'password' : 'text'"
         placeholder="•••••••••"
         class="bg-slate-800 text-neutral-300 rounded-r-xl p-3 grow"
@@ -52,6 +60,7 @@ export default {
   data() {
     return {
       showPasswd: false,
+      fieldData: ''
     };
   },
   props: {
@@ -59,6 +68,8 @@ export default {
       required: true,
       type: String,
     },
+  },
+  methods: {
   },
 };
 </script>
