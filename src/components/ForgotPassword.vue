@@ -24,8 +24,14 @@
           </p>
         </a>
       </div>
-      <p v-if="validEmail" class="text-green-500 font-semibold mt-3">Password reset link has been sent to {{emailData}} address</p>
-      <p v-if="invalidEmail" class="text-red-500 font-semibold mt-3">Please enter a valid email address!</p>
+      <div class="flex justify-center">
+        <p v-if="validEmail" class=" absolute text-green-500 font-semibold mt-3">
+          Password reset link has been sent to {{ emailData }} address
+        </p>
+        <p v-if="invalidEmail" class="absolute text-red-500 font-semibold mt-3">
+          Please enter a valid email address!
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -34,10 +40,10 @@ import UserField from "./UserField.vue";
 export default {
   name: "ForgotPassword",
   data() {
-    return { 
+    return {
       emailData: "",
       validEmail: false,
-      invalidEmail: false
+      invalidEmail: false,
     };
   },
   components: {
@@ -51,7 +57,7 @@ export default {
       if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.emailData)) {
         this.validEmail = true;
         this.invalidEmail = !this.validEmail;
-      }else{
+      } else {
         this.validEmail = false;
         this.invalidEmail = !this.validEmail;
       }
@@ -59,7 +65,7 @@ export default {
     },
     checkFields() {
       if (this.validateEmail()) {
-        return
+        return;
       }
     },
   },

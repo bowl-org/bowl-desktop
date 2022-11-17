@@ -14,7 +14,6 @@
               type="checkbox"
               @change="rememberMe = !rememberMe"
               class="p-1.5 rounded-sm appearance-none cursor-pointer bg-slate-800 checked:bg-slate-400"
-              
             />
           </div>
           <p class="ml-3 font-medium text-slate-800">Remember me</p>
@@ -43,9 +42,11 @@
           </p>
         </a>
       </div>
-      <p class="text-red-500 font-semibold mt-3">
-        {{ errorMsg }}
-      </p>
+      <div class="flex justify-center">
+        <p class="absolute  text-red-500 font-semibold mt-3">
+          {{ errorMsg }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -59,7 +60,7 @@ export default {
       emailData: "",
       passwdData: "",
       errorMsg: "",
-      rememberMe: false
+      rememberMe: false,
     };
   },
   components: {
@@ -83,16 +84,17 @@ export default {
       if (this.passwdData !== "") {
         return true;
       }
-        this.errorMsg = "Password can't be empty!";
-        return false;
+      this.errorMsg = "Password can't be empty!";
+      return false;
     },
+
     validateFields() {
       let flag = this.checkFields();
       if (flag) {
-        alert("Redirecting to chat page...")
+        alert("Redirecting to chat page...");
       }
       console.log("Error msg: ", this.errorMsg);
-      console.log("Remember me: ",this.rememberMe);
+      console.log("Remember me: ", this.rememberMe);
       //Not implemented yet
       return flag;
     },
