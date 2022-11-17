@@ -85,7 +85,7 @@ export default {
     sendMessage(){
       this.$refs.chatMessageList.sendMessage(this.inputVal);
     },
-    open_options() {},
+    openOptions() {},
   },
 };
 </script>

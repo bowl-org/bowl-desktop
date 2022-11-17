@@ -2,9 +2,14 @@
   <!--More options container is relative to sidebar because i want to component be fixed position while scrolling-->
   <div class="the-sidebar flex flex-col w-75 max-h-screen relative">
     <div class="upper-sidebar flex items-center justify-between">
-      <ConversationAvatar letter="O" class="m-5" />
+      <ConversationAvatar @click="toggleUserMenu" letter="O" class="m-5" />
+      <ul v-if="showUserMenu" class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-20 left-5 font-medium bg-neutral-200 rounded-md ">
+        <li class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75 ">Demo</li>
+        <li class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75">Demo</li>
+        <li class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900" @click="logOut">Log Out</li>
+      </ul>
       <div class="upper-rigth-sidebar flex flex-col items-center">
-        <button class="w-12 h-12 text-4xl m-3 text-center text-white">
+        <button class="settings w-12 h-12 text-4xl m-3 text-center text-white" @click="openSettings">
           <font-awesome-icon
             icon="fa-solid fa-gear "
             class="hover:animate-spin"
@@ -14,9 +19,10 @@
     </div>
     <SearchSidebar />
     <ConversationTypeMenu @getConversationType="setConversationType($event)" />
-    <div class="conversations-container overflow-auto max-h-screen max-w-sm ">
-
-      <div class="more-options-container flex justify-end items-center absolute right-0 bottom-0 ">
+    <div class="conversations-container overflow-auto max-h-screen max-w-sm">
+      <div
+        class="more-options-container flex justify-end items-center absolute right-0 bottom-0"
+      >
         <button
           v-if="showMore"
           class="w-8 h-8 m-1 rounded-full bg-sky-500 hover:bg-slate-600 text-white"
@@ -57,12 +63,23 @@ export default {
     return {
       conversationType: String,
       showMore: false,
+      showUserMenu: false,
     };
   },
   methods: {
     setConversationType(conversationType) {
       this.conversationType = conversationType;
     },
+    toggleUserMenu(){
+      this.showUserMenu = !this.showUserMenu;
+    },
+    logOut() {
+      this.$router.push("/");
+      //Log out
+    },
+    openSettings(){
+      this.$router.push("/settings");
+    }
   },
 };
 </script>
