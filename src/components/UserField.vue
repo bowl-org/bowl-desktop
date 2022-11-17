@@ -1,6 +1,6 @@
 <template>
   <div
-    class="user-field-container m-5 flex bg-slate-800 rounded-xl justify-center"
+    class="user-field-container m-5 flex bg-slate-800 rounded-xl"
   >
     <div
       class="flex items-center justify-center pl-3 text-neutral-400 text-xl text-center"
@@ -31,15 +31,15 @@
       placeholder="Email Address"
       class="rounded-r-xl bg-slate-800 text-neutral-300 p-3 grow"
     />
-    <div v-if="FieldType == 'Password'" class="passwd-container">
-      <input
-        v-model="fieldData"
-        @change="$emit('fieldData', fieldData)"
-        :type="!showPasswd ? 'password' : 'text'"
-        placeholder="•••••••••"
-        class="bg-slate-800 text-neutral-300 rounded-r-xl p-3 grow"
-      />
-      <button class="rounded-xl mr-3 text-neutral-400 text-l w-5">
+    <input
+      v-if="FieldType == 'Password'"
+      v-model="fieldData"
+      @change="$emit('fieldData', fieldData)"
+      :type="!showPasswd ? 'password' : 'text'"
+      placeholder="•••••••••"
+      class="bg-slate-800 text-neutral-300 rounded-r-xl p-3 grow"
+    />
+      <button v-if="FieldType == 'Password'" class="w-20 rounded-xl text-neutral-400 text-l">
         <font-awesome-icon
           v-if="!showPasswd"
           @click="showPasswd = !showPasswd"
@@ -51,7 +51,6 @@
           icon="fa-solid fa-eye"
         />
       </button>
-    </div>
   </div>
 </template>
 <script>
@@ -60,7 +59,7 @@ export default {
   data() {
     return {
       showPasswd: false,
-      fieldData: ''
+      fieldData: "",
     };
   },
   props: {
@@ -69,7 +68,6 @@ export default {
       type: String,
     },
   },
-  methods: {
-  },
+  methods: {},
 };
 </script>
