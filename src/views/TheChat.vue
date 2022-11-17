@@ -1,6 +1,6 @@
 <template>
   <div class="the-chat bg-neutral-100 flex flex-col  justify-between max-h-screen">
-    <div class="upper-chat bg-neutral-300 flex justify-between items-center">
+    <div class="upper-chat relative bg-neutral-300 flex justify-between items-center">
       <div class="current-chat-box flex items-center">
         <ConversationAvatar letter="M" class="m-5 rounded-md" />
         <div class="chat-box-info">
@@ -25,9 +25,14 @@
           </div>
         </div>
       </div>
-      <button @click="open_options" class="w-12 h-12 text-3xl">
+      <button @click="toggleChatMenu" class="w-12 h-12 text-3xl">
         <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
+      <ul v-if="showChatMenu" class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-16 right-5 font-medium bg-neutral-200 rounded-md ">
+        <li class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75 ">Info</li>
+        <li class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75">Search</li>
+        <li class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900" >Exit</li>
+      </ul>
     </div>
     <ChatMessageList ref="chatMessageList"/>
     <div
@@ -68,7 +73,8 @@ export default {
     return {
       messages: [],
       isInFav: true,
-      inputval: ''
+      inputval: '',
+      showChatMenu: false
     };
   },
   props: {
@@ -85,7 +91,9 @@ export default {
     sendMessage(){
       this.$refs.chatMessageList.sendMessage(this.inputVal);
     },
-    openOptions() {},
+    toggleChatMenu() {
+      this.showChatMenu = !this.showChatMenu;
+    },
   },
 };
 </script>

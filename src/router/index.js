@@ -4,6 +4,7 @@ import LogIn from "@/views/LogIn.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
 import MainView from "@/views/MainView.vue";
 import UserView from "@/views/UserView.vue";
+import TheSettingsView from "@/views/TheSettingsView.vue";
 
 const routes = [
   {
@@ -44,6 +45,11 @@ const routes = [
         component: () => import("@/views/TheChat.vue"),
       },
     ],
+  },
+  {
+    path: "/settings",
+    name: "settings",
+    component: TheSettingsView
   },
   {
     path: "/about",
