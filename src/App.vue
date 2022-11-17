@@ -2,28 +2,29 @@
   <TheSidebar class="hidden" />
   <TheChat class="grow hidden" :status="status" />
   <!--Testing without router-->
-  <SignUp class="hidden"/>
-  <ForgotPassword class="hidden"/>
-  <LogIn class=""/>
-
+  <SignUp class="pb-16 hidden" />
+  <ForgotPassword class="pb-16 " />
+  <LogIn class="pb-16 hidden" />
+  <ThePolygon/>
 </template>
 
 <script>
 import TheSidebar from "./components/TheSidebar.vue";
 import TheChat from "./components/TheChat.vue";
 import SignUp from "./components/SignUp.vue";
-import ForgotPassword from "./components/ForgotPassword.vue"
-import LogIn from "./components/LogIn.vue"
-
+import ForgotPassword from "./components/ForgotPassword.vue";
+import LogIn from "./components/LogIn.vue";
+import ThePolygon from "./components/ThePolygon.vue"
 
 export default {
   name: "App",
   components: {
     TheSidebar,
     TheChat,
-    SignUp, 
+    SignUp,
     ForgotPassword,
-    LogIn
+    LogIn,
+    ThePolygon
   },
   data() {
     return {
@@ -31,36 +32,36 @@ export default {
       senderData: {},
       msgData: {},
       messages: [],
-      status: "online"
+      status: "online",
     };
   },
   methods: {
     add() {},
   },
-//  created(){
-//    this.socket = io("http://localhost:3000")
-//    this.senderData = "Mehmet"
-//    this.msgData = "Merhaba dünya!"
-//    this.socket.emit("data",{
-//      sender: this.senderData,
-//      data: this.msgData
-//    });
+  //  created(){
+  //    this.socket = io("http://localhost:3000")
+  //    this.senderData = "Mehmet"
+  //    this.msgData = "Merhaba dünya!"
+  //    this.socket.emit("data",{
+  //      sender: this.senderData,
+  //      data: this.msgData
+  //    });
   //},
-//  created(){
-//    setInterval(() =>{
-//      if(this.status == "online")
-//        this.status = "offline"
-//      else
-//        this.status = "online"
-//    }, 3000)
-//  }
+  //  created(){
+  //    setInterval(() =>{
+  //      if(this.status == "online")
+  //        this.status = "offline"
+  //      else
+  //        this.status = "online"
+  //    }, 3000)
+  //  }
 };
-  //background-color: #2d202c;
+//background-color: #2d202c;
 </script>
 
 <style>
 #app {
-  flex-direction: row;
+  flex-direction: column;
   display: flex;
   justify-content: space-between;
   min-height: 100vh;
