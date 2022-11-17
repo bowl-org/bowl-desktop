@@ -1,5 +1,5 @@
 <template>
-  <div class="polygon-container w-full absolute bottom-0 bg-neutral-300">
+  <div class="polygon-container w-full absolute bottom-0 bg-neutral-300 ">
     <svg class="absolute" viewBox="10 -8 1000 60" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fill-rule="evenodd"

@@ -1,16 +1,13 @@
 <template>
-  <router-view class="pb-16"/>
+  <router-view />
   <!--Testing without router-->
-  <ThePolygon/>
 </template>
 
 <script>
-import ThePolygon from "./components/ThePolygon.vue"
 
 export default {
   name: "App",
   components: {
-    ThePolygon
   },
   data() {
     return {
@@ -47,7 +44,7 @@ export default {
 
 <style>
 #app {
-  flex-direction: column;
+  flex-direction: row;
   display: flex;
   justify-content: space-between;
   min-height: 100vh;

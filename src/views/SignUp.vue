@@ -16,13 +16,13 @@
       </button>
       <div class="log-in-info-container flex justify-center mu-5">
         <p class="text-black">Do you have an account?</p>
-        <a href="" class="">
+        <router-link to="/login">
           <p
             class="hover:underline underline-offset-4  ml-2 light-purple font-medium"
           >
             Log in here
           </p>
-        </a>
+        </router-link>
       </div>
     </div>
   </div>

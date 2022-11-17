@@ -51,10 +51,10 @@
 </template>
 
 <script>
-import ConversationAvatar from "./ConversationAvatar.vue";
-import OnlineDot from "./OnlineDot.vue";
-import EmojiSelection from "./modals/EmojiSelection.vue";
-import ChatMessageList from "./ChatMessageList.vue"
+import ConversationAvatar from "@/components/ConversationAvatar.vue";
+import OnlineDot from "@/components/OnlineDot.vue";
+import EmojiSelection from "@/components/modals/EmojiSelection.vue";
+import ChatMessageList from "@/components/ChatMessageList.vue"
 
 export default {
   name: "TheChat",
@@ -73,6 +73,7 @@ export default {
   },
   props: {
     status: {
+      default: 'offline',
       type: String,
       required: true,
     },

@@ -92,6 +92,7 @@ export default {
       let flag = this.checkFields();
       if (flag) {
         alert("Redirecting to chat page...");
+        this.$router.push({path: 'main'})
       }
       console.log("Error msg: ", this.errorMsg);
       console.log("Remember me: ", this.rememberMe);
