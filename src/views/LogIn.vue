@@ -18,13 +18,13 @@
           </div>
           <p class="ml-3 font-medium text-slate-800">Remember me</p>
         </div>
-        <a href="" class="">
+        <router-link to="/forgotpassword">
           <p
             class="hover:underline underline-offset-4 ml-2 light-purple font-medium"
           >
             Forgot password?
           </p>
-        </a>
+        </router-link>
       </div>
       <button
         @click="validateFields()"
@@ -34,13 +34,13 @@
       </button>
       <div class="log-in-info-container flex justify-center mu-5">
         <p class="text-black">Don't have an account?</p>
-        <a href="" class="">
+        <router-link to="/signup">
           <p
             class="hover:underline underline-offset-4 ml-2 light-purple font-medium"
           >
             Sign up here
           </p>
-        </a>
+        </router-link>
       </div>
       <div class="flex justify-center">
         <p class="absolute  text-red-500 font-semibold mt-3">
@@ -52,7 +52,7 @@
 </template>
 
 <script>
-import UserField from "./UserField.vue";
+import UserField from "@/components/UserField.vue";
 export default {
   name: "LogIn",
   data() {

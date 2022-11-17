@@ -16,13 +16,13 @@
       </button>
       <div class="log-in-info-container flex justify-center mu-5">
         <p class="text-black">Don't have an account?</p>
-        <a href="" class="">
+        <router-link to="/signup">
           <p
             class="hover:underline underline-offset-4 ml-2 light-purple font-medium"
           >
             Sign up here
           </p>
-        </a>
+        </router-link>
       </div>
       <div class="flex justify-center">
         <p v-if="validEmail" class=" absolute text-green-500 font-semibold mt-3">
@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import UserField from "./UserField.vue";
+import UserField from "@/components/UserField.vue";
 export default {
   name: "ForgotPassword",
   data() {

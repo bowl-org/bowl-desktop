@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import UserField from "./UserField.vue";
+import UserField from "@/components/UserField.vue";
 
 export default {
   name: "SignUp",

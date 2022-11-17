@@ -1,29 +1,15 @@
 <template>
-  <TheSidebar class="hidden" />
-  <TheChat class="grow hidden" :status="status" />
+  <router-view class="pb-16"/>
   <!--Testing without router-->
-  <SignUp class="pb-16 hidden" />
-  <ForgotPassword class="pb-16 " />
-  <LogIn class="pb-16 hidden" />
   <ThePolygon/>
 </template>
 
 <script>
-import TheSidebar from "./components/TheSidebar.vue";
-import TheChat from "./components/TheChat.vue";
-import SignUp from "./components/SignUp.vue";
-import ForgotPassword from "./components/ForgotPassword.vue";
-import LogIn from "./components/LogIn.vue";
 import ThePolygon from "./components/ThePolygon.vue"
 
 export default {
   name: "App",
   components: {
-    TheSidebar,
-    TheChat,
-    SignUp,
-    ForgotPassword,
-    LogIn,
     ThePolygon
   },
   data() {
