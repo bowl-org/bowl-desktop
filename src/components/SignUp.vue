@@ -10,7 +10,7 @@
       <UserField FieldType="Password" @fieldData="getPasswdInp" />
       <button
         @click="checkFields()"
-        class="drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
+        class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
       >
         Sign Up
       </button>

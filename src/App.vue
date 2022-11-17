@@ -3,7 +3,8 @@
   <TheChat class="grow hidden" :status="status" />
   <!--Testing without router-->
   <SignUp class="hidden"/>
-  <ForgotPassword class=""/>
+  <ForgotPassword class="hidden"/>
+  <LogIn class=""/>
 
 </template>
 
@@ -12,6 +13,7 @@ import TheSidebar from "./components/TheSidebar.vue";
 import TheChat from "./components/TheChat.vue";
 import SignUp from "./components/SignUp.vue";
 import ForgotPassword from "./components/ForgotPassword.vue"
+import LogIn from "./components/LogIn.vue"
 
 
 export default {
@@ -20,7 +22,8 @@ export default {
     TheSidebar,
     TheChat,
     SignUp, 
-    ForgotPassword
+    ForgotPassword,
+    LogIn
   },
   data() {
     return {
