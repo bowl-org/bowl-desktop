@@ -84,6 +84,7 @@ export default {
   },
   methods: {
     sendMessage(message) {
+      console.log("message sent")
       var msgData = this.addNewMessage("sent", message);
       //msgData.messageType = ''
       this.socket.emit("chatMessage", msgData);
@@ -103,11 +104,12 @@ export default {
   created() {
     var sampleNameList = ['Mehmet Ümit Özden', 'Onur Yılmaz', 'Bill Joy', 'Evan You', 'Adam Wathan', 'Steve Schoger', 'Tim Berners-Lee']
     this.name = sampleNameList[Math.floor(Math.random() * sampleNameList.length)];
-    this.socket = io("http://localhost:3000");
+    //this.socket = io('localhost:3000', {path: `${process.env.VUE_APP_API_TOKEN}/socket.io`});
+    this.socket = io(process.env.VUE_APP_BASE_URL, {path: `${process.env.VUE_APP_API_TOKEN}/socket.io`});
     this.socket.on("chatMessage", (data) => {
+      console.log("Message received")
       console.log(data);
-      //this.addNewMessage(data.messageType, data.message);
-      this.addNewMessage("", data.message);
+      this.addNewMessage(data.messageType, data.message);
     });
     this.socket.on("online", (friendName) => {
 		console.log(friendName + ' is online')

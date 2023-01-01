@@ -4,18 +4,23 @@
       <h2 class="font-medium m-4 mt-10">
         Fill your information to sign up now!
       </h2>
+      <div class="h-5">
+        <h3 class="font-semibold " :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500' ">
+          {{ infoMessage }}
+        </h3>
+      </div>
     <div class="flex flex-col w-96 ">
       <UserField FieldType="Name" @fieldData="getNameInp" />
       <UserField FieldType="Email" @fieldData="getEmailInp" />
       <UserField FieldType="Password" @fieldData="getPasswdInp" />
       <button
-        @click="checkFields()"
+        @click="signUp()"
         class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
       >
         Sign Up
       </button>
-      <div class="log-in-info-container flex justify-center mu-5">
-        <p class="text-black">Do you have an account?</p>
+      <div class="log-in-info-container flex justify-center mu-5 ">
+        <p class="text-black ">Do you have an account?</p>
         <router-link to="/login">
           <p
             class="hover:underline underline-offset-4  ml-2 light-purple font-medium"
@@ -23,13 +28,14 @@
             Log in here
           </p>
         </router-link>
+
       </div>
     </div>
   </div>
 </template>
 <script>
 import UserField from "@/components/UserField.vue";
-
+import * as signUpService from "@/services/signUpService"
 export default {
   name: "SignUp",
   components: {
@@ -40,6 +46,8 @@ export default {
       emailData: "",
       nameData: "",
       passwdData: "",
+      infoMessage: "",
+      responseStatus: "",
     };
   },
   methods: {
@@ -52,34 +60,23 @@ export default {
     getNameInp(nameInp) {
       this.nameData = nameInp;
     },
-    validateEmail() {
-      if (!/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.emailData)) {
-        alert("Please enter a valid email address!");
-        return false;
+    signUp() {
+      let userData = {
+        name: this.nameData,
+        email: this.emailData,
+        password: this.passwdData
       }
-      return true;
-    },
-    validatePasswd() {
-      if (this.passwdData === "") {
-        alert("Password can't be empty!");
-        return false;
-      }
-      return true;
-    },
-    validateName() {
-      if (this.nameData === "") {
-        alert("Name field can't be empty!");
-        return false;
-      }
-      return true;
-    },
-    checkFields() {
-      if ( this.validateName() && this.validateEmail() && this.validatePasswd()) {
-        alert("Sign up success!");
-        return true;
-      }
-      return false;
-    },
+      signUpService.signUp(userData)
+        .then((res) => {
+          this.infoMessage = res.data.msg;
+          this.responseStatus = res.data.status;
+          console.log(res.data);
+        }).catch((err) => {
+          this.infoMessage = err.response.data.msg;
+          this.responseStatus = err.response.data.status;
+          console.log(this.infoMessage, this.responseStatus);
+        });
+    }
   },
 };
 </script>
