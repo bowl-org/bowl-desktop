@@ -1,7 +1,12 @@
 <template>
   <div class="bg-neutral-300 grow flex flex-col justify-center items-center">
     <h1 class="text-6xl text-center font-medium light-purple">Log In</h1>
-    <h2 class="font-medium m-4 mt-10">Fill your information to log in now!</h2>
+    <h2 class="font-medium m-3 mt-10">Fill your information to log in now!</h2>
+    <div class="h-4">
+      <h3 class="font-semibold " :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500' ">
+        {{ infoMessage }}
+      </h3>
+    </div>
     <div class="flex flex-col w-96">
       <UserField FieldType="Email" @fieldData="getEmailInp" />
       <UserField FieldType="Password" @fieldData="getPasswdInp" />
@@ -27,7 +32,7 @@
         </router-link>
       </div>
       <button
-        @click="validateFields()"
+        @click="logIn()"
         class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
       >
         Log In
@@ -53,6 +58,7 @@
 
 <script>
 import UserField from "@/components/UserField.vue";
+import * as logInService from "@/services/logInService";
 export default {
   name: "LogIn",
   data() {
@@ -61,6 +67,8 @@ export default {
       passwdData: "",
       errorMsg: "",
       rememberMe: false,
+      infoMessage: "",
+      responseStatus: ""
     };
   },
   components: {
@@ -73,35 +81,20 @@ export default {
     getEmailInp(emailInp) {
       this.emailData = emailInp;
     },
-    validateEmail() {
-      if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.emailData)) {
-        return true;
-      }
-      this.errorMsg = "Please enter a valid email address!";
-      return false;
-    },
-    validatePasswd() {
-      if (this.passwdData !== "") {
-        return true;
-      }
-      this.errorMsg = "Password can't be empty!";
-      return false;
-    },
-
-    validateFields() {
-      let flag = this.checkFields();
-      if (flag) {
-        alert("Redirecting to chat page...");
-        this.$router.push({path: 'main'})
-      }
-      console.log("Error msg: ", this.errorMsg);
-      console.log("Remember me: ", this.rememberMe);
-      //Not implemented yet
-      return flag;
-    },
-    checkFields() {
-      return this.validateEmail() && this.validatePasswd() ? true : false;
-    },
+    logIn(){
+      logInService
+        .logIn({email: this.emailData, password: this.passwdData})
+        .then((res) => {
+          this.infoMessage = res.data.msg;
+          this.responseStatus = res.data.status;
+          console.log(res.data);
+          this.$router.push({path: 'main'})
+        }).catch((err) => {
+          this.infoMessage = err.response.data.msg;
+          this.responseStatus = err.response.data.status;
+          console.log(err.response.data);
+        });
+    }
   },
 };
 </script>
