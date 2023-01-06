@@ -25,6 +25,7 @@
 import ChatMessage from "./ChatMessage.vue";
 import ChatDateSpan from "./ChatDateSpan.vue";
 import io from "socket.io-client";
+import messageService from "../services/messageService";
 export default {
   name: "ChatMessageList",
   components: {
@@ -34,75 +35,52 @@ export default {
   data() {
     return {
       name: "",
-      messages: [
-        {
-          date: "15 October 2022",
-          time: "9:40",
-          messageType: "sent",
-          message:
-            "Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt.",
-        },
-        {
-          date: "15 October 2022",
-          time: "13:36",
-          messageType: "",
-          message:
-            "Praesent a pretium nisi. Vivamus elementum elit eu nunc pellentesque, eu sodales ex viverra. Sed sit amet nulla orci. Etiam ac nisl ante. Duis tempus metus ut augue interdum, sed bibendum nisl pellentesque. Quisque blandit maximus bibendum. Vestibulum ex lectus, placerat id mollis tempor, auctor ut quam. Integer quis pharetra elit, vel accumsan sapien. Curabitur pulvinar dolor et dui consequat, ut luctus mauris tincidunt.",
-        },
-        {
-          date: "15 October 2022",
-          time: "16:40",
-          messageType: "",
-          message: "Hello",
-        },
-        {
-          date: "18 October 2022",
-          time: "12:40",
-          messageType: "",
-          message: "Hello world 18",
-        },
-        {
-          date: "18 October 2022",
-          time: "18:40",
-          messageType: "sent",
-          message: "Hello world sent",
-        },
-        {
-          date: "01 November 2022",
-          time: "12:43",
-          messageType: "",
-          message: "Hello",
-        },
-        {
-          date: "01 November 2022",
-          time: "14:43",
-          messageType: "sent",
-          message: "Hello",
-        },
-      ],
+      messages: [],
     };
   },
   methods: {
     loadMessages() {
       console.log("Load messages from db");
-
+      messageService
+        .getAllMessages()
+        .then((messages) => {
+          this.messages = messages;
+        })
+        .catch((err) => {
+          console.log("Couldn't load messages!");
+          console.log(err);
+        });
     },
     sendMessage(message) {
       console.log("message sent");
-      var msgData = this.addNewMessage("sent", message);
-      //msgData.messageType = ''
-      this.socket.emit("chatMessage", msgData);
-    },
-    addNewMessage(messageType, message) {
       let today = new Date();
       let todaySplit = today.toString().split(" ");
-      this.messages.push({
+      let msgData = {
         date: todaySplit[2] + " " + todaySplit[1] + " " + todaySplit[3],
         time: today.getHours() + ":" + today.getMinutes(),
-        messageType: messageType,
+        messageType: "sent",
         message: message,
-      });
-      return this.messages[this.messages.length - 1];
+      };
+      messageService.insertMessage(msgData)
+        .then((msg) => {
+          console.log('Sent message inserted successfully!: ', msg);
+          this.messages.push(msgData);
+          this.socket.emit("chatMessage", msgData);
+        }).catch((err) => {
+          console.log(err);
+        });
+    },
+    receiveMessage(msgData) {
+      //Make sure message type is not sent
+      msgData.messageType = '';
+      messageService.insertMessage(msgData)
+        .then((msg) => {
+          console.log('Received message inserted successfully!: ', msg);
+          this.messages.push(msgData);
+        }).catch((err) => {
+          console.log(err);
+        });
+
     },
   },
   created() {
@@ -123,9 +101,7 @@ export default {
       path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
     });
     this.socket.on("chatMessage", (data) => {
-      data.messageType = "";
-      console.log("Message received");
-      this.addNewMessage(data.messageType, data.message);
+      this.receiveMessage(data);
     });
     this.socket.on("online", (friendName) => {
       console.log(friendName + " is online");
