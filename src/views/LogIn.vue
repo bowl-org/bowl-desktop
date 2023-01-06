@@ -74,6 +74,11 @@ export default {
   components: {
     UserField,
   },
+  created() {
+      //DEV
+      //Redirect directly to chat window 
+      this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
+  },
   methods: {
     getPasswdInp(passwdInp) {
       this.passwdData = passwdInp;
@@ -88,7 +93,7 @@ export default {
           this.infoMessage = res.data.msg;
           this.responseStatus = res.data.status;
           console.log(res.data);
-          this.$router.push({path: 'main'})
+          this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
         }).catch((err) => {
           this.infoMessage = err.response.data.msg;
           this.responseStatus = err.response.data.status;
