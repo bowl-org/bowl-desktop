@@ -33,7 +33,7 @@ export default {
   },
   data() {
     return {
-      name: '',
+      name: "",
       messages: [
         {
           date: "15 October 2022",
@@ -83,11 +83,12 @@ export default {
     };
   },
   methods: {
-    loadMessages(){
+    loadMessages() {
       console.log("Load messages from db");
+
     },
     sendMessage(message) {
-      console.log("message sent")
+      console.log("message sent");
       var msgData = this.addNewMessage("sent", message);
       //msgData.messageType = ''
       this.socket.emit("chatMessage", msgData);
@@ -106,21 +107,32 @@ export default {
   },
   created() {
     this.loadMessages();
-    var sampleNameList = ['Mehmet Ümit Özden', 'Onur Yılmaz', 'Bill Joy', 'Evan You', 'Adam Wathan', 'Steve Schoger', 'Tim Berners-Lee']
-    this.name = sampleNameList[Math.floor(Math.random() * sampleNameList.length)];
+    var sampleNameList = [
+      "Mehmet Ümit Özden",
+      "Onur Yılmaz",
+      "Bill Joy",
+      "Evan You",
+      "Adam Wathan",
+      "Steve Schoger",
+      "Tim Berners-Lee",
+    ];
+    this.name =
+      sampleNameList[Math.floor(Math.random() * sampleNameList.length)];
     //this.socket = io('localhost:3000', {path: `${process.env.VUE_APP_API_TOKEN}/socket.io`});
-    this.socket = io(process.env.VUE_APP_BASE_URL, {path: `${process.env.VUE_APP_API_TOKEN}/socket.io`});
+    this.socket = io(process.env.VUE_APP_BASE_URL, {
+      path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
+    });
     this.socket.on("chatMessage", (data) => {
-      data.messageType = ""
-      console.log("Message received")
+      data.messageType = "";
+      console.log("Message received");
       this.addNewMessage(data.messageType, data.message);
     });
     this.socket.on("online", (friendName) => {
-		console.log(friendName + ' is online')
-	});
+      console.log(friendName + " is online");
+    });
     setInterval(() => {
-        this.socket.emit('online', this.name);
-    }, 10000)
+      this.socket.emit("online", this.name);
+    }, 10000);
   },
 };
 </script>
