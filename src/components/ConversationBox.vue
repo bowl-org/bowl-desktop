@@ -66,11 +66,6 @@ export default {
   components: {
     ConversationAvatar,
   },
-  methods: {
-    openConversation() {
-      alert(this.conversationName);
-    },
-  },
 };
 </script>
 <style>

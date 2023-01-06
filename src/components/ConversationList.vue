@@ -2,13 +2,14 @@
   <div class="flex flex-col justify-between items-center overflow-x-hidden">
     <p class="white">Selected conversation type is: {{ conversationType }}</p>
     <ConversationBox
-      v-for="conversation in conversations"
+      v-for="(conversation, index) in conversations"
       :key="conversation"
       :conversationName="conversation.name"
       :onlineStatus="conversation.onlineStatus"
       :isActive="conversation.isActive"
       :lastMessageTimestamp="conversation.lastMessageTimestamp"
       :lastMessage="conversation.lastMessage"
+      @click="selectConversation(index)"
     />
   </div>
 </template>
@@ -33,6 +34,11 @@ export default {
     },
   },
   methods: {
+    selectConversation(index){
+      //Simple way to set active only clicked conversation
+      this.conversations.forEach( c => c.isActive = 'false');
+      this.conversations[index].isActive = 'true';
+    },
     loadConversations() {
       //Testing purposes
       messageService.getAllMessages().then((messages) => {
