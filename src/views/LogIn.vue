@@ -77,7 +77,7 @@ export default {
   created() {
       //DEV
       //Redirect directly to chat window 
-      this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
+      //this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
   },
   methods: {
     getPasswdInp(passwdInp) {

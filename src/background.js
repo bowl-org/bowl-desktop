@@ -31,13 +31,13 @@ async function createWindow() {
     },
   });
   // Remove upper menu bar
-  //win.removeMenu();
+  win.removeMenu();
   win.setOpacity(0.98);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     // Load the url of the dev server if in development mode
     await win.loadURL(process.env.WEBPACK_DEV_SERVER_URL);
-    if (!process.env.IS_TEST) win.webContents.openDevTools()
+    //if (!process.env.IS_TEST) win.webContents.openDevTools()
   } else {
     createProtocol("app");
     // Load the index.html when not in development

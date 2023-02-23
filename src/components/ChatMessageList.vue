@@ -102,6 +102,7 @@ export default {
     });
     this.socket.on("chatMessage", (data) => {
       this.receiveMessage(data);
+      console.log('Message received: ', data);
     });
     this.socket.on("online", (friendName) => {
       console.log(friendName + " is online");
