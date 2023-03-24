@@ -11,11 +11,11 @@ export default {
   },
   data() {
     return {
-      socket: {},
-      senderData: {},
-      msgData: {},
-      messages: [],
-      status: "online",
+//      socket: {},
+//      senderData: {},
+//      msgData: {},
+//      messages: [],
+//      status: "online",
     };
   },
   methods: {

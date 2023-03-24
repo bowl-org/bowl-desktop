@@ -71,6 +71,7 @@ export default {
         });
     },
     receiveMessage(msgData) {
+      msgData = JSON.parse(msgData)
       //Make sure message type is not sent
       msgData.messageType = '';
       messageService.insertMessage(msgData)
@@ -96,7 +97,6 @@ export default {
     ];
     this.name =
       sampleNameList[Math.floor(Math.random() * sampleNameList.length)];
-    //this.socket = io('localhost:3000', {path: `${process.env.VUE_APP_API_TOKEN}/socket.io`});
     this.socket = io(process.env.VUE_APP_BASE_URL, {
       path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
     });

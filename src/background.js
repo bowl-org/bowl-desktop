@@ -31,7 +31,7 @@ async function createWindow() {
     },
   });
   // Remove upper menu bar
-  win.removeMenu();
+  //win.removeMenu();
   win.setOpacity(0.98);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
