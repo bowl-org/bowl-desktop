@@ -1,18 +1,19 @@
-//window.ipcRenderer defined in preload
+import messageRepo from "../ipc-wrappers/messageRepositoryWrapper";
+
 const findMessage = async (messageData) => {
-  return  window.ipcRenderer.invoke("findMessage", messageData);
+  return  messageRepo.findMessage(messageData);
 };
 const deleteMessage = async (messageData) => {
-  return  window.ipcRenderer.invoke("deleteMessage", messageData);
+  return  messageRepo.deleteMessage(messageData);
 };
 const updateMessage = async (messageData) => {
-  return  window.ipcRenderer.invoke("updateMessage", messageData);
+  return  messageRepo.updateMessage(messageData);
 };
 const insertMessage = async (messageData) => {
-  return  window.ipcRenderer.invoke("insertMessage", messageData);
+  return messageRepo.insertMessage(messageData);
 };
 const getAllMessages = async () => {
-  return  window.ipcRenderer.invoke("getAllMessages");
+  return messageRepo.getAllMessages();
 };
 
 export default {

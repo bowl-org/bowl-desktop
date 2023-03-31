@@ -1,4 +1,5 @@
 # Cloud based p2p chat system
+**DON'T forget to add new main ipc functions to preload.js**
 
 ## Project setup
 ```

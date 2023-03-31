@@ -3,7 +3,10 @@
     <h1 class="text-6xl text-center font-medium light-purple">Log In</h1>
     <h2 class="font-medium m-3 mt-10">Fill your information to log in now!</h2>
     <div class="h-4">
-      <h3 class="font-semibold " :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500' ">
+      <h3
+        class="font-semibold"
+        :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500'"
+      >
         {{ infoMessage }}
       </h3>
     </div>
@@ -48,7 +51,7 @@
         </router-link>
       </div>
       <div class="flex justify-center">
-        <p class="absolute  text-red-500 font-semibold mt-3">
+        <p class="absolute text-red-500 font-semibold mt-3">
           {{ errorMsg }}
         </p>
       </div>
@@ -59,6 +62,7 @@
 <script>
 import UserField from "@/components/UserField.vue";
 import * as logInService from "@/services/logInService";
+import authTokenService from "@/services/authTokenService";
 export default {
   name: "LogIn",
   data() {
@@ -68,16 +72,16 @@ export default {
       errorMsg: "",
       rememberMe: false,
       infoMessage: "",
-      responseStatus: ""
+      responseStatus: "",
     };
   },
   components: {
     UserField,
   },
   created() {
-      //DEV
-      //Redirect directly to chat window 
-      //this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
+    //DEV
+    //Redirect directly to chat window
+    //this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
   },
   methods: {
     getPasswdInp(passwdInp) {
@@ -86,20 +90,33 @@ export default {
     getEmailInp(emailInp) {
       this.emailData = emailInp;
     },
-    logIn(){
+    logIn() {
       logInService
-        .logIn({email: this.emailData, password: this.passwdData})
+        .logIn({ email: this.emailData, password: this.passwdData })
         .then((res) => {
           this.infoMessage = res.data.msg;
           this.responseStatus = res.data.status;
           console.log(res.data);
-          this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
-        }).catch((err) => {
+          let token = res.data.data;
+          console.log("LOGIN_RESPONSE_TOKEN:", token);
+          authTokenService
+            .setToken(token)
+            .then(() => {
+              this.$router.push({
+                path: "main",
+                query: { rememberme: this.rememberMe },
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        })
+        .catch((err) => {
           this.infoMessage = err.response.data.msg;
           this.responseStatus = err.response.data.status;
           console.log(err.response.data);
         });
-    }
+    },
   },
 };
 </script>

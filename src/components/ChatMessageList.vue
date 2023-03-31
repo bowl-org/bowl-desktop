@@ -26,6 +26,7 @@ import ChatMessage from "./ChatMessage.vue";
 import ChatDateSpan from "./ChatDateSpan.vue";
 import io from "socket.io-client";
 import messageService from "../services/messageService";
+import authTokenService from "../services/authTokenService";
 export default {
   name: "ChatMessageList",
   components: {
@@ -61,27 +62,30 @@ export default {
         messageType: "sent",
         message: message,
       };
-      messageService.insertMessage(msgData)
+      messageService
+        .insertMessage(msgData)
         .then((msg) => {
-          console.log('Sent message inserted successfully!: ', msg);
+          console.log("Sent message inserted successfully!: ", msg);
           this.messages.push(msgData);
           this.socket.emit("chatMessage", msgData);
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.log(err);
         });
     },
     receiveMessage(msgData) {
-      msgData = JSON.parse(msgData)
+      msgData = JSON.parse(msgData);
       //Make sure message type is not sent
-      msgData.messageType = '';
-      messageService.insertMessage(msgData)
+      msgData.messageType = "";
+      messageService
+        .insertMessage(msgData)
         .then((msg) => {
-          console.log('Received message inserted successfully!: ', msg);
+          console.log("Received message inserted successfully!: ", msg);
           this.messages.push(msgData);
-        }).catch((err) => {
+        })
+        .catch((err) => {
           console.log(err);
         });
-
     },
   },
   created() {
@@ -97,19 +101,30 @@ export default {
     ];
     this.name =
       sampleNameList[Math.floor(Math.random() * sampleNameList.length)];
-    this.socket = io(process.env.VUE_APP_BASE_URL, {
-      path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
+
+    authTokenService.getToken().then((token) => {
+      console.log("TOKEN: ", token);
+      this.socket = io(process.env.VUE_APP_BASE_URL, {
+        path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
+        extraHeaders: {
+          "token": token.data,
+        },
+      });
+      this.socket.on("chatMessage", (data) => {
+        this.receiveMessage(data);
+        console.log("Message received: ", data);
+      });
+      this.socket.on("connect_error", (data) => {
+        console.log("CONNECT_ERROR: ", data);
+        console.log("SOCKET: ", this.socket);
+      });
+      this.socket.on("online", (friendName) => {
+        console.log(friendName + " is online");
+      });
+      setInterval(() => {
+        this.socket.emit("online", this.name);
+      }, 10000);
     });
-    this.socket.on("chatMessage", (data) => {
-      this.receiveMessage(data);
-      console.log('Message received: ', data);
-    });
-    this.socket.on("online", (friendName) => {
-      console.log(friendName + " is online");
-    });
-    setInterval(() => {
-      this.socket.emit("online", this.name);
-    }, 10000);
   },
 };
 </script>
