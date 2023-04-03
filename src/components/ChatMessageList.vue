@@ -92,12 +92,12 @@ export default {
     this.loadMessages();
     var sampleNameList = [
       "Mehmet Ümit Özden",
-      "Onur Yılmaz",
-      "Bill Joy",
-      "Evan You",
-      "Adam Wathan",
-      "Steve Schoger",
-      "Tim Berners-Lee",
+//      "Onur Yılmaz",
+//      "Bill Joy",
+//      "Evan You",
+//      "Adam Wathan",
+//      "Steve Schoger",
+//      "Tim Berners-Lee",
     ];
     this.name =
       sampleNameList[Math.floor(Math.random() * sampleNameList.length)];
