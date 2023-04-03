@@ -4,7 +4,7 @@ const db = new Database("./src/backend/db/main.db");
 db.pragma("journal_mode = WAL");
 const initDb = () => {
   db.exec(
-    "CREATE TABLE IF NOT EXISTS messages(id INTEGER PRIMARY KEY AUTOINCREMENT, message TEXT, messageType TEXT, date TEXT, time TEXT)"
+    "CREATE TABLE IF NOT EXISTS messages(id INTEGER PRIMARY KEY AUTOINCREMENT, message TEXT NOT NULL , messageType TEXT NOT NULL, date TEXT NOT NULL, time TEXT NOT NULL)"
   );
 };
 //Default db

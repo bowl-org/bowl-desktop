@@ -35,7 +35,7 @@
 </template>
 <script>
 import UserField from "@/components/UserField.vue";
-import * as signUpService from "@/services/signUpService"
+import signUpService from "@/services/signUpService"
 export default {
   name: "SignUp",
   components: {
@@ -72,6 +72,7 @@ export default {
           this.responseStatus = res.data.status;
           console.log(res.data);
         }).catch((err) => {
+          console.log("ERR:",err);
           this.infoMessage = err.response.data.msg;
           this.responseStatus = err.response.data.status;
           console.log(this.infoMessage, this.responseStatus);
