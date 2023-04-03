@@ -1,6 +1,7 @@
 module.exports = {
   transpileDependencies: true,
   configureWebpack: {
+    resolve: require("./webpack.config").resolve,
     externals: {
       "better-sqlite3": "commonjs better-sqlite3",
     },
