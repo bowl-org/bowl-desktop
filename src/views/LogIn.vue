@@ -61,7 +61,8 @@
 
 <script>
 import UserField from "@/components/UserField.vue";
-import * as logInService from "@/services/logInService";
+import logInService from "@/services/logInService";
+import userModel from "@/backend/models/user";
 import authTokenService from "@/services/authTokenService";
 export default {
   name: "LogIn",
@@ -79,6 +80,22 @@ export default {
     UserField,
   },
   created() {
+    logInService
+      .autoLogInCheck()
+      .then(async (user) => {
+        this.$store.dispatch("setUser", user);
+        let token = await authTokenService.getToken();
+        this.$store.dispatch("setToken", token);
+        console.log("Store user:", this.$store.getters.user);
+        console.log("Store token:", this.$store.getters.token);
+        this.$router.push({
+          path: "main",
+          //query: { rememberme: this.rememberMe },
+        });
+      })
+      .catch((err) => {
+        console.log("Auto log in token not found!", err);
+      });
     //DEV
     //Redirect directly to chat window
     //this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
@@ -91,25 +108,25 @@ export default {
       this.emailData = emailInp;
     },
     logIn() {
+      let user = userModel;
+      user.email = this.emailData;
+      user.password = this.passwdData;
       logInService
-        .logIn({ email: this.emailData, password: this.passwdData })
+        .logIn(user, this.rememberMe)
         .then((res) => {
           this.infoMessage = res.data.msg;
           this.responseStatus = res.data.status;
-          console.log(res.data);
-          let token = res.data.data;
-          console.log("LOGIN_RESPONSE_TOKEN:", token);
-          authTokenService
-            .setToken(token)
-            .then(() => {
-              this.$router.push({
-                path: "main",
-                query: { rememberme: this.rememberMe },
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+          let token = res.data.token;
+
+          console.log("USER:", user);
+          this.$store.dispatch("setUser", user);
+          this.$store.dispatch("setToken", token);
+
+          this.$router.push({
+            path: "main",
+            //query: { rememberme: this.rememberMe },
+            //params: { user, token },
+          });
         })
         .catch((err) => {
           this.infoMessage = err.response.data.msg;

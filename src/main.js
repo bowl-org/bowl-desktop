@@ -14,7 +14,8 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { fab } from "@fortawesome/free-brands-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 import router from './router'
+import store from './store'
 /* add icons to the library */
 library.add(fas, fab, far);
 
-createApp(App).use(router).use(router).use(router).component("font-awesome-icon", FontAwesomeIcon).mount("#app");
+createApp(App).use(store).use(router).use(router).use(router).component("font-awesome-icon", FontAwesomeIcon).mount("#app");

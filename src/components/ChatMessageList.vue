@@ -26,7 +26,6 @@ import ChatMessage from "./ChatMessage.vue";
 import ChatDateSpan from "./ChatDateSpan.vue";
 import io from "socket.io-client";
 import messageService from "../services/messageService";
-import authTokenService from "../services/authTokenService";
 export default {
   name: "ChatMessageList",
   components: {
@@ -35,9 +34,14 @@ export default {
   },
   data() {
     return {
-      name: "",
+      //name: "",
       messages: [],
     };
+  },
+  computed: {
+    name() {
+      return this.$store.getters.user.name;
+    },
   },
   methods: {
     loadMessages() {
@@ -58,7 +62,8 @@ export default {
       let todaySplit = today.toString().split(" ");
       let msgData = {
         date: todaySplit[2] + " " + todaySplit[1] + " " + todaySplit[3],
-        time: today.getHours() + ":" + String(today.getMinutes()).padStart(2, "0"),
+        time:
+          today.getHours() + ":" + String(today.getMinutes()).padStart(2, "0"),
         messageType: "sent",
         message: message,
       };
@@ -90,41 +95,28 @@ export default {
   },
   created() {
     this.loadMessages();
-    var sampleNameList = [
-      "Mehmet Ümit Özden",
-//      "Onur Yılmaz",
-//      "Bill Joy",
-//      "Evan You",
-//      "Adam Wathan",
-//      "Steve Schoger",
-//      "Tim Berners-Lee",
-    ];
-    this.name =
-      sampleNameList[Math.floor(Math.random() * sampleNameList.length)];
-
-    authTokenService.getToken().then((token) => {
-      console.log("TOKEN: ", token);
-      this.socket = io(process.env.VUE_APP_BASE_URL, {
-        path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
-        extraHeaders: {
-          "token": token.data,
-        },
-      });
-      this.socket.on("chatMessage", (data) => {
-        this.receiveMessage(data);
-        console.log("Message received: ", data);
-      });
-      this.socket.on("connect_error", (data) => {
-        console.log("CONNECT_ERROR: ", data);
-        console.log("SOCKET: ", this.socket);
-      });
-      this.socket.on("online", (friendName) => {
-        console.log(friendName + " is online");
-      });
-      setInterval(() => {
-        this.socket.emit("online", this.name);
-      }, 10000);
+    let token = this.$store.getters.token;
+    console.log("TOKEN: ", token);
+    this.socket = io(process.env.VUE_APP_BASE_URL, {
+      path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
+      extraHeaders: {
+        token: token.data,
+      },
     });
+    this.socket.on("chatMessage", (data) => {
+      this.receiveMessage(data);
+      console.log("Message received: ", data);
+    });
+    this.socket.on("connect_error", (data) => {
+      console.log("CONNECT_ERROR: ", data);
+      console.log("SOCKET: ", this.socket);
+    });
+    this.socket.on("online", (friendName) => {
+      console.log(friendName + " is online");
+    });
+    setInterval(() => {
+      this.socket.emit("online", this.name);
+    }, 10000);
   },
 };
 </script>

@@ -24,9 +24,13 @@ const deleteUser = async (userData) => {
   const statement = db.prepare("DELETE FROM users WHERE id = @id");
   return statement.run(userData);
 };
-const findUser = async (userData) => {
-  const statement = db.prepare("SELECT * FROM users WHERE id = @id");
-  return statement.run(userData);
+const findUser = async (id) => {
+  const statement = db.prepare("SELECT * FROM users WHERE id = ?");
+  return statement.get(id);
+};
+const findUserByEmail = async (email) => {
+  const statement = db.prepare("SELECT * FROM users WHERE email = ?");
+  return statement.get(email);
 };
 const getAllUsers = async () => {
   return db.prepare("SELECT * FROM users").all();
@@ -37,5 +41,6 @@ export default {
   updateUser,
   deleteUser,
   findUser,
+  findUserByEmail,
   getAllUsers,
 };

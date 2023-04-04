@@ -10,6 +10,9 @@ const deleteUser = async(id) => {
 const findUser = async(id) => {
   return  window.ipcRenderer.invoke("findUser", id);
 }
+const findUserByEmail = async(email) => {
+  return  window.ipcRenderer.invoke("findUserByEmail", email);
+}
 const getAllUsers = async() => {
   return  window.ipcRenderer.invoke("getAllUsers");
 }
@@ -18,5 +21,6 @@ export default {
   updateUser,
   deleteUser,
   findUser,
+  findUserByEmail,
   getAllUsers,
 }

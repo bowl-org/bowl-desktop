@@ -1,8 +1,24 @@
-import userRepo from "@/ipc-wrappers/userRepositoryWrapper"
-const createNewUser = async (newUser) => {
-  return await userRepo.insertUser(newUser);
+import userRepo from "@/ipc-wrappers/userRepositoryWrapper";
+import cryptionService from "@/services/cryptionService";
 
-}
+const createNewUser = async (newUser) => {
+  //Create key pair if not exists
+  if (newUser.privateKey == null || newUser.privateKey == "") {
+    console.log("Creating key pair for new user...");
+    const keyPair = await cryptionService.generateKeyPair();
+    newUser.privateKey = keyPair.privateKey;
+    newUser.publicKey = keyPair.publicKey;
+  }
+  return await userRepo.insertUser(newUser);
+};
+const findByEmail = async (email) => {
+  return await userRepo.findUserByEmail(email);
+};
+const findUser = async (id) => {
+  return await userRepo.findUser(id);
+};
 export default {
-  createNewUser
-}
+  createNewUser,
+  findUser,
+  findByEmail,
+};

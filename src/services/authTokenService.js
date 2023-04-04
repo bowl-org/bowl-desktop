@@ -6,7 +6,11 @@ const setToken = async (tokenData) => {
 const getToken = async () => {
   return await authTokenRepo.getToken();
 };
+const deleteToken = async () => {
+  return await authTokenRepo.deleteToken();
+}
 export default {
   setToken,
   getToken,
+  deleteToken
 };

@@ -7,3 +7,6 @@ ipcMain.handle("getToken", async (event, args) => {
 ipcMain.handle("setToken", async (event, args) => {
   return await authTokenRepo.setToken(args);
 });
+ipcMain.handle("deleteToken", async (event, args) => {
+  return await authTokenRepo.deleteToken(args);
+});

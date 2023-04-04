@@ -13,6 +13,9 @@ ipcMain.handle("updateUser", async (event, args) => {
 ipcMain.handle("findUser", async (event, args) => {
   return await userRepo.findUser(args);
 });
+ipcMain.handle("findUserByEmail", async (event, args) => {
+  return await userRepo.findUserByEmail(args);
+});
 ipcMain.handle("getAllUsers", async (event, args) => {
   return await userRepo.getAllUsers(args);
 });

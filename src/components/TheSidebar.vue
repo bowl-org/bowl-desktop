@@ -2,14 +2,33 @@
   <!--More options container is relative to sidebar because i want to component be fixed position while scrolling-->
   <div class="the-sidebar flex flex-col w-75 max-h-screen relative">
     <div class="upper-sidebar flex items-center justify-between">
-      <ConversationAvatar @click="toggleUserMenu" letter="O" class="m-5" />
-      <ul v-if="showUserMenu" class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-20 left-5 font-medium bg-neutral-200 rounded-md ">
-        <li class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75 ">Demo</li>
-        <li class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75">Demo</li>
-        <li class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900" @click="logOut">Log Out</li>
+      <ConversationAvatar @click="toggleUserMenu" :letter="userName.charAt(0)" class="m-5" />
+      <ul
+        v-if="showUserMenu"
+        class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-20 left-5 font-medium bg-neutral-200 rounded-md"
+      >
+        <li
+          class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75"
+        >
+          Demo
+        </li>
+        <li
+          class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75"
+        >
+          Demo
+        </li>
+        <li
+          class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900"
+          @click="logOut"
+        >
+          Log Out
+        </li>
       </ul>
       <div class="upper-rigth-sidebar flex flex-col items-center">
-        <button class="settings w-12 h-12 text-4xl m-3 text-center text-white" @click="openSettings">
+        <button
+          class="settings w-12 h-12 text-4xl m-3 text-center text-white"
+          @click="openSettings"
+        >
           <font-awesome-icon
             icon="fa-solid fa-gear "
             class="hover:animate-spin"
@@ -47,6 +66,7 @@ import ConversationAvatar from "./ConversationAvatar.vue";
 import SearchSidebar from "./SearchSidebar.vue";
 import ConversationTypeMenu from "./ConversationTypeMenu.vue";
 import ConversationList from "./ConversationList.vue";
+import logInService from "../services/logInService";
 
 export default {
   name: "TheSidebar",
@@ -66,20 +86,34 @@ export default {
       showUserMenu: false,
     };
   },
+  computed: {
+    userName(){
+      return this.$store.getters.user.name;
+    }
+  },
   methods: {
     setConversationType(conversationType) {
       this.conversationType = conversationType;
     },
-    toggleUserMenu(){
+    toggleUserMenu() {
       this.showUserMenu = !this.showUserMenu;
     },
     logOut() {
-      this.$router.push("/");
+      logInService
+        .logOut()
+        .then(() => {
+          this.$store.dispatch("deleteUser");
+          this.$store.dispatch("deleteToken");
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          console.log("Log out error!", err);
+        });
       //Log out
     },
-    openSettings(){
+    openSettings() {
       this.$router.push("/settings");
-    }
+    },
   },
 };
 </script>
