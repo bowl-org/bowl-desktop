@@ -22,6 +22,7 @@ const logIn = async (logInData, rememberMe) => {
   }
   //res.data.data -> response token object
   res.data.token = { userId: user.id, data: res.data.data };
+  res.data.user = user;
   //Save token to database
   if (rememberMe) {
     await authTokenService.setToken(res.data.token);

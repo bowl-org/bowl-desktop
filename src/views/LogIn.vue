@@ -108,17 +108,17 @@ export default {
       this.emailData = emailInp;
     },
     logIn() {
-      let user = userModel;
-      user.email = this.emailData;
-      user.password = this.passwdData;
+      let loginUser = userModel;
+      loginUser.email = this.emailData;
+      loginUser.password = this.passwdData;
       logInService
-        .logIn(user, this.rememberMe)
+        .logIn(loginUser, this.rememberMe)
         .then((res) => {
           this.infoMessage = res.data.msg;
           this.responseStatus = res.data.status;
           let token = res.data.token;
+          let user = res.data.user;
 
-          console.log("USER:", user);
           this.$store.dispatch("setUser", user);
           this.$store.dispatch("setToken", token);
 
