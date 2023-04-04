@@ -58,7 +58,7 @@ export default {
       let todaySplit = today.toString().split(" ");
       let msgData = {
         date: todaySplit[2] + " " + todaySplit[1] + " " + todaySplit[3],
-        time: today.getHours() + ":" + today.getMinutes(),
+        time: today.getHours() + ":" + String(today.getMinutes()).padStart(2, "0"),
         messageType: "sent",
         message: message,
       };
