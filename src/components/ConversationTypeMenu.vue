@@ -4,11 +4,11 @@
       Favorites
     </button>
     <button
-      class="conversetaion-type-btn p-3 grow" @click="selectConversationType('Friends')" :class="selectedConversationType === 'Friends' ? 'selectedType' : 'notSelectedType'"
+      class="conversetaion-type-btn p-3 grow" @click="selectConversationType('Contact')" :class="selectedConversationType === 'Contact' ? 'selectedType' : 'notSelectedType'"
     >
-      Friends
+      Contacts
     </button>
-    <button class="conversetaion-type-btn rounded-r-lg p-3 grow " @click="selectConversationType('Groups')" :class="selectedConversationType === 'Groups' ? 'selectedType' : 'notSelectedType'">
+    <button class="conversetaion-type-btn rounded-r-lg p-3 grow " @click="selectConversationType('Group')" :class="selectedConversationType === 'Group' ? 'selectedType' : 'notSelectedType'">
       Groups
     </button>
   </div>

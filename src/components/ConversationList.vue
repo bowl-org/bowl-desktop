@@ -1,16 +1,19 @@
 <template>
   <div class="flex flex-col justify-between items-center overflow-x-hidden">
-    <p class="white">Selected conversation type is: {{ conversationType }}</p>
-    <ConversationBox
+    <template
       v-for="(conversation, index) in this.$store.getters.conversations"
       :key="conversation"
-      :conversationName="conversation.name"
-      :onlineStatus="conversation.onlineStatus"
-      :isActive="conversation.isActive"
-      :lastMessageTimestamp="conversation.lastMessageTimestamp"
-      :lastMessage="conversation.lastMessage"
-      @click="selectConversation(index)"
-    />
+    >
+      <ConversationBox
+        v-if="conversationType == 'Favorites' && conversation.isFav || conversationType == conversation.conversationType"
+        :conversationName="conversation.name"
+        :onlineStatus="conversation.onlineStatus"
+        :isActive="conversation.isActive"
+        :lastMessageTimestamp="conversation.lastMessageTimestamp"
+        :lastMessage="conversation.lastMessage"
+        @click="selectConversation(index)"
+      />
+    </template>
   </div>
 </template>
 
@@ -44,7 +47,7 @@ export default {
       );
       console.log("Last active index:", lastActiveIndex);
       console.log("Active conversation id:", activeConversationId);
-      this.conversations[lastActiveIndex].isActive = 'false';
+      this.conversations[lastActiveIndex].isActive = "false";
       this.conversations[index].isActive = "true";
       this.$store.dispatch(
         "setActiveConversationId",
@@ -64,6 +67,7 @@ export default {
             lastMessageTimestamp: "01/11/2022",
             lastMessage: lastMessage,
             isFav: true,
+            conversationType: "Contact",
           },
           {
             conversationId: 2,
@@ -73,6 +77,7 @@ export default {
             lastMessageTimestamp: "08/10/2022",
             lastMessage: "Hello, did you tried vi editor ",
             isFav: false,
+            conversationType: "Contact",
           },
           {
             conversationId: 1,
@@ -82,6 +87,17 @@ export default {
             lastMessageTimestamp: "20/08/2022",
             lastMessage: "Talk is cheap. Show me the code.",
             isFav: true,
+            conversationType: "Contact",
+          },
+          {
+            conversationId: 3,
+            name: "Demo Group",
+            //onlineStatus: "offline",
+            isActive: "false",
+            lastMessageTimestamp: "20/08/2022",
+            lastMessage: "This is group last message.",
+            isFav: true,
+            conversationType: "Group",
           },
         ];
         this.conversations.forEach((x) =>
