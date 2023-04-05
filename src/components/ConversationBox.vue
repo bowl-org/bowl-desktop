@@ -10,6 +10,12 @@
   >
     <!--flex-none means don't shrink or grow in flex box-->
     <ConversationAvatar
+      v-if="conversationType == 'Group'"
+      class="flex-none rounded-lg m-3 w-12 h-12"
+      :letter="conversationName[0]"
+    />
+    <ConversationAvatar
+      v-else-if="conversationType == 'Contact'"
       class="flex-none rounded-lg m-3 w-12 h-12"
       showOnlineDot="true"
       :letter="conversationName[0]"
@@ -56,6 +62,10 @@ export default {
       type: String,
     },
     conversationName: {
+      type: String,
+      required: true,
+    },
+    conversationType: {
       type: String,
       required: true,
     },

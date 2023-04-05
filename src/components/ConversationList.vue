@@ -11,6 +11,7 @@
         :isActive="conversation.isActive"
         :lastMessageTimestamp="conversation.lastMessageTimestamp"
         :lastMessage="conversation.lastMessage"
+        :conversationType="conversation.conversationType"
         @click="selectConversation(index)"
       />
     </template>

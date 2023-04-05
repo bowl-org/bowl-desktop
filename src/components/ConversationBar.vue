@@ -17,7 +17,7 @@
           />
         </button>
       </div>
-      <div class="active-info flex items-center">
+      <div v-if="conversationType != 'Group'" class="active-info flex items-center">
         <OnlineDot :status="onlineStatus" />
         <p class="text-sm ml-3 text-gray-500">{{ onlineStatus }}</p>
       </div>
