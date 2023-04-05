@@ -44,8 +44,21 @@ export default {
     },
   },
   methods: {
+    watchActiveConversationChanges(){
+      this.$store.watch((state, getters) => getters.activeConversationId, () => {
+        console.log("WATCHER:",this.$store.getters.activeConversationId);
+        this.loadMessages();
+
+      });
+
+    },
+    updateLastMessage(msg){
+      //Demonstration
+      let payload = {conversationId: this.$store.getters.activeConversationId, lastMessage: msg}
+      this.$store.dispatch("setLastMessageOfConversation", payload);
+    },
     loadMessages() {
-      console.log("Load messages from db");
+      console.log("Load messages from db, ID:",this.$store.getters.activeConversationId);
       messageService
         .getAllMessages()
         .then((messages) => {
@@ -72,6 +85,7 @@ export default {
         .then((msg) => {
           console.log("Sent message inserted successfully!: ", msg);
           this.messages.push(msgData);
+          this.updateLastMessage(message);
           this.socket.emit("chatMessage", msgData);
         })
         .catch((err) => {
@@ -87,6 +101,7 @@ export default {
         .then((msg) => {
           console.log("Received message inserted successfully!: ", msg);
           this.messages.push(msgData);
+          this.updateLastMessage(msgData.msg);
         })
         .catch((err) => {
           console.log(err);
@@ -95,6 +110,7 @@ export default {
   },
   created() {
     this.loadMessages();
+    this.watchActiveConversationChanges();
     let token = this.$store.getters.token;
     console.log("TOKEN: ", token);
     this.socket = io(process.env.VUE_APP_BASE_URL, {

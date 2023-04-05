@@ -6,6 +6,8 @@ export default createStore({
   state: {
     user: userModel,
     token: tokenModel,
+    activeConversationId: 0,
+    conversations: [],
   },
   getters: {
     user(state) {
@@ -14,12 +16,32 @@ export default createStore({
     token(state) {
       return state.token;
     },
+    activeConversationId(state) {
+      return state.activeConversationId;
+    },
+    conversations(state) {
+      return state.conversations;
+    },
+    getConversationIndexById: (state) => (conversationId) => {
+      return state.conversations.findIndex(
+        (x) => x.conversationId == conversationId
+      );
+    },
+    getConversationById: (state) => (conversationId) => {
+      return state.conversations.find(
+        (x) => x.conversationId == conversationId
+      );
+    },
+
     //Method style access
     //token: (state) =>{
     //return state.token;
     //}
   },
   mutations: {
+    SET_ACTIVE_CONVERSATION_ID(state, conversationId) {
+      state.activeConversationId = conversationId;
+    },
     SET_USER(state, userData) {
       //set if not null
       state.user.name = userData.name || state.user.name;
@@ -31,14 +53,30 @@ export default createStore({
       state.token.userId = tokenData.userId || state.token.userId;
       state.token.data = tokenData.data || state.token.data;
     },
-    DELETE_USER(state){
+    DELETE_USER(state) {
       state.token = tokenModel;
-
     },
-    DELETE_TOKEN(state){
+    DELETE_TOKEN(state) {
       state.user = userModel;
-
-    }
+    },
+    ADD_CONVERSATION(state, conversation) {
+      state.conversations.push(conversation);
+    },
+    SET_LAST_MESSAGE_OF_CONVERSATION(state, { conversationId, lastMessage,getters }) {
+      let conversationIndex =
+        getters.getConversationIndexById(conversationId);
+      if (conversationIndex != -1) {
+        state.conversations[conversationIndex].lastMessage = lastMessage;
+      }
+    },
+    TOGGLE_CONVERSATION_FAV(state, {conversationId, getters}) {
+      let conversationIndex =
+        getters.getConversationIndexById(conversationId);
+      if (conversationIndex != -1) {
+        state.conversations[conversationIndex].isFav =
+          !state.conversations[conversationIndex].isFav;
+      }
+    },
   },
   actions: {
     setUser({ commit }, newUserData) {
@@ -52,6 +90,22 @@ export default createStore({
     },
     deleteUser({ commit }) {
       commit("DELETE_USER");
+    },
+    setActiveConversationId({ commit }, activeConversationId) {
+      commit("SET_ACTIVE_CONVERSATION_ID", activeConversationId);
+    },
+    addConversation({ commit }, conversation) {
+      commit("ADD_CONVERSATION", conversation);
+    },
+    setLastMessageOfConversation({ commit, getters}, { conversationId, lastMessage }) {
+      commit("SET_LAST_MESSAGE_OF_CONVERSATION", {
+        conversationId,
+        lastMessage,
+        getters
+      });
+    },
+    toggleConversationFav({ commit, getters }, conversationId) {
+      commit("TOGGLE_CONVERSATION_FAV", {conversationId, getters});
     },
   },
   modules: {

@@ -1,30 +1,7 @@
 <template>
   <div class="the-chat bg-neutral-100 flex flex-col  justify-between max-h-screen grow">
     <div class="upper-chat relative bg-neutral-300 flex justify-between items-center">
-      <div class="current-chat-box flex items-center">
-        <ConversationAvatar letter="M" class="m-5 rounded-md" />
-        <div class="chat-box-info">
-          <div class="flex items-center">
-            <p class="font-medium">Mehmet Ümit Özden</p>
-            <button class="fav-btn active:animate-ping" @click="addOrRemoveFav">
-              <font-awesome-icon
-                v-if="isInFav"
-                icon="fa-solid fa-heart"
-                class="pl-3 text-lg fav"
-              />
-              <font-awesome-icon
-                v-else
-                icon="fa-regular fa-heart"
-                class="pl-3 text-lg fav"
-              />
-            </button>
-          </div>
-          <div class="active-info flex items-center">
-            <OnlineDot :status="status" />
-            <p class="text-sm ml-3 text-gray-500">{{status}}</p>
-          </div>
-        </div>
-      </div>
+      <ConversationBar v-bind="conversation" @toggleFav="toggleFav"/>
       <button @click="toggleChatMenu" class="w-12 h-12 text-3xl">
         <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
@@ -56,18 +33,16 @@
 </template>
 
 <script>
-import ConversationAvatar from "@/components/ConversationAvatar.vue";
-import OnlineDot from "@/components/OnlineDot.vue";
+import ConversationBar from "@/components/ConversationBar.vue";
 import EmojiSelection from "@/components/modals/EmojiSelection.vue";
 import ChatMessageList from "@/components/ChatMessageList.vue"
 
 export default {
   name: "TheChat",
   components: {
-    ConversationAvatar,
-    OnlineDot,
     EmojiSelection,
-    ChatMessageList
+    ChatMessageList,
+    ConversationBar
   },
   data() {
     return {
@@ -84,9 +59,15 @@ export default {
       required: true,
     },
   },
+  computed: {
+    conversation(){
+      console.log("CONVERSATION:",this.$store.getters.getConversationById(this.$store.getters.activeConversationId));
+      return this.$store.getters.getConversationById(this.$store.getters.activeConversationId);
+    }
+  },
   methods: {
-    addOrRemoveFav() {
-      this.isInFav = !this.isInFav;
+    toggleFav(){
+      this.$store.dispatch("toggleConversationFav", this.$store.getters.activeConversationId);
     },
     sendMessage(){
       this.$refs.chatMessageList.sendMessage(this.inputVal);
