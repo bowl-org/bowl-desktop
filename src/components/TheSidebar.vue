@@ -36,7 +36,7 @@
         </button>
       </div>
     </div>
-    <SearchSidebar />
+    <SearchSidebar @updateSearch="updateSearchFilter"/>
     <ConversationTypeMenu @getConversationType="setConversationType($event)" />
     <div class="conversations-container overflow-auto max-h-screen max-w-sm">
       <div
@@ -56,7 +56,7 @@
           <font-awesome-icon icon="fa-regular fa-comment-dots" />
         </button>
       </div>
-      <ConversationList :conversationType="conversationType" />
+      <ConversationList :conversationType="conversationType" :searchFilter="searchFilter" />
     </div>
   </div>
 </template>
@@ -84,6 +84,7 @@ export default {
       conversationType: String,
       showMore: false,
       showUserMenu: false,
+      searchFilter: ""
     };
   },
   computed: {
@@ -92,6 +93,9 @@ export default {
     }
   },
   methods: {
+    updateSearchFilter(searchText){
+      this.searchFilter = searchText;
+    },
     setConversationType(conversationType) {
       this.conversationType = conversationType;
     },

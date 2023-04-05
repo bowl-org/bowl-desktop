@@ -1,11 +1,14 @@
 <template>
   <div class="flex flex-col justify-between items-center overflow-x-hidden">
     <template
-      v-for="(conversation, index) in this.$store.getters.conversations"
+      v-for="(conversation, index) in filteredConversationList"
       :key="conversation"
     >
       <ConversationBox
-        v-if="conversationType == 'Favorites' && conversation.isFav || conversationType == conversation.conversationType"
+        v-if="
+          (conversationType == 'Favorites' && conversation.isFav) ||
+          conversationType == conversation.conversationType
+        "
         :conversationName="conversation.name"
         :onlineStatus="conversation.onlineStatus"
         :isActive="conversation.isActive"
@@ -35,6 +38,9 @@ export default {
     conversationType: {
       type: String,
       required: true,
+    },
+    searchFilter: {
+      type: String,
     },
   },
   updated() {
@@ -107,6 +113,15 @@ export default {
         console.log("CONVERSATIONS VUEX:", this.$store.getters.conversations);
         this.$store.dispatch("setActiveConversationId", 1);
         this.selectConversation(1);
+      });
+    },
+  },
+  computed: {
+    filteredConversationList() {
+      return this.$store.getters.conversations.filter((conversation) => {
+        return conversation.name
+          .toLowerCase()
+          .includes(this.searchFilter.toLowerCase());
       });
     },
   },
