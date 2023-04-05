@@ -81,7 +81,7 @@ export default {
   },
   data() {
     return {
-      conversationType: String,
+      conversationType: "",
       showMore: false,
       showUserMenu: false,
       searchFilter: ""

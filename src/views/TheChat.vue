@@ -48,16 +48,9 @@ export default {
     return {
       messages: [],
       isInFav: true,
-      inputval: '',
+      inputVal: '',
       showChatMenu: false
     };
-  },
-  props: {
-    status: {
-      default: 'offline',
-      type: String,
-      required: true,
-    },
   },
   computed: {
     conversation(){

@@ -55,10 +55,10 @@ export default {
       console.log("Last active index:", lastActiveIndex);
       console.log("Active conversation id:", activeConversationId);
       this.conversations[lastActiveIndex].isActive = "false";
-      this.conversations[index].isActive = "true";
+      this.filteredConversationList[index].isActive = "true";
       this.$store.dispatch(
         "setActiveConversationId",
-        this.conversations[index].conversationId
+        this.filteredConversationList[index].conversationId
       );
     },
     loadConversations() {

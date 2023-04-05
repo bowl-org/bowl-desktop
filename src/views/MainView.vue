@@ -13,7 +13,7 @@ export default {
   name: 'MainView',
   data(){
     return {
-      status: "online"
+      //status: "online"
     }
   },
   created(){
