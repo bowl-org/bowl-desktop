@@ -8,7 +8,7 @@
       <ul v-if="showChatMenu" class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-16 right-5 font-medium bg-neutral-200 rounded-md ">
         <li class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75 ">Info</li>
         <li class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75">Search</li>
-        <li class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900" >Exit</li>
+        <li @click="closeApp()" class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900" >Exit</li>
       </ul>
     </div>
     <ChatMessageList ref="chatMessageList"/>
@@ -36,6 +36,8 @@
 import ConversationBar from "@/components/ConversationBar.vue";
 import EmojiSelection from "@/components/modals/EmojiSelection.vue";
 import ChatMessageList from "@/components/ChatMessageList.vue"
+// eslint-disable-next-line no-unused-vars
+import electronIpcWrapper from "@/ipc-wrappers/electronIpcWrapper";
 
 export default {
   name: "TheChat",
@@ -59,6 +61,9 @@ export default {
     }
   },
   methods: {
+    closeApp(){
+      electronIpcWrapper.closeApp();
+    },
     toggleFav(){
       this.$store.dispatch("toggleConversationFav", this.$store.getters.activeConversationId);
     },
@@ -68,6 +73,7 @@ export default {
     toggleChatMenu() {
       this.showChatMenu = !this.showChatMenu;
     },
+
   },
 };
 </script>

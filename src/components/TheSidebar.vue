@@ -8,14 +8,10 @@
         class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-20 left-5 font-medium bg-neutral-200 rounded-md"
       >
         <li
-          class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75"
-        >
-          Demo
-        </li>
-        <li
+          @click="$router.push({name:'profile'})"
           class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75"
         >
-          Demo
+          Profile
         </li>
         <li
           class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900"
