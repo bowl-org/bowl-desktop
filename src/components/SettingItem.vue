@@ -1,0 +1,34 @@
+<template>
+  <div
+    class="cursor-pointer select-none flex justify-between items-center p-10 px-16 m-3 rounded-xl"
+    :class="
+      isActive
+        ? 'bg-neutral-200 '
+        : 'bg-neutral-100 hover:bg-neutral-200'
+    "
+  >
+    <h1 class="text-xl font-medium text-slate-600">{{ itemName }}</h1>
+  </div>
+</template>
+<script>
+export default {
+  name: "SettingItem",
+  props: {
+    itemName: {
+      type: String,
+      required: true,
+    },
+    isActive: {
+      type: Boolean,
+    },
+  },
+};
+</script>
+<style>
+.setting-item-default {
+  background-color: #f2f4f7;
+}
+.setting-item-active {
+  background-color: #d1e4e8;
+}
+</style>

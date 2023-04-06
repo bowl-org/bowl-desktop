@@ -49,17 +49,34 @@ const routes = [
   {
     path: "/settings",
     name: "settings",
-    component: TheSettingsView
+    component: TheSettingsView,
+    children: [
+      {
+        path: "about",
+        name: "about",
+        component: () => import("@/views/AboutView.vue"),
+      },
+      {
+        path: "security",
+        name: "security",
+        component: () => import("@/views/TheSecurity.vue"),
+      },
+      {
+        path: "profile",
+        name: "profile",
+        component: () => import("@/views/TheProfile.vue"),
+      },
+    ],
   },
-  {
-    path: "/about",
-    name: "about",
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
-  },
+  //{
+  //  path: "/about",
+  //  name: "about",
+  //  // route level code-splitting
+  //  // this generates a separate chunk (about.[hash].js) for this route
+  //  // which is lazy-loaded when the route is visited.
+  //  component: () =>
+  //    import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
+  //},
 ];
 
 const router = createRouter({
@@ -69,7 +86,7 @@ const router = createRouter({
   routes,
 });
 //
-//Redirect undefined paths 
-router.replace({path: '*', redirect: '/'})
+//Redirect undefined paths
+router.replace({ path: "*", redirect: "/" });
 
 export default router;
