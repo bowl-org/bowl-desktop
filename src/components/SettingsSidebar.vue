@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral-100 flex flex-col w-80 max-h-screen overflow-x-hidden">
+  <div class="bg-neutral-100 flex flex-col w-80 max-h-screen overflow-x-hidden fixed">
     <SettingItem
       v-for="(setting, index) in settingList"
       :key="setting"

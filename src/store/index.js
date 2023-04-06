@@ -59,6 +59,9 @@ export default createStore({
     DELETE_TOKEN(state) {
       state.user = userModel;
     },
+    DELETE_CONVERSATIONS(state) {
+      state.conversations = [];
+    },
     ADD_CONVERSATION(state, conversation) {
       state.conversations.push(conversation);
     },
@@ -90,6 +93,9 @@ export default createStore({
     },
     deleteUser({ commit }) {
       commit("DELETE_USER");
+    },
+    deleteConversations({ commit }) {
+      commit("DELETE_CONVERSATIONS");
     },
     setActiveConversationId({ commit }, activeConversationId) {
       commit("SET_ACTIVE_CONVERSATION_ID", activeConversationId);

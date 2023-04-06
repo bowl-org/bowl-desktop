@@ -107,6 +107,8 @@ export default {
             conversationType: "Group",
           },
         ];
+        //Demonstration purposes
+        this.$store.dispatch("deleteConversations");
         this.conversations.forEach((x) =>
           this.$store.dispatch("addConversation", x)
         );

@@ -1,26 +1,30 @@
 <template>
-  <div class="select-none w-12 h-12 relative avatar-container rounded-full hover:contrast-125">
-  <button
-    class="w-12 h-12 text-xl font-semibold  text-center"
+  <div
+    class=" text-xl flex select-none w-12 h-12 relative avatar-container rounded-full hover:contrast-125 justify-center items-center"
   >
-    {{ letter }}
-  </button>
-  <OnlineDot :class="showOnlineDot != 'true' ? 'hidden' : '' " :status="onlineStatus" class="absolute right-0 bottom-0"/>
+    <button class="w-12 h-12 font-semibold text-center">
+      {{ letter }}
+    </button>
+    <OnlineDot
+      :class="showOnlineDot != 'true' ? 'hidden' : ''"
+      :status="onlineStatus"
+      class="absolute right-0 bottom-0"
+    />
   </div>
 </template>
 
 <script>
-import OnlineDot from "./OnlineDot.vue"
+import OnlineDot from "./OnlineDot.vue";
 export default {
   name: "ConversationAvatar",
   props: {
     letter: String,
     showOnlineDot: String,
-    onlineStatus: String
+    onlineStatus: String,
   },
   components: {
-    OnlineDot
-  }
+    OnlineDot,
+  },
 };
 </script>
 
