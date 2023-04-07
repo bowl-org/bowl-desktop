@@ -44,6 +44,23 @@ const routes = [
         name: "chat",
         component: () => import("@/views/TheChat.vue"),
       },
+      {
+        path: "/newconversation",
+        name: "newconversation",
+        component: () => import("@/views/NewConversation.vue"),
+        children: [
+          {
+            path: "/newgroup",
+            name: "newgroup",
+            component: () => import("@/views/NewGroup.vue"),
+          },
+          {
+            path: "/newcontact",
+            name: "newcontact",
+            component: () => import("@/views/NewContact.vue"),
+          },
+        ],
+      },
     ],
   },
   {

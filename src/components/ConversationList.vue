@@ -60,6 +60,7 @@ export default {
         "setActiveConversationId",
         this.filteredConversationList[index].conversationId
       );
+    this.$router.push({name: 'chat', params: {id: this.$store.getters.activeConversationId}});
     },
     loadConversations() {
       //Testing purposes

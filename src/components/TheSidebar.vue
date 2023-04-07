@@ -41,7 +41,7 @@
         <button
           v-if="showMore"
           class="w-8 h-8 m-1 rounded-full bg-sky-500 hover:bg-slate-600 text-white"
-          @click="add"
+          @click="$router.push({name: 'newconversation'})"
         >
           <font-awesome-icon icon="fa-solid fa-plus" />
         </button>
