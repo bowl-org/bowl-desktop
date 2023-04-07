@@ -4,20 +4,19 @@
       :letter="contact.name.charAt(0)"
       class="w-48 h-48 text-5xl"
     />
-      <h2 class="text-4xl font-bold text-slate-600 p-5">Status:</h2>
+    <div class="name flex flex-col justify-center items-center">
+      <h2 class="text-4xl font-bold text-slate-600 p-5">Name:</h2>
+      <p class="text-4xl font-medium text-slate-600 mx-20 p-5">
+        {{ contact.name }}
+      </p>
+    </div>
+    <h2 class="text-4xl font-bold text-slate-600 p-5">Status:</h2>
     <div
       class="online-status-container flex flex-row justify-center items-center mt-3"
     >
       <OnlineDot :status="contact.onlineStatus" class="p-2" />
       <p class="text-3xl font-medium ml-3 text-gray-500">
         {{ contact.onlineStatus }}
-      </p>
-    </div>
-
-    <div class="name flex flex-col justify-center items-center">
-      <h2 class="text-4xl font-bold text-slate-600 p-5">Name:</h2>
-      <p class="text-4xl font-medium text-slate-600 mx-20  p-5">
-        {{ contact.name }}
       </p>
     </div>
     <div class="email flex flex-col justify-center items-center">
