@@ -1,13 +1,12 @@
 <template>
-  <div class="grow flex flex-col justify-center items-center">
-    <div class="flex flex-row justify-between items-center p-5">
-    <h1 class="text-5xl font-medium text-slate-600 m-5">
-      Create New Conversation!
-    </h1>
-    <BackButton class="p-8" :goBackCounter="goBackCounter" />
-
+  <div class="flex flex-col items-center justify-between grow">
+    <div class="flex flex-row justify-between items-center p-5 sticky top-0">
+      <h1 class="text-5xl font-medium text-slate-600 m-5">
+        Create New Conversation!
+      </h1>
+      <BackButton class="p-8" :goBackCounter="goBackCounter" />
     </div>
-    <router-view />
+    <router-view class="grow"/>
     <div class="flex flex-row items-center justify-center">
       <NewConversationItem
         v-for="(newConversationItem, index) in newConversationList"
@@ -33,14 +32,14 @@ export default {
       goBackCounter: 1,
       newConversationList: [
         {
-          itemName: "New Group",
-          isActive: false,
-          routeName: "newgroup",
-        },
-        {
           itemName: "New Contact",
           isActive: false,
           routeName: "newcontact",
+        },
+        {
+          itemName: "New Group",
+          isActive: false,
+          routeName: "newgroup",
         },
       ],
     };

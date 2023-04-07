@@ -12,10 +12,11 @@
       </ul>
     </div>
     <ChatMessageList ref="chatMessageList"/>
+    <EmojiSelection @selectEmoji="selectEmoji" :class="!showEmojiSelection ? 'hidden' : ''"/>
     <div
       class="bottom-chat bg-neutral-300 flex justify-center items-center p-4 pl-0"
     >
-      <EmojiSelection class="mr-auto ml-3" />
+      <EmojiButton @click="toggleEmojiSelection" class="mr-auto ml-3" />
       <input
         type="text"
         v-model="inputVal"
@@ -34,6 +35,7 @@
 
 <script>
 import ConversationBar from "@/components/ConversationBar.vue";
+import EmojiButton from "@/components/EmojiButton.vue";
 import EmojiSelection from "@/components/modals/EmojiSelection.vue";
 import ChatMessageList from "@/components/ChatMessageList.vue"
 // eslint-disable-next-line no-unused-vars
@@ -42,6 +44,7 @@ import electronIpcWrapper from "@/ipc-wrappers/electronIpcWrapper";
 export default {
   name: "TheChat",
   components: {
+    EmojiButton,
     EmojiSelection,
     ChatMessageList,
     ConversationBar
@@ -51,7 +54,8 @@ export default {
       messages: [],
       isInFav: true,
       inputVal: '',
-      showChatMenu: false
+      showChatMenu: false,
+      showEmojiSelection: false
     };
   },
   computed: {
@@ -72,10 +76,17 @@ export default {
     },
     sendMessage(){
       this.$refs.chatMessageList.sendMessage(this.inputVal);
+      this.inputVal = "";
     },
     toggleChatMenu() {
       this.showChatMenu = !this.showChatMenu;
     },
+    toggleEmojiSelection() {
+      this.showEmojiSelection = !this.showEmojiSelection;
+    },
+    selectEmoji(emoji){
+      this.inputVal += emoji;
+    }
 
   },
 };

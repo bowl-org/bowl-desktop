@@ -25,6 +25,7 @@
     "better-sqlite3": "^8.0.1",
     "core-js": "^3.8.3",
     "crypto-browserify": "^3.12.0",
+    "emoji.json": "^14.0.0",
     "express": "^4.18.2",
     "postcss": "^8",
     "socket.io-client": "^4.5.3",
