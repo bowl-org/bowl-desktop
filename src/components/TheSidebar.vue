@@ -40,13 +40,13 @@
       >
         <button
           v-if="showMore"
-          class="w-8 h-8 m-1 rounded-full bg-sky-500 hover:bg-slate-600 text-white"
+          class="w-8 h-8 m-1 rounded-full bg-sky-500 hover:bg-sky-800 text-white"
           @click="$router.push({name: 'newconversation'})"
         >
           <font-awesome-icon icon="fa-solid fa-plus" />
         </button>
         <button
-          class="w-12 h-12 m-3 text-xl rounded-full bg-sky-500 hover:bg-slate-500 text-white chat-btn"
+          class="w-12 h-12 m-3 text-xl rounded-full bg-sky-500 hover:contrast-75 text-white chat-btn"
           @click="showMore = !showMore"
         >
           <font-awesome-icon icon="fa-regular fa-comment-dots" />
