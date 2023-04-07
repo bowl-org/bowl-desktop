@@ -61,10 +61,14 @@ export default {
   computed: {
     conversation(){
       console.log("CONVERSATION:",this.$store.getters.getConversationById(this.$store.getters.activeConversationId));
+      this.closeEmojiSelection();
       return this.$store.getters.getConversationById(this.$store.getters.activeConversationId);
     }
   },
   methods: {
+    closeEmojiSelection(){
+      this.showEmojiSelection = false;
+    },
     openConversationInfo(){
       this.$router.push({name: 'conversationinfo', params: {id: this.$store.getters.activeConversationId}});
     },

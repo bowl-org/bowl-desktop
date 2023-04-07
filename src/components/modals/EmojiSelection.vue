@@ -1,12 +1,17 @@
 <template>
   <div class="bg-neutral-200 overflow-auto max-h-screen">
-    <button v-for="emoji in emojiList" :key="emoji" class="m-2" @click="selectEmoji(emoji.char)">
+    <button
+      v-for="emoji in emojiList"
+      :key="emoji"
+      class="m-2"
+      @click="selectEmoji(emoji.char)"
+    >
       {{ emoji.char }}
     </button>
   </div>
 </template>
 <script>
-import Emoji from "emoji.json";
+const EmojiJson = () => require("emoji.json");
 export default {
   name: "EmojiSelection",
   data() {
@@ -14,22 +19,20 @@ export default {
       emojiList: [],
     };
   },
-  created() {
-    Emoji.forEach((x) => {
-      let emoji = {
-        char: "",
-        name: "",
-      };
-      emoji.char = x.char;
-      emoji.name = x.name;
-      this.emojiList.push(emoji);
+  mounted() {
+    EmojiJson().forEach((x) => {
+      this.emojiList.push({
+        char: x.char,
+        name: x.name,
+      });
     });
   },
-  methods:{
-    selectEmoji(emojiChar){
+  created() {},
+  methods: {
+    selectEmoji(emojiChar) {
       this.$emit("selectEmoji", emojiChar);
-    }
-  }
+    },
+  },
 };
 </script>
 <style></style>
