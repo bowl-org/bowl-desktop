@@ -1,6 +1,6 @@
 <template>
 <!--TODO:Dynamically render chat component depends on the conversation-->
-    <TheSidebar/>
+    <TheSidebar class="sticky top-0"/>
     <router-view/>
 </template>
 

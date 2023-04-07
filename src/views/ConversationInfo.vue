@@ -1,12 +1,16 @@
 <template>
   <div class="grow flex flex-col justify-center items-center">
-    <div class="flex flex-row justify-between items-center p-5">
-      <h1 class="text-5xl font-medium text-slate-600 m-5">Conversation Info</h1>
-      <BackButton class="p-8" goBackCounter="2" />
-    </div>
-    <div class="grow">
-      <router-view />
-      <!--Items-->
+    <div>
+      <div
+        class="upper-bar flex flex-row justify-between sticky top-0 z-10 bg-white"
+      >
+        <h1 class="text-5xl font-medium text-slate-600 m-5">
+          Conversation Info
+        </h1>
+        <BackButton class="p-8" goBackCounter="2" />
+      </div>
+        <router-view class="grow" />
+        <!--Items-->
     </div>
   </div>
 </template>

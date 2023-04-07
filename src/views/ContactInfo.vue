@@ -1,16 +1,75 @@
 <template>
-      <h1 class="text-5xl font-medium text-slate-600 m-5">Contact Info</h1>
+  <div class="flex flex-col justify-center items-center">
+    <ConversationAvatar
+      :letter="contact.name.charAt(0)"
+      class="w-48 h-48 text-5xl"
+    />
+      <h2 class="text-4xl font-bold text-slate-600 p-5">Status:</h2>
+    <div
+      class="online-status-container flex flex-row justify-center items-center mt-3"
+    >
+      <OnlineDot :status="contact.onlineStatus" class="p-2" />
+      <p class="text-3xl font-medium ml-3 text-gray-500">
+        {{ contact.onlineStatus }}
+      </p>
+    </div>
+
+    <div class="name flex flex-col justify-center items-center">
+      <h2 class="text-4xl font-bold text-slate-600 p-5">Name:</h2>
+      <p class="text-4xl font-medium text-slate-600 mx-20  p-5">
+        {{ contact.name }}
+      </p>
+    </div>
+    <div class="email flex flex-col justify-center items-center">
+      <h2 class="text-4xl font-bold text-slate-600 p-5">Email:</h2>
+      <p class="text-4xl font-medium text-slate-600 mx-20 p-5">
+        {{ contact.email }}
+      </p>
+    </div>
+    <div class="public-key flex flex-col justify-center items-center">
+      <h2 class="text-4xl font-bold text-slate-600 p-5 w-full">Public Key:</h2>
+      <p class="text-4xl font-medium text-slate-600 p-5 mx-20 break-all">
+        {{ contact.publicKey }}
+      </p>
+    </div>
+  </div>
 </template>
 <script>
+import ConversationAvatar from "@/components/ConversationAvatar.vue";
+import OnlineDot from "@/components/OnlineDot.vue";
 export default {
   name: "ContactInfo",
   components: {
+    ConversationAvatar,
+    OnlineDot,
   },
   data() {
     return {
+      contact: {
+        name: "",
+        email: "",
+        publicKey: "",
+        onlineStatus: "",
+      },
     };
   },
-  methods: {
+  created() {
+    let contactModel = {
+      name: "",
+      email: "dummy_email@example.com",
+      publicKey: "dummy public key",
+      onlineStatus: "",
+      // conversationType: "",
+      // lastMessageTimestamp: "",
+      // lastMessage: "",
+    };
+    let activeContact = this.$store.getters.getConversationById(
+      this.$store.getters.activeConversationId
+    );
+    contactModel.name = activeContact.name;
+    contactModel.onlineStatus = activeContact.onlineStatus;
+    this.contact = contactModel;
   },
+  methods: {},
 };
 </script>
