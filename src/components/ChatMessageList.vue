@@ -1,6 +1,6 @@
 <template>
   <div
-    class="scroll-reverser-div overflow-auto max-h-screen flex flex-col-reverse"
+    class="scroll-reverser-div overflow-y-auto overflow-x-hidden  max-h-screen flex flex-col-reverse"
   >
     <div class="flex-col">
       <div
@@ -60,7 +60,7 @@ export default {
     loadMessages() {
       console.log("Load messages from db, ID:",this.$store.getters.activeConversationId);
       messageService
-        .getAllMessages()
+        .getAllMessages(this.$store.getters.activeConversationId)
         .then((messages) => {
           this.messages = messages;
         })

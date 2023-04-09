@@ -1,6 +1,6 @@
 <template>
   <div
-    class="flex flex-col justify-between"
+    class="flex flex-col justify-between break-all"
     :class="messageType === 'sent' ? 'items-end' : 'items-start'"
   >
     <p

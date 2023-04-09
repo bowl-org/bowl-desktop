@@ -1,7 +1,7 @@
 <template>
 <!--TODO:Dynamically render chat component depends on the conversation-->
     <TheSidebar class="sticky top-0"/>
-    <router-view/>
+    <router-view class="overflow-hidden"/>
 </template>
 
 <script>
