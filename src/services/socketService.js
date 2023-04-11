@@ -1,0 +1,88 @@
+import io from "socket.io-client";
+import Store from "@/store/index";
+import messageService from "../services/messageService";
+
+let socket;
+const initSocket = () => {
+
+  socket = io(process.env.VUE_APP_BASE_URL, {
+    path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
+    extraHeaders: {
+      token: Store.getters.token.data,
+    },
+  });
+  errorListener();
+  onlineListener();
+  initOnlinePingSender();
+
+  receiveChatMessageListener();
+  contactRequestListener();
+};
+const initOnlinePingSender = () => {
+  setInterval(() => {
+    socket.emit("online", Store.getters.user.name);
+  }, 10000);
+};
+const receiveChatMessageListener = () => {
+  socket.on("chatMessage", (msgData) => {
+    console.log("Message received: ", msgData);
+    msgData = JSON.parse(JSON.stringify(msgData));
+    console.log("Message received after: ", msgData);
+    //Make sure message type is not sent
+    msgData.messageType = "";
+    messageService
+      .insertMessage(msgData)
+      .then((msg) => {
+        console.log("Received message inserted successfully!: ", msg);
+        //if sender active conversation then
+        //this.messages.push(msgData);
+        messageService.updateLastMessage(msgData.message, 123);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  });
+};
+const errorListener = () => {
+  socket.on("connect_error", (data) => {
+    console.log("CONNECT_ERROR: ", data);
+    console.log("SOCKET: ", socket);
+  });
+};
+const onlineListener = () => {
+  socket.on("online", (friendName) => {
+    console.log(friendName + " is online");
+  });
+};
+const contactRequestListener = () => {
+  socket.on("contactRequestReceived", (data) => {
+    console.log("Contact request received: ", data);
+  });
+};
+const sendContactRequest = (email) => {
+  socket.emit("sendContactRequest", { email: email }, (res) => {
+    console.log(res);
+  });
+};
+const sendChatMessage = async (message) => {
+  console.log("message sent");
+  let today = new Date();
+  let todaySplit = today.toString().split(" ");
+  let msgData = {
+    date: todaySplit[2] + " " + todaySplit[1] + " " + todaySplit[3],
+    time: today.getHours() + ":" + String(today.getMinutes()).padStart(2, "0"),
+    messageType: "sent",
+    message: message,
+  };
+  let msg = await messageService.insertMessage(msgData);
+  console.log("Sent message inserted successfully!: ", msg);
+  //this.messages.push(msgData);
+  messageService.updateLastMessage(message);
+  socket.emit("chatMessage", msgData);
+  return msgData;
+};
+export default {
+  initSocket,
+  sendChatMessage,
+  sendContactRequest,
+};

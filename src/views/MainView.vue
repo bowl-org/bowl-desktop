@@ -8,6 +8,7 @@
 // @ is an alias to /src
 //import TheChat from '@/components/TheChat.vue'
 import TheSidebar from '@/components/TheSidebar.vue'
+import socketService from '@/services/socketService'
 
 export default {
   name: 'MainView',
@@ -17,6 +18,7 @@ export default {
     }
   },
   created(){
+    socketService.initSocket();
     this.$router.push({name: 'chat', params: {id: 0}});
   },
   components: {
