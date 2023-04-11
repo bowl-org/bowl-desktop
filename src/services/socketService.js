@@ -4,7 +4,6 @@ import messageService from "../services/messageService";
 
 let socket;
 const initSocket = () => {
-
   socket = io(process.env.VUE_APP_BASE_URL, {
     path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
     extraHeaders: {
@@ -60,8 +59,14 @@ const contactRequestListener = () => {
   });
 };
 const sendContactRequest = (email) => {
-  socket.emit("sendContactRequest", { email: email }, (res) => {
-    console.log(res);
+  return new Promise((resolve, reject) => {
+    socket.emit("sendContactRequest", { email: email }, (res) => {
+      if (res?.status != "OK") {
+        reject(new Error(res?.error));
+      }else{
+        resolve();
+      }
+    });
   });
 };
 const sendChatMessage = async (message) => {

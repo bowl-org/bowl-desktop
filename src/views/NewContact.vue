@@ -2,7 +2,11 @@
   <div class="grow flex flex-col justify-center items-center w-3/5">
     <h1 class="text-5xl font-medium text-slate-600 p-5">Add New Contact!</h1>
 
-    <InfoMessage class="absolute top-0 break-keep whitespace-nowrap" :message="infoMessageText" :status="infoMessageStatus" />
+    <InfoMessage
+      class="absolute top-0 break-keep whitespace-nowrap"
+      :message="infoMessageText"
+      :status="infoMessageStatus"
+    />
     <input
       type="text"
       v-model="emailInput"
@@ -11,15 +15,16 @@
     />
 
     <div
-      @click="checkEmail"
-      class="cursor-pointer send-button hover:contrast-125 select-none flex justify-center items-center p-8 mt-8 m-3 w-5/6  rounded-xl"
+      @click="sendContactRequest"
+      class="cursor-pointer send-button hover:contrast-125 select-none flex justify-center items-center p-8 mt-8 m-3 w-5/6 rounded-xl"
     >
-      <h1 class="text-xl font-medium ">Send Contact Request</h1>
+      <h1 class="text-xl font-medium">Send Contact Request</h1>
     </div>
   </div>
 </template>
 <script>
 import validationService from "@/services/validationService";
+import socketService from "@/services/socketService";
 import InfoMessage from "@/components/InfoMessage.vue";
 export default {
   name: "NewContact",
@@ -34,23 +39,35 @@ export default {
     };
   },
   methods: {
-    checkEmail() {
-      try {
-        validationService.validateEmail(this.emailInput);
-        this.infoMessageText = "Contact request sent successfully!";
-        this.infoMessageStatus = "SUCCESS";
-        this.emailInput = "";
-      } catch (err) {
-        this.infoMessageText = "Invalid email address!";
-        this.infoMessageStatus = "FAILURE";
-      }
+    async checkEmail() {
+      validationService.validateEmail(this.emailInput);
+    },
+    sendContactRequest() {
+      this.checkEmail()
+        .then(() => {
+          socketService
+            .sendContactRequest(this.emailInput)
+            .then(() => {
+              this.infoMessageText = "Contact request sent successfully!";
+              this.infoMessageStatus = "SUCCESS";
+              this.emailInput = "";
+            })
+            .catch((err) => {
+              this.infoMessageText = err.message;
+              this.infoMessageStatus = "FAILURE";
+            });
+        })
+        .catch(() => {
+          this.infoMessageText = "Invalid email address!";
+          this.infoMessageStatus = "FAILURE";
+        });
     },
   },
 };
 </script>
 <style>
-.send-button{
-  background-color: #A499B3;
+.send-button {
+  background-color: #a499b3;
   color: white;
 }
 </style>
