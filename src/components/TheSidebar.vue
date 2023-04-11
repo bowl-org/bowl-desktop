@@ -20,7 +20,8 @@
           Log Out
         </li>
       </ul>
-      <div class="upper-rigth-sidebar flex flex-col items-center">
+      <div class="upper-rigth-sidebar flex flex-row items-center justify-center">
+        <NotificationBadge/>
         <button
           class="settings w-12 h-12 text-4xl m-3 text-center text-white"
           @click="openSettings"
@@ -59,6 +60,7 @@
 
 <script>
 import ConversationAvatar from "./ConversationAvatar.vue";
+import NotificationBadge from "./NotificationBadge.vue";
 import SearchSidebar from "./SearchSidebar.vue";
 import ConversationTypeMenu from "./ConversationTypeMenu.vue";
 import ConversationList from "./ConversationList.vue";
@@ -71,6 +73,7 @@ export default {
     SearchSidebar,
     ConversationTypeMenu,
     ConversationList,
+    NotificationBadge
   },
   props: {
     msg: String,

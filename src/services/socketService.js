@@ -56,6 +56,7 @@ const onlineListener = () => {
 const contactRequestListener = () => {
   socket.on("contactRequestReceived", (data) => {
     console.log("Contact request received: ", data);
+    Store.dispatch("increaseNotificationCount");
   });
 };
 const sendContactRequest = (email) => {
@@ -63,7 +64,7 @@ const sendContactRequest = (email) => {
     socket.emit("sendContactRequest", { email: email }, (res) => {
       if (res?.status != "OK") {
         reject(new Error(res?.error));
-      }else{
+      } else {
         resolve();
       }
     });

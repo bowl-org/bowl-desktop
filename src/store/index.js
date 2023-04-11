@@ -6,6 +6,7 @@ export default createStore({
   state: {
     user: userModel,
     token: tokenModel,
+    notificationCount: 0,
     activeConversationId: 0,
     conversations: [],
   },
@@ -21,6 +22,9 @@ export default createStore({
     },
     conversations(state) {
       return state.conversations;
+    },
+    notificationCount(state) {
+      return state.notificationCount;
     },
     getConversationIndexById: (state) => (conversationId) => {
       return state.conversations.findIndex(
@@ -65,7 +69,16 @@ export default createStore({
     ADD_CONVERSATION(state, conversation) {
       state.conversations.push(conversation);
     },
-    SET_LAST_MESSAGE_OF_CONVERSATION(state, { conversationId, lastMessage,getters }) {
+    INCREASE_NOTIFICATION_COUNT(state) {
+      state.notificationCount += 1;
+    },
+    DECREASE_NOTIFICATION_COUNT(state) {
+      state.notificationCount -= 1;
+    },
+    SET_NOTIFICATION_COUNT(state, notificationCount) {
+      state.notificationCount = notificationCount;
+    },
+    SET_LAST_MESSAGE_OF_CONVERSATION(state, { conversationId, lastMessage, getters }) {
       let conversationIndex =
         getters.getConversationIndexById(conversationId);
       if (conversationIndex != -1) {
@@ -112,6 +125,15 @@ export default createStore({
     },
     toggleConversationFav({ commit, getters }, conversationId) {
       commit("TOGGLE_CONVERSATION_FAV", {conversationId, getters});
+    },
+    increaseNotificationCount({ commit }) {
+      commit("INCREASE_NOTIFICATION_COUNT");
+    },
+    decreaseNotificationCount({ commit }) {
+      commit("DECREASE_NOTIFICATION_COUNT");
+    },
+    setNotificationCount({ commit, notificationCount }) {
+      commit("SET_NOTIFICATION_COUNT", notificationCount);
     },
   },
   modules: {
