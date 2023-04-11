@@ -21,7 +21,7 @@
         </li>
       </ul>
       <div class="upper-rigth-sidebar flex flex-row items-center justify-center">
-        <NotificationBadge/>
+        <NotificationBadge @click="$router.push({name:'notification'})"/>
         <button
           class="settings w-12 h-12 text-4xl m-3 text-center text-white"
           @click="openSettings"

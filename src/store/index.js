@@ -6,7 +6,7 @@ export default createStore({
   state: {
     user: userModel,
     token: tokenModel,
-    notificationCount: 0,
+    notificationCount: 1,
     activeConversationId: 0,
     conversations: [],
   },
@@ -75,8 +75,8 @@ export default createStore({
     DECREASE_NOTIFICATION_COUNT(state) {
       state.notificationCount -= 1;
     },
-    SET_NOTIFICATION_COUNT(state, notificationCount) {
-      state.notificationCount = notificationCount;
+    SET_NOTIFICATION_COUNT(state, count) {
+      state.notificationCount = count;
     },
     SET_LAST_MESSAGE_OF_CONVERSATION(state, { conversationId, lastMessage, getters }) {
       let conversationIndex =
@@ -132,7 +132,7 @@ export default createStore({
     decreaseNotificationCount({ commit }) {
       commit("DECREASE_NOTIFICATION_COUNT");
     },
-    setNotificationCount({ commit, notificationCount }) {
+    setNotificationCount({ commit }, notificationCount) {
       commit("SET_NOTIFICATION_COUNT", notificationCount);
     },
   },

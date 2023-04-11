@@ -78,6 +78,12 @@ const routes = [
           },
         ],
       },
+
+      {
+        path: "/notification",
+        name: "notification",
+        component: () => import("@/views/NotificationView.vue"),
+      },
     ],
   },
   {
