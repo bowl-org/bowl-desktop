@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-full bg-sky-500 w-2.5 h-2.5 inline-block"
+    class="rounded-full w-2.5 h-2.5 inline-block"
     :class="status == 'online' ? 'bg-sky-500 ' : 'bg-red-500'"
   />
 </template>
