@@ -3,6 +3,8 @@ import "./ipc-handlers/userIpcHandler"
 import "./ipc-handlers/messageIpcHandler"
 import "./ipc-handlers/authTokenIpcHandler"
 import "./ipc-handlers/nodeCryptionIpcHandler"
+import "./ipc-handlers/contactRequestNotificationIpcHandler"
+import "./ipc-handlers/groupRequestNotificationIpcHandler"
 
 ipcMain.handle("closeApp", async () => {
   return app.quit();

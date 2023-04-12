@@ -1,6 +1,7 @@
 import io from "socket.io-client";
 import Store from "@/store/index";
 import messageService from "../services/messageService";
+import requestNotificationService from "../services/requestNotificationService";
 
 let socket;
 const initSocket = () => {
@@ -54,9 +55,42 @@ const onlineListener = () => {
   });
 };
 const contactRequestListener = () => {
-  socket.on("contactRequestReceived", (data) => {
-    console.log("Contact request received: ", data);
-    Store.dispatch("increaseNotificationCount");
+  socket.on("contactRequestReceived", async (data) => {
+    try {
+      await requestNotificationService.addContactRequestNotification(data);
+    console.log("Contact request received and added! ", data);
+    } catch (err) {
+      console.log(err);
+      console.log("Contact request received add failed!");
+    }
+  });
+};
+const acceptGroupRequest = () => {
+}
+const declineGroupRequest = () => {
+}
+const sendGroupRequest = () => {
+}
+const acceptContactRequest = (email) => {
+  return new Promise((resolve, reject) => {
+    socket.emit("acceptContactRequest", { email: email }, (res) => {
+      if (res?.status != "OK") {
+        reject(new Error(res?.error));
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+const declineContactRequest = (email) => {
+  return new Promise((resolve, reject) => {
+    socket.emit("declineContactRequest", { email: email }, (res) => {
+      if (res?.status != "OK") {
+        reject(new Error(res?.error));
+      } else {
+        resolve();
+      }
+    });
   });
 };
 const sendContactRequest = (email) => {
@@ -91,4 +125,9 @@ export default {
   initSocket,
   sendChatMessage,
   sendContactRequest,
+  acceptContactRequest,
+  declineContactRequest,
+  acceptGroupRequest,
+  declineGroupRequest,
+  sendGroupRequest
 };

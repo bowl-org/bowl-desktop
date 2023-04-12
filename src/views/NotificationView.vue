@@ -19,6 +19,7 @@
 <script>
 import BackButton from "@/components/BackButton.vue";
 import NotificationBox from "@/components/NotificationBox.vue";
+import requestNotificationService from "@/services/requestNotificationService";
 export default {
   name: "NotifcationView",
   components: {
@@ -34,42 +35,18 @@ export default {
     this.loadNotifications();
   },
   methods: {
-    loadNotifications() {
-      this.notificationList = [
-        {
-          name: "Bill Joy",
-          type: "Contact",
-        },
-        {
-          name: "Demo Group",
-          type: "Group",
-        },
-        {
-          name: "Linus Torvalds",
-          type: "Contact",
-        },
-        {
-          name: "Richard Stallman",
-          type: "Contact",
-        },
-        {
-          name: "Dennis Ritchie",
-          type: "Contact",
-        },
-      ];
-      this.$store.dispatch(
-        "setNotificationCount",
-        this.notificationList.length
-      );
+    async loadNotifications() {
+      this.notificationList = await requestNotificationService.loadNotifications();
+      console.log(this.notificationList);
     },
     acceptRequest(index) {
       console.log("Accept:", this.notificationList[index]);
-      this.$store.dispatch("decreaseNotificationCount");
+      requestNotificationService.acceptRequest(this.notificationList[index]);
       this.notificationList.splice(index, 1);
     },
     declineRequest(index) {
       console.log("Decline:", this.notificationList[index]);
-      this.$store.dispatch("decreaseNotificationCount");
+      requestNotificationService.declineRequest(this.notificationList[index]);
       this.notificationList.splice(index, 1);
     },
   },
