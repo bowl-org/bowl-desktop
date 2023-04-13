@@ -1,7 +1,9 @@
 const messageModel = {
+  id: 0,
+  personId: 0,
   message: "",
-  type: "",
+  messageType: "",
   date: "",
   time: ""
 }
-export default messageModel;
+export default {messageModel};

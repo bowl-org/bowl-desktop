@@ -94,8 +94,8 @@ const acceptRequest = async (requestData) => {
     await contactRequestNotificationRepository.deleteContactRequestNotification(
       requestData.id
     );
-    decreaseNotificationCount();
     //TODO add to contacts
+    decreaseNotificationCount();
     socketService.acceptContactRequest(contactReq.email);
   } else if (requestData.type == "Group") {
     // eslint-disable-next-line no-unused-vars
@@ -106,8 +106,8 @@ const acceptRequest = async (requestData) => {
     await groupRequestNotificationRepository.deleteGroupRequestNotification(
       requestData.id
     );
-    decreaseNotificationCount();
     //TODO add to groups
+    decreaseNotificationCount();
     socketService.acceptGroupRequest(groupReq.email);
   }
   console.log("Notification accept:", requestData);

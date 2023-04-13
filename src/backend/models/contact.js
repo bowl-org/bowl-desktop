@@ -1,8 +1,7 @@
 import person from "./person";
-const userModel = {
+const contactModel = {
   ...person.personModel,
   personId: 0,
-  privateKey: "",
 };
 
 const toPerson = (data) => {
@@ -12,7 +11,7 @@ const toPerson = (data) => {
       ? (newPerson[key] = data[key])
       : "";
   });
-  newPerson.id = data.personId;
+  newPerson.id = data?.personId;
   return newPerson;
 };
-export default { userModel, toPerson };
+export default { contactModel, toPerson };

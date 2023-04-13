@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "db:up": "node -e 'import(\"./src/backend/repository/migrations/initDb.js\").then(db => db.up());'",
+    "db:down": "node -e 'import(\"./src/backend/repository/migrations/initDb.js\").then(db => db.down());'",
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",

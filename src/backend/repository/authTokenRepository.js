@@ -1,31 +1,21 @@
-import Database from "better-sqlite3";
-//import messageModel from '../models/message';
-const db = new Database("./src/backend/db/main.db");
-db.pragma("journal_mode = WAL");
-const initDb = () => {
-  db.exec(
-    "CREATE TABLE IF NOT EXISTS authtoken(id INTEGER PRIMARY KEY, userId INTEGER NOT NULL, data TEXT NOT NULL)"
-  );
-};
-//Default db
+import queryRunner from "./commons/queryRunner";
+
+const tableName = "auth_token"
 const setToken = async (token) => {
-  const statement = db.prepare(
-    "REPLACE INTO authtoken (id, userId, data) VALUES (1, @userId, @data)"
+  return queryRunner.runPreparedQuery(
+    `REPLACE INTO ${tableName} (id, userId, data) VALUES (1, @userId, @data)`,
+    token
   );
-  return statement.run(token);
 };
 const getToken = async () => {
-  const statement = db.prepare("SELECT * FROM authtoken WHERE id = 1");
-  return statement.get();
+  return queryRunner.findById(tableName, 1);
 };
 const deleteToken = async () => {
-  const statement = db.prepare("DELETE FROM authtoken WHERE id = 1");
-  return statement.run();
+  return queryRunner.deleteById(tableName, 1);
 };
 
-initDb();
 export default {
   getToken,
   setToken,
-  deleteToken
+  deleteToken,
 };

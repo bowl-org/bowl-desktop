@@ -1,46 +1,114 @@
-import Database from "better-sqlite3";
+import db from "./commons/db";
+import queryRunner from "./commons/queryRunner";
+import personRepository from "./personRepository";
+import user from "../models/user";
 
-const db = new Database("./src/backend/db/main.db");
-db.pragma("journal_mode = WAL");
-const initDb = () => {
-  db.exec(
-    "CREATE TABLE IF NOT EXISTS users(id INTEGER PRIMARY KEY AUTOINCREMENT, privateKey TEXT NOT NULL, publicKey TEXT NOT NULL, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE)"
-  );
-};
-//Default db
+const tableName = "users";
 const insertUser = async (userData) => {
-  const statement = db.prepare(
-    "INSERT INTO users(privateKey, publicKey, name, email) VALUES (@privateKey, @publicKey, @name, @email)"
-  );
-  return statement.run(userData);
+  db.transaction(async () => {
+    const info = await personRepository.insertPerson(user.toPerson(userData));
+    //const info = queryRunner.runPreparedQuery(
+    //"INSERT INTO persons(public_key, name, email) VALUES (@publicKey, @name, @email)",
+    //userData
+    //);
+    queryRunner.runPreparedQuery(
+      `INSERT INTO ${tableName}(personId, privateKey) VALUES (?, ?)`,
+      [info.lastInsertRowid, userData.privateKey]
+    );
+  });
 };
 const updateUser = async (userData) => {
-  const statement = db.prepare(
-    "UPDATE users SET privateKey = @privateKey, publicKey = @publicKey , name = @name, email = @email WHERE id = @id"
-  );
-  return statement.run(userData);
+  db.transaction(async () => {
+    queryRunner.runPreparedQuery(
+      `UPDATE ${tableName} SET privateKey = @privateKey WHERE id = @id`,
+      userData
+    );
+    let personData = user.toPerson(userData);
+    await personRepository.updatePerson(personData);
+    //queryRunner.runPreparedQuery(
+    //"UPDATE persons SET publicKey = @publicKey, name = @name, email = @email WHERE id = @personId",
+    //{ ...userData, personId: info.lastInsertRowid }
+    //);
+  });
 };
 const deleteUser = async (userData) => {
-  const statement = db.prepare("DELETE FROM users WHERE id = @id");
-  return statement.run(userData);
+  db.transaction(() => {
+    queryRunner.deleteById(tableName, userData.id);
+  });
 };
 const findUser = async (id) => {
-  const statement = db.prepare("SELECT * FROM users WHERE id = ?");
-  return statement.get(id);
+  return queryRunner.runPreparedQuery(
+    `SELECT
+      user.id,
+      user.personId
+      user.privateKey,
+      person.publicKey,
+      person.name,
+      person.email
+    FROM
+      ${tableName} user
+    INNER JOIN
+      ${personRepository.tableName} person on user.personId = person.id
+    WHERE user.id = ?`,
+    id
+  );
+};
+const findUserByPersonId = async (personId) => {
+  return queryRunner.runPreparedQuery(
+    `SELECT
+      user.id,
+      user.personId
+      user.privateKey,
+      person.publicKey,
+      person.name,
+      person.email
+    FROM
+      ${tableName} user
+    INNER JOIN
+      ${personRepository.tableName} person on user.personId = person.id
+    WHERE user.personId = ?`,
+    personId
+  );
 };
 const findUserByEmail = async (email) => {
-  const statement = db.prepare("SELECT * FROM users WHERE email = ?");
-  return statement.get(email);
+  return queryRunner.getFromPreparedQuery(
+    `SELECT
+      user.id,
+      user.personId
+      user.privateKey,
+      person.publicKey,
+      person.name,
+      person.email
+    FROM
+      ${tableName} user
+    INNER JOIN
+      ${personRepository.tableName} person on user.personId = person.id
+    WHERE person.email = ?`,
+    email
+  );
 };
 const getAllUsers = async () => {
-  return db.prepare("SELECT * FROM users").all();
+  return queryRunner.allFromPreparedQuery(
+    `SELECT
+      user.id,
+      user.personId
+      user.privateKey,
+      person.publicKey,
+      person.name,
+      person.email
+    FROM
+      ${tableName} user
+    INNER JOIN
+      ${personRepository.tableName} person on user.personId = person.id`
+  );
 };
-initDb();
 export default {
+  tableName,
   insertUser,
   updateUser,
   deleteUser,
   findUser,
+  findUserByPersonId,
   findUserByEmail,
   getAllUsers,
 };

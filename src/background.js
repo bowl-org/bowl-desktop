@@ -8,6 +8,9 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 
 // Main ipc handler
 import "./backend/mainIpcHandler";
+// Init database using migrations
+import initDb from "./backend/repository/migrations/initDb";
+initDb.up()
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
