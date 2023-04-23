@@ -129,6 +129,7 @@ export default {
           });
         })
         .catch((err) => {
+          console.log(err);
           this.infoMessage = err.response.data.msg;
           this.responseStatus = err.response.data.status;
           console.log(err.response.data);

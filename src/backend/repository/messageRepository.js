@@ -1,6 +1,6 @@
-import queryRunner from "./commons/queryRunner";
+import queryRunner from './commons/queryRunner';
 
-const tableName = "messages"
+const tableName = 'messages';
 const insertMessage = async (messageData) => {
   return queryRunner.runPreparedQuery(
     `INSERT INTO ${tableName} (personId, message, messageType, date, time) VALUES (@personId, @message, @messageType, @date, @time)`,
@@ -9,14 +9,15 @@ const insertMessage = async (messageData) => {
 };
 const getMessagesByPersonId = async (personId) => {
   return queryRunner.getFromPreparedQuery(
-    `SELECT * ${tableName} WHERE personId = ?`,
+    `SELECT * FROM ${tableName} WHERE personId = ?`,
     personId
   );
 };
 const updateMessage = async (messageData) => {
   return queryRunner.runPreparedQuery(
-    `UPDATE ${tableName} SET personId = @personId, message = @message, messageType = @messageType, date = @date, time = @time WHERE id = @id`
-    ,messageData);
+    `UPDATE ${tableName} SET personId = @personId, message = @message, messageType = @messageType, date = @date, time = @time WHERE id = @id`,
+    messageData
+  );
 };
 const deleteMessage = async (messageData) => {
   return queryRunner.deleteById(tableName, messageData.id);
@@ -24,7 +25,9 @@ const deleteMessage = async (messageData) => {
 const findMessage = async (messageData) => {
   return queryRunner.findById(tableName, messageData.id);
 };
-const getAllMessages = async () => {
+const getAllMessages = async (conversationId) => {
+  console.log('GET ALL CONVERSATION:', conversationId);
+  //DEMO
   return queryRunner.getAll(tableName);
 };
 
@@ -34,5 +37,5 @@ export default {
   deleteMessage,
   findMessage,
   getAllMessages,
-  getMessagesByPersonId
+  getMessagesByPersonId,
 };

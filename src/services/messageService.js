@@ -13,9 +13,8 @@ const updateMessage = async (messageData) => {
 const insertMessage = async (messageData) => {
   return messageRepo.insertMessage(messageData);
 };
-// eslint-disable-next-line no-unused-vars
 const getAllMessages = async (conversationId) => {
-  return messageRepo.getAllMessages();
+  return messageRepo.getAllMessages(conversationId);
 };
 // eslint-disable-next-line no-unused-vars
 const updateLastMessage = (msg, conversationId) => {

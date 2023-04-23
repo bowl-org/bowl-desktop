@@ -74,7 +74,7 @@ const findUserByEmail = async (email) => {
   return queryRunner.getFromPreparedQuery(
     `SELECT
       user.id,
-      user.personId
+      user.personId,
       user.privateKey,
       person.publicKey,
       person.name,
@@ -91,7 +91,7 @@ const getAllUsers = async () => {
   return queryRunner.allFromPreparedQuery(
     `SELECT
       user.id,
-      user.personId
+      user.personId,
       user.privateKey,
       person.publicKey,
       person.name,

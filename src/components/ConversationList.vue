@@ -23,7 +23,7 @@
 
 <script>
 import ConversationBox from "./ConversationBox.vue";
-import messageService from "../services/messageService";
+// import messageService from "../services/messageService";
 export default {
   name: "ConversationList",
   components: {
@@ -60,63 +60,66 @@ export default {
         "setActiveConversationId",
         this.filteredConversationList[index].conversationId
       );
-    this.$router.push({name: 'chat', params: {id: this.$store.getters.activeConversationId}});
+      this.$router.push({
+        name: "chat",
+        params: { id: this.$store.getters.activeConversationId },
+      });
     },
     loadConversations() {
       //Testing purposes
-      messageService.getAllMessages().then((messages) => {
-        let lastMessage = messages[messages.length - 1].message;
-        this.conversations = [
-          {
-            conversationId: 0,
-            name: "Mehmet Ümit Özden",
-            onlineStatus: "online",
-            isActive: "false",
-            lastMessageTimestamp: "01/11/2022",
-            lastMessage: lastMessage,
-            isFav: true,
-            conversationType: "Contact",
-          },
-          {
-            conversationId: 2,
-            name: "Bill Joy",
-            onlineStatus: "offline",
-            isActive: "false",
-            lastMessageTimestamp: "08/10/2022",
-            lastMessage: "Hello, did you tried vi editor ",
-            isFav: false,
-            conversationType: "Contact",
-          },
-          {
-            conversationId: 1,
-            name: "Linus Torvalds",
-            onlineStatus: "offline",
-            isActive: "false",
-            lastMessageTimestamp: "20/08/2022",
-            lastMessage: "Talk is cheap. Show me the code.",
-            isFav: true,
-            conversationType: "Contact",
-          },
-          {
-            conversationId: 3,
-            name: "Demo Group",
-            //onlineStatus: "offline",
-            isActive: "false",
-            lastMessageTimestamp: "20/08/2022",
-            lastMessage: "This is group last message.",
-            isFav: true,
-            conversationType: "Group",
-          },
-        ];
-        //Demonstration purposes
-        this.$store.dispatch("deleteConversations");
-        this.conversations.forEach((x) =>
-          this.$store.dispatch("addConversation", x)
-        );
-        console.log("CONVERSATIONS VUEX:", this.$store.getters.conversations);
-        this.$store.dispatch("setActiveConversationId", 1);
-        this.selectConversation(1);
-      });
+      // messageService.getAllMessages().then((messages) => {
+      // let lastMessage = messages[messages.length - 1].message;
+      let lastMessage = "This is last message";
+      this.conversations = [
+        {
+          conversationId: 0,
+          name: "Mehmet Ümit Özden",
+          onlineStatus: "online",
+          isActive: "false",
+          lastMessageTimestamp: "01/11/2022",
+          lastMessage: lastMessage,
+          isFav: true,
+          conversationType: "Contact",
+        },
+        {
+          conversationId: 2,
+          name: "Bill Joy",
+          onlineStatus: "offline",
+          isActive: "false",
+          lastMessageTimestamp: "08/10/2022",
+          lastMessage: "Hello, did you tried vi editor ",
+          isFav: false,
+          conversationType: "Contact",
+        },
+        {
+          conversationId: 1,
+          name: "Linus Torvalds",
+          onlineStatus: "offline",
+          isActive: "false",
+          lastMessageTimestamp: "20/08/2022",
+          lastMessage: "Talk is cheap. Show me the code.",
+          isFav: true,
+          conversationType: "Contact",
+        },
+        {
+          conversationId: 3,
+          name: "Demo Group",
+          //onlineStatus: "offline",
+          isActive: "false",
+          lastMessageTimestamp: "20/08/2022",
+          lastMessage: "This is group last message.",
+          isFav: true,
+          conversationType: "Group",
+        },
+      ];
+      //Demonstration purposes
+      this.$store.dispatch("deleteConversations");
+      this.conversations.forEach((x) =>
+        this.$store.dispatch("addConversation", x)
+      );
+      console.log("CONVERSATIONS VUEX:", this.$store.getters.conversations);
+      this.$store.dispatch("setActiveConversationId", 1);
+      this.selectConversation(1);
     },
   },
   computed: {
