@@ -2,6 +2,15 @@
   <div
     class="scroll-reverser-div overflow-y-auto overflow-x-hidden max-h-screen flex flex-col-reverse"
   >
+    <div class="flex justify-center items-center">
+      <div
+        v-if="isFirstMessage"
+        class="flex flex-col items-center justify-between w-1/3 m-5 p-5 font-bold text-slate-500 bg-neutral-200 rounded-tr-xl rounded-xl"
+      >
+        <p>No messages here yet...</p>
+        <p>Start typing to send message!</p>
+      </div>
+    </div>
     <div class="flex-col">
       <div
         class="message-container"
@@ -41,6 +50,9 @@ export default {
   computed: {
     name() {
       return this.$store.getters.user.name;
+    },
+    isFirstMessage() {
+      return this.messages.length == 0 ? true : false;
     },
   },
   methods: {

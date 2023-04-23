@@ -12,7 +12,7 @@
       </ul>
     </div>
     <ChatMessageList ref="chatMessageList"/>
-    <EmojiSelection @selectEmoji="selectEmoji" :class="!showEmojiSelection ? 'hidden' : ''"/>
+    <EmojiSelection v-if="showEmojiSelection" @selectEmoji="selectEmoji" />
     <div
       class="bottom-chat bg-neutral-300 flex justify-center items-center p-4 pl-0"
     >
