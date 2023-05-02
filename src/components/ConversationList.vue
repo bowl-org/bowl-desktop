@@ -72,7 +72,7 @@ export default {
       let lastMessage = "This is last message";
       this.conversations = [
         {
-          conversationId: 0,
+          conversationId: 123,
           name: "Mehmet Ümit Özden",
           onlineStatus: "online",
           isActive: "false",
@@ -82,7 +82,7 @@ export default {
           conversationType: "Contact",
         },
         {
-          conversationId: 2,
+          conversationId: 0,
           name: "Bill Joy",
           onlineStatus: "offline",
           isActive: "false",

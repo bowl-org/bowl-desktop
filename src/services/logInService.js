@@ -20,6 +20,7 @@ const logIn = async (logInData, rememberMe) => {
     user = await userService.createNewUser(logInData);
     //TODO update user public key on server
   }
+    console.log("LOGIN USER:", user)
   //res.data.data -> response token object
   res.data.token = { userId: user.id, data: res.data.data };
   res.data.user = user;

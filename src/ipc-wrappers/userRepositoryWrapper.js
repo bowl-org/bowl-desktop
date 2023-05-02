@@ -2,7 +2,7 @@ const insertUser = async(user) => {
   return  window.ipcRenderer.invoke("insertUser", user);
 }
 const updateUser = async(id, updatedUser) => {
-  return  window.ipcRenderer.invoke("insertUser", {id: id, ...updatedUser});
+  return  window.ipcRenderer.invoke("updateUser", {id: id, ...updatedUser});
 }
 const deleteUser = async(id) => {
   return  window.ipcRenderer.invoke("deleteUser", id);

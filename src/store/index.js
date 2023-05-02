@@ -1,11 +1,11 @@
 import { createStore } from "vuex";
-import userModel from "@/backend/models/user";
-import tokenModel from "@/backend/models/authToken";
+import User from "@/backend/models/user";
+import Token from "@/backend/models/authToken";
 
 export default createStore({
   state: {
-    user: userModel,
-    token: tokenModel,
+    user: User.userModel,
+    token: Token.authTokenModel,
     notificationCount: 1,
     activeConversationId: 0,
     conversations: [],
@@ -48,6 +48,7 @@ export default createStore({
     },
     SET_USER(state, userData) {
       //set if not null
+      state.user.id = userData.id || state.user.id;
       state.user.name = userData.name || state.user.name;
       state.user.email = userData.email || state.user.email;
       state.user.publicKey = userData.publicKey || state.user.publicKey;
@@ -58,10 +59,10 @@ export default createStore({
       state.token.data = tokenData.data || state.token.data;
     },
     DELETE_USER(state) {
-      state.token = tokenModel;
+      state.token = Token.authTokenModel;
     },
     DELETE_TOKEN(state) {
-      state.user = userModel;
+      state.user = User.userModel;
     },
     DELETE_CONVERSATIONS(state) {
       state.conversations = [];

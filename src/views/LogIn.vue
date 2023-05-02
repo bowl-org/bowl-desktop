@@ -62,7 +62,7 @@
 <script>
 import UserField from "@/components/UserField.vue";
 import logInService from "@/services/logInService";
-import userModel from "@/backend/models/user";
+import User from "@/backend/models/user";
 import authTokenService from "@/services/authTokenService";
 export default {
   name: "LogIn",
@@ -108,7 +108,7 @@ export default {
       this.emailData = emailInp;
     },
     logIn() {
-      let loginUser = userModel;
+      let loginUser = User.userModel;
       loginUser.email = this.emailData;
       loginUser.password = this.passwdData;
       logInService
@@ -119,6 +119,7 @@ export default {
           let token = res.data.token;
           let user = res.data.user;
 
+          console.log("RES USER: ", user)
           this.$store.dispatch("setUser", user);
           this.$store.dispatch("setToken", token);
 

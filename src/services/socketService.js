@@ -57,6 +57,7 @@ const onlineListener = () => {
 const contactRequestListener = () => {
   socket.on("contactRequestReceived", async (data) => {
     try {
+      console.log("CONTACT REQUEST RECEIVED:", data)
       await requestNotificationService.addContactRequestNotification(data);
     console.log("Contact request received and added! ", data);
     } catch (err) {
@@ -73,7 +74,7 @@ const sendGroupRequest = () => {
 }
 const acceptContactRequest = (email) => {
   return new Promise((resolve, reject) => {
-    socket.emit("acceptContactRequest", { email: email }, (res) => {
+    socket.emit("acceptContactRequest", JSON.stringify( { email: email } ), (res) => {
       if (res?.status != "OK") {
         reject(new Error(res?.error));
       } else {
@@ -84,7 +85,7 @@ const acceptContactRequest = (email) => {
 };
 const declineContactRequest = (email) => {
   return new Promise((resolve, reject) => {
-    socket.emit("declineContactRequest", { email: email }, (res) => {
+    socket.emit("declineContactRequest", JSON.stringify( { email: email } ), (res) => {
       if (res?.status != "OK") {
         reject(new Error(res?.error));
       } else {
@@ -95,7 +96,7 @@ const declineContactRequest = (email) => {
 };
 const sendContactRequest = (email) => {
   return new Promise((resolve, reject) => {
-    socket.emit("sendContactRequest", { email: email }, (res) => {
+    socket.emit("sendContactRequest", JSON.stringify({ email: email }), (res) => {
       if (res?.status != "OK") {
         reject(new Error(res?.error));
       } else {
@@ -114,11 +115,11 @@ const sendChatMessage = async (message) => {
     messageType: "sent",
     message: message,
   };
-  let msg = await messageService.insertMessage(msgData);
-  console.log("Sent message inserted successfully!: ", msg);
+  //////////// let msg = await messageService.insertMessage(msgData);
+  ///////////console.log("Sent message inserted successfully!: ", msg);
   //this.messages.push(msgData);
-  messageService.updateLastMessage(message);
-  socket.emit("chatMessage", msgData);
+  messageService.updateLastMessage(message, 123);
+  socket.emit("chatMessage", JSON.stringify(msgData));
   return msgData;
 };
 export default {

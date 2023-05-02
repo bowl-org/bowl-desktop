@@ -63,8 +63,9 @@ const decreaseNotificationCount = async () => {
 };
 const addContactRequestNotification = async (data) => {
   try {
+    console.log("ADD CONTACT REQUEST NOTIFICATION CURR USER: ", Store.getters.user)
     await contactRequestNotificationRepository.insertContactRequestNotification(
-      data
+      {userId: Store.getters.user.id , ...data}
     );
     increaseNotificationCount();
   } catch (err) {
