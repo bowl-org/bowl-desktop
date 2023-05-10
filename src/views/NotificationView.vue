@@ -39,9 +39,9 @@ export default {
       this.notificationList = await requestNotificationService.loadNotifications();
       console.log(this.notificationList);
     },
-    acceptRequest(index) {
+    async acceptRequest(index) {
       console.log("Accept:", this.notificationList[index]);
-      requestNotificationService.acceptRequest(this.notificationList[index]);
+      await requestNotificationService.acceptRequest(this.notificationList[index]);
       this.notificationList.splice(index, 1);
     },
     declineRequest(index) {

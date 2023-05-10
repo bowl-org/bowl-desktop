@@ -5,15 +5,15 @@ import contactConversation from "../models/contactConversation";
 
 const tableName = "contact_conversations";
 const insertContactConversation = async (contactConversationData) => {
-  db.transaction(async () => {
-    const info = await conversationRepository.insertConversation(
-      contactConversation.toConversation(contactConversationData)
-    );
-    return queryRunner.runPreparedQuery(
-      `INSERT INTO ${tableName}(conversationId, contactId) VALUES (?, ?)`,
-      [info.lastInsertRowid, contactConversationData.contactId]
-    );
-  });
+  const info = await conversationRepository.insertConversation(
+    contactConversation.toConversation(contactConversationData)
+  );
+  const contatConversationId = queryRunner.runPreparedQuery(
+    `INSERT INTO ${tableName}(conversationId, contactId) VALUES (?, ?)`,
+    [info.lastInsertRowid, contactConversationData.contactId]
+  ).lastInsertRowid;
+
+  return await findContactConversation(contatConversationId);
 };
 const updateContactConversation = async (contactConversationData) => {
   db.transaction(async () => {
@@ -38,7 +38,7 @@ const findContactConversation = async (id) => {
       contact_conversation.id,
       contact_conversation.conversationId,
       contact_conversation.contactId,
-      conversation.userId
+      conversation.userId,
       conversation.isFavorite
     FROM
       ${tableName} contact_conversation
@@ -54,7 +54,7 @@ const findContactConversationByContactId = async (contactId) => {
       contact_conversation.id,
       contact_conversation.conversationId,
       contact_conversation.contactId,
-      conversation.userId
+      conversation.userId,
       conversation.isFavorite
     FROM
       ${tableName} contact_conversation
@@ -70,7 +70,7 @@ const getAllContactConversations = async () => {
       contact_conversation.id,
       contact_conversation.conversationId,
       contact_conversation.contactId,
-      conversation.userId
+      conversation.userId,
       conversation.isFavorite
     FROM
       ${tableName} contact_conversation

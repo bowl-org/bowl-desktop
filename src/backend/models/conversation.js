@@ -1,6 +1,6 @@
 const conversationModel = {
   id: 0,
   userId: 0,
-  isFavorite: false
+  isFavorite: 0
 };
 export default { conversationModel };

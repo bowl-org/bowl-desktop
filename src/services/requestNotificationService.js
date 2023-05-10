@@ -2,6 +2,7 @@ import Store from "@/store/index";
 import groupRequestNotificationRepository from "../ipc-wrappers/groupRequestNotificationRepositoryWrapper";
 import contactRequestNotificationRepository from "../ipc-wrappers/contactRequestNotificationRepositoryWrapper";
 import socketService from "./socketService";
+import contactConversationService from "./contactConversationService";
 
 const loadNotifications = async () => {
   let groupReqNotifications =
@@ -63,9 +64,12 @@ const decreaseNotificationCount = async () => {
 };
 const addContactRequestNotification = async (data) => {
   try {
-    console.log("ADD CONTACT REQUEST NOTIFICATION CURR USER: ", Store.getters.user)
+    console.log(
+      "ADD CONTACT REQUEST NOTIFICATION CURR USER: ",
+      Store.getters.user
+    );
     await contactRequestNotificationRepository.insertContactRequestNotification(
-      {userId: Store.getters.user.id , ...data}
+      { userId: Store.getters.user.id, ...data }
     );
     increaseNotificationCount();
   } catch (err) {
@@ -85,22 +89,21 @@ const addGroupRequestNotification = async (data) => {
   }
 };
 const acceptRequest = async (requestData) => {
+  let req;
   if (requestData.type == "Contact") {
-    // eslint-disable-next-line no-unused-vars
-    let contactReq =
+     req =
       await contactRequestNotificationRepository.findContactRequestNotificationById(
         requestData.id
       );
-    console.log(requestData);
+    contactConversationService.createContactChat(req)
     await contactRequestNotificationRepository.deleteContactRequestNotification(
       requestData.id
     );
     //TODO add to contacts
     decreaseNotificationCount();
-    socketService.acceptContactRequest(contactReq.email);
+    socketService.acceptContactRequest(req.email);
   } else if (requestData.type == "Group") {
-    // eslint-disable-next-line no-unused-vars
-    let groupReq =
+     req =
       await groupRequestNotificationRepository.findGroupRequestNotificationById(
         requestData.id
       );
@@ -109,9 +112,9 @@ const acceptRequest = async (requestData) => {
     );
     //TODO add to groups
     decreaseNotificationCount();
-    socketService.acceptGroupRequest(groupReq.email);
+    socketService.acceptGroupRequest(req.email);
   }
-  console.log("Notification accept:", requestData);
+  console.log("Notification accept:", req);
 };
 const declineRequest = async (requestData) => {
   if (requestData.type == "Contact") {

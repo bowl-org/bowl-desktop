@@ -4,13 +4,13 @@ import queryRunner from "./commons/queryRunner";
 
 const tableName = "conversations";
 const insertConversation = async (conversationData) => {
-  queryRunner.runPreparedQuery(
+  return queryRunner.runPreparedQuery(
     `INSERT INTO ${tableName}(userId, isFavorite) VALUES(@userId, @isFavorite)`,
     conversationData
   );
 };
 const updateConversation = async (conversationData) => {
-  queryRunner.runPreparedQuery(
+  return queryRunner.runPreparedQuery(
     `UPDATE ${tableName} SET userId = @userId, isFavorite = @isFavorite WHERE id = @id`,
     conversationData
   );

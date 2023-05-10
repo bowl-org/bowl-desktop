@@ -1,5 +1,5 @@
 import conversation from "./conversation";
-const contactConversation = {
+const contactConversationModel = {
   ...conversation.conversationModel,
   conversationId: 0,
   contactId: 0,
@@ -12,7 +12,7 @@ const toConversation = (data) => {
       ? (newConversation[key] = data[key])
       : "";
   });
-  newConversation.id = data?.conversationId;
+  newConversation.id = data.conversationId;
   return newConversation;
 };
-export default { contactConversation, toConversation };
+export default { contactConversationModel, toConversation };

@@ -5,15 +5,20 @@ import contact from "../models/contact";
 
 const tableName = "contacts";
 const insertContact = async (contactData) => {
-  db.transaction(async () => {
-    const info = await personRepository.insertPerson(
-      contact.toPerson(contactData)
-    );
-    queryRunner.runPreparedQuery(
-      `INSERT INTO ${tableName}(personId, privateKey) VALUES (?, ?)`,
-      info.lastInsertRowid
-    );
-  });
+  const existedPerson = await personRepository.findPersonByEmail(
+    contactData.email
+  );
+  let info;
+  if (existedPerson == null) {
+    info = await personRepository.insertPerson(contact.toPerson(contactData));
+  } else {
+    info = { lastInsertRowid: existedPerson.id };
+  }
+  const insertedInfo = queryRunner.runPreparedQuery(
+    `INSERT INTO ${tableName}(personId) VALUES (?)`,
+    info.lastInsertRowid
+  );
+  return queryRunner.findById(tableName, insertedInfo.lastInsertRowid);
 };
 const updateContact = async (contactData) => {
   db.transaction(async () => {
@@ -31,7 +36,7 @@ const deleteContact = async (contactData) => {
   });
 };
 const findContact = async (id) => {
-  return queryRunner.runPreparedQuery(
+  return queryRunner.getFromPreparedQuery(
     `SELECT
       contact.id,
       contact.personId,
@@ -46,8 +51,24 @@ const findContact = async (id) => {
     id
   );
 };
+const findContactByEmail = async (email) => {
+  return queryRunner.getFromPreparedQuery(
+    `SELECT
+      contact.id,
+      contact.personId,
+      person.publicKey,
+      person.name,
+      person.email
+    FROM
+      ${tableName} contact
+    INNER JOIN
+      ${personRepository.tableName} person on contact.personId = person.id
+    WHERE person.email = ?`,
+    email
+  );
+};
 const findContactByPersonId = async (personId) => {
-  return queryRunner.runPreparedQuery(
+  return queryRunner.getFromPreparedQuery(
     `SELECT
       contact.id,
       contact.personId,
@@ -82,6 +103,7 @@ export default {
   updateContact,
   deleteContact,
   findContact,
+  findContactByEmail,
   findContactByPersonId,
   getAllContacts,
 };

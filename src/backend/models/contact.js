@@ -11,7 +11,7 @@ const toPerson = (data) => {
       ? (newPerson[key] = data[key])
       : "";
   });
-  newPerson.id = data?.personId;
+  newPerson.id = data.personId;
   return newPerson;
 };
 export default { contactModel, toPerson };

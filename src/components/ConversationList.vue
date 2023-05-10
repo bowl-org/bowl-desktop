@@ -73,7 +73,7 @@ export default {
       this.conversations = [
         {
           conversationId: 123,
-          name: "Mehmet Ümit Özden",
+          name: "Mehmet Okul",
           onlineStatus: "online",
           isActive: "false",
           lastMessageTimestamp: "01/11/2022",
@@ -107,7 +107,7 @@ export default {
           //onlineStatus: "offline",
           isActive: "false",
           lastMessageTimestamp: "20/08/2022",
-          lastMessage: "This is group last message.",
+          // lastMessage: "This is group last message.",
           isFav: true,
           conversationType: "Group",
         },
