@@ -6,9 +6,9 @@ const up = () => {
 
   initPersons();
   initUsers();
-  initContacts();
-  initMessages();
-  initConversations();
+  initGroupMessages();
+  initGroupConversations();
+  initContactMessages();
   initContactConversations();
   initGroupConversations();
   initPersonGroups();
@@ -32,13 +32,6 @@ const initPersons = () =>
     publicKey TEXT NOT NULL,
     name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE)`
-  );
-const initContacts = () =>
-  queryRunner.runQuery(
-    `CREATE TABLE IF NOT EXISTS contacts(
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    personId INTEGER NOT NULL UNIQUE,
-    FOREIGN KEY(personId) REFERENCES persons(id))`
   );
 const initAuthToken = () =>
   queryRunner.runQuery(
@@ -68,33 +61,43 @@ const initGroupRequestNotifications = () =>
       description TEXT NOT NULL,
       FOREIGN KEY(userId) REFERENCES users(id))`
   );
-const initMessages = () =>
+const initContactMessages = () =>
   queryRunner.runQuery(
-    `CREATE TABLE IF NOT EXISTS messages(
+    `CREATE TABLE IF NOT EXISTS contact_messages(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      personId INTEGER NOT NULL,
+      contactConversationId INTEGER NOT NULL,
+      hashTableId INTEGER NOT NULL,
+      isSenderUser INTEGER NOT NULL,
       message TEXT NOT NULL,
-      messageType TEXT NOT NULL,
+      messageType TEXT,
       date TEXT NOT NULL,
       time TEXT NOT NULL,
-      FOREIGN KEY(personId) REFERENCES persons(id))`
+      FOREIGN KEY(contactConversationId) REFERENCES contact_conversations(id),
+      FOREIGN KEY(hashTableId) REFERENCES hash_tables(id))`
   );
-const initConversations = () =>
+const initGroupMessages = () =>
   queryRunner.runQuery(
-    `CREATE TABLE IF NOT EXISTS conversations(
+    `CREATE TABLE IF NOT EXISTS group_messages(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      userId INTEGER NOT NULL,
-      isFavorite INTEGER NOT NULL DEFAULT 0,
-      FOREIGN KEY(userId) REFERENCES users(id))`
+      senderPersonId INTEGER NOT NULL,
+      groupConversationId INTEGER NOT NULL,
+      hashTableId INTEGER NOT NULL,
+      message TEXT NOT NULL,
+      messageType TEXT,
+      date TEXT NOT NULL,
+      time TEXT NOT NULL,
+      FOREIGN KEY(senderPersonId) REFERENCES persons(id),
+      FOREIGN KEY(hashTableId) REFERENCES hash_tables(id))`
   );
 const initContactConversations = () =>
   queryRunner.runQuery(
     `CREATE TABLE IF NOT EXISTS contact_conversations(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      conversationId INTEGER NOT NULL UNIQUE,
-      contactId INTEGER NOT NULL UNIQUE,
-      FOREIGN KEY(conversationId) REFERENCES conversations(id),
-      FOREIGN KEY(contactId) REFERENCES contacts(id))`
+      contactPersonId INTEGER NOT NULL,
+      userId INTEGER NOT NULL,
+      isFavorite INTEGER NOT NULL DEFAULT 0,
+      FOREIGN KEY(contactPersonId) REFERENCES persons(id),
+      FOREIGN KEY(userId) REFERENCES users(id))`
   );
 const initHashTables = () =>
   queryRunner.runQuery(
@@ -102,24 +105,23 @@ const initHashTables = () =>
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       previousHashId INTEGER NOT NULL UNIQUE DEFAULT 0,
       conversationId INTEGER NOT NULL,
-      messageId INTEGER NOT NULL UNIQUE,
       previousHashValue TEXT NOT NULL,
       hashMessageData TEXT NOT NULL,
       hashValue TEXT NOT NULL,
       FOREIGN KEY(previousHashId) REFERENCES hash_tables(id),
-      FOREIGN KEY(conversationId) REFERENCES conversations(id),
-      FOREIGN KEY(messageId) REFERENCES messages(id))`
+      FOREIGN KEY(conversationId) REFERENCES conversations(id))`
   );
 const initGroupConversations = () =>
   queryRunner.runQuery(
     `CREATE TABLE IF NOT EXISTS group_conversations(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      conversationId INTEGER NOT NULL UNIQUE,
+      userId INTEGER NOT NULL,
       adminId INTEGER NOT NULL,
       groupKey TEXT NOT NULL,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
-      FOREIGN KEY(conversationId) REFERENCES conversations(id),
+      isFavorite INTEGER NOT NULL DEFAULT 0,
+      FOREIGN KEY(userId) REFERENCES users(id),
       FOREIGN KEY(adminId) REFERENCES persons(id))`
   );
 const initPersonGroups = () =>

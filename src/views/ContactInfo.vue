@@ -53,20 +53,15 @@ export default {
     };
   },
   created() {
-    let contactModel = {
-      name: "",
-      email: "dummy_email@example.com",
-      publicKey: "dummy public key",
-      onlineStatus: "",
-      // conversationType: "",
-      // lastMessageTimestamp: "",
-      // lastMessage: "",
-    };
     let activeContact = this.$store.getters.getConversationById(
       this.$store.getters.activeConversationId
     );
-    contactModel.name = activeContact.name;
-    contactModel.onlineStatus = activeContact.onlineStatus;
+    let contactModel = {
+      name: activeContact?.name,
+      email: activeContact?.email,
+      publicKey: activeContact?.publicKey,
+      onlineStatus: activeContact?.onlineStatus,
+    };
     this.contact = contactModel;
   },
   methods: {},
