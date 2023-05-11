@@ -2,6 +2,7 @@ import contactConversationRepo from "@/ipc-wrappers/contactConversationRepositor
 import contactMessageRepo from "@/ipc-wrappers/contactMessageRepositoryWrapper";
 import personService from "./personService";
 import ContactConversation from "@/backend/models/contactConversation";
+import Store from "@/store/index";
 
 const createContactChat = async (contactPersonData, userId) => {
   try {
@@ -50,8 +51,22 @@ const getLastMessageDetailsOfChat = async (contactConversationId) => {
     contactConversationId
   );
 };
+
+const dispatchLastMessageDetail = async (contactConversationId) => {
+  let lastMessageDetail = await getLastMessageDetailsOfChat(
+    contactConversationId
+  );
+  let payload = {
+    conversationId: contactConversationId,
+    lastMessageTimestamp: lastMessageDetail.date ?? "",
+    lastMessage: lastMessageDetail.message ?? "",
+  };
+  console.log("Dispatch last message detail:", payload);
+  Store.dispatch("setLastMessageDetailOfConversation", payload);
+};
 export default {
   createContactChat,
   getLastMessageDetailsOfChat,
   getAllContactChatsOfUser,
+  dispatchLastMessageDetail,
 };

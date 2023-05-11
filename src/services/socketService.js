@@ -1,5 +1,6 @@
 import io from "socket.io-client";
 import Store from "@/store/index";
+import contactConversationService from "./contactConversationService";
 import contactMessageService from "./contactMessageService";
 // import groupMessageService from "./groupMessageService";
 import requestNotificationService from "./requestNotificationService";
@@ -26,28 +27,24 @@ const initOnlinePingSender = () => {
   }, 10000);
 };
 const receiveChatMessageListener = () => {
-  socket.on("chatMessage", (msgData) => {
+  socket.on("chatMessage", async (msgData) => {
     console.log("Message received: ", msgData);
     msgData = JSON.parse(msgData);
     console.log("Message received after: ", msgData);
     //Make sure message type is not sent
     // msgData["messageType"]= "";
-    msgData.message = cryptionService.decryptData(
+    msgData.message = await cryptionService.decryptData(
       Store.getters.user.privateKey,
       msgData.message
     );
+    msgData.isSenderUser = 0;
+    //TODO
+    msgData.contactConversationId = Store.getters.activeConversationId;
+    await contactMessageService.addMessage(msgData);
+    await contactConversationService.dispatchLastMessageDetail(
+      Store.getters.activeConversationId
+    );
     console.log("Received message inserted successfully!: ", msgData.message);
-    // messageService
-    //   .insertMessage(msgData)
-    //   .then((msg) => {
-    //     console.log("Received message inserted successfully!: ", msg);
-    //     //if sender active conversation then
-    //     //this.messages.push(msgData);
-    //     messageService.updateLastMessage(msgData.message, 123);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-    //   });
   });
 };
 const errorListener = () => {
@@ -138,12 +135,15 @@ const sendContactChatMessage = async (message) => {
     ),
   };
   console.log("Sent message data ", msgData);
-  //////////// let msg = await messageService.insertMessage(msgData);
-  //this.messages.push(msgData);
-  contactMessageService.updateLastMessage(message, Store.getters.activeConversationId);
   socket.emit("chatMessage", JSON.stringify(msgData));
   //Unencrypted message
   msgData.message = message;
+  msgData.isSenderUser = 1;
+  msgData.contactConversationId = Store.getters.activeConversationId;
+  await contactMessageService.addMessage(msgData);
+  await contactConversationService.dispatchLastMessageDetail(
+    Store.getters.activeConversationId
+  );
   return msgData;
 };
 const sendGroupChatMessage = async (message) => {
@@ -152,9 +152,9 @@ const sendGroupChatMessage = async (message) => {
 };
 //TODO
 //Online status of persons
-const getOnlineStatus = () =>{
+const getOnlineStatus = () => {
   return true;
-}
+};
 export default {
   initSocket,
   sendContactChatMessage,

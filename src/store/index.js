@@ -86,6 +86,14 @@ export default createStore({
         state.conversations[conversationIndex].lastMessage = lastMessage;
       }
     },
+    SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION(state, { lastMessageDetail, getters }) {
+      let conversationIndex =
+        getters.getConversationIndexById(lastMessageDetail.conversationId);
+      if (conversationIndex != -1) {
+        state.conversations[conversationIndex].lastMessage = lastMessageDetail.lastMessage ?? "";
+        state.conversations[conversationIndex].lastMessageTimestamp = lastMessageDetail.lastMessageTimestamp ?? "";
+      }
+    },
     TOGGLE_CONVERSATION_FAV(state, {conversationId, getters}) {
       let conversationIndex =
         getters.getConversationIndexById(conversationId);
@@ -121,6 +129,12 @@ export default createStore({
       commit("SET_LAST_MESSAGE_OF_CONVERSATION", {
         conversationId,
         lastMessage,
+        getters
+      });
+    },
+    setLastMessageDetailOfConversation({ commit, getters}, lastMessageDetail) {
+      commit("SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION", {
+        lastMessageDetail,
         getters
       });
     },

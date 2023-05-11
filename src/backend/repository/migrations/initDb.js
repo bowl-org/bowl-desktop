@@ -66,7 +66,7 @@ const initContactMessages = () =>
     `CREATE TABLE IF NOT EXISTS contact_messages(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       contactConversationId INTEGER NOT NULL,
-      hashTableId INTEGER NOT NULL,
+      hashTableId INTEGER NULL,
       isSenderUser INTEGER NOT NULL,
       message TEXT NOT NULL,
       messageType TEXT,
@@ -81,7 +81,7 @@ const initGroupMessages = () =>
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       senderPersonId INTEGER NOT NULL,
       groupConversationId INTEGER NOT NULL,
-      hashTableId INTEGER NOT NULL,
+      hashTableId INTEGER NULL,
       message TEXT NOT NULL,
       messageType TEXT,
       date TEXT NOT NULL,

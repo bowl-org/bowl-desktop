@@ -115,7 +115,7 @@ export default {
       //Log out
     },
     openSettings() {
-      this.$router.push("/settings");
+      this.$router.push({name: "settings"});
     },
   },
 };

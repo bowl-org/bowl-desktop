@@ -84,27 +84,27 @@ const routes = [
         name: "notification",
         component: () => import("@/views/NotificationView.vue"),
       },
+    ],
+  },
+  {
+    path: "/settings",
+    name: "settings",
+    component: TheSettingsView,
+    children: [
       {
-        path: "settings",
-        name: "settings",
-        component: TheSettingsView,
-        children: [
-          {
-            path: "about",
-            name: "about",
-            component: () => import("@/views/AboutView.vue"),
-          },
-          {
-            path: "security",
-            name: "security",
-            component: () => import("@/views/TheSecurity.vue"),
-          },
-          {
-            path: "profile",
-            name: "profile",
-            component: () => import("@/views/TheProfile.vue"),
-          },
-        ],
+        path: "about",
+        name: "about",
+        component: () => import("@/views/AboutView.vue"),
+      },
+      {
+        path: "security",
+        name: "security",
+        component: () => import("@/views/TheSecurity.vue"),
+      },
+      {
+        path: "profile",
+        name: "profile",
+        component: () => import("@/views/TheProfile.vue"),
       },
     ],
   },
