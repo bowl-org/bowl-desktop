@@ -3,10 +3,11 @@ import queryRunner from "./commons/queryRunner";
 
 const tableName = "persons";
 const insertPerson = async (personData) => {
-  return queryRunner.runPreparedQuery(
+  const info = queryRunner.runPreparedQuery(
     `INSERT INTO ${tableName}(publicKey, name, email) VALUES (@publicKey, @name, @email)`,
     personData
   );
+  return findPerson(info.lastInsertRowid);
 };
 const updatePerson = async (personData) => {
   return queryRunner.runPreparedQuery(

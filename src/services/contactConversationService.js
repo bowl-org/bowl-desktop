@@ -13,6 +13,7 @@ const createContactChat = async (contactPersonData, userId) => {
       contactPersonData.email
     );
     if (contactPerson == null) {
+      console.log("Contact person not found, new person creating...")
       contactPerson = await personService.createPerson(contactPersonData);
     }
 

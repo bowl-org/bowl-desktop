@@ -5,10 +5,10 @@ import user from "../models/user";
 
 const tableName = "users";
 const insertUser = async (userData) => {
-  const info = await personRepository.insertPerson(user.toPerson(userData));
+  const person = await personRepository.insertPerson(user.toPerson(userData));
   const userId = queryRunner.runPreparedQuery(
     `INSERT INTO ${tableName} (personId, privateKey) VALUES (?, ?)`,
-    [info.lastInsertRowid, userData.privateKey]
+    [person.id, userData.privateKey]
   ).lastInsertRowid;
   return await findUser(userId);
 };

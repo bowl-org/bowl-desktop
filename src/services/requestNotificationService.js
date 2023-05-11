@@ -95,7 +95,7 @@ const acceptRequest = async (requestData) => {
       await contactRequestNotificationRepository.findContactRequestNotificationById(
         requestData.id
       );
-    contactConversationService.createContactChat(req)
+    contactConversationService.createContactChat(req, Store.getters.user.id )
     await contactRequestNotificationRepository.deleteContactRequestNotification(
       requestData.id
     );
