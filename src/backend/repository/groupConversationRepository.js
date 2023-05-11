@@ -1,77 +1,33 @@
 import db from "./commons/db";
 import queryRunner from "./commons/queryRunner";
-import conversationRepository from "./conversationRepository";
-import groupConversation from "../models/groupConversation";
 
 const tableName = "group_conversations";
 const insertGroupConversation = async (groupConversationData) => {
-  db.transaction(async () => {
-    const info = await conversationRepository.insertConversation(
-      groupConversation.toConversation(groupConversationData)
-    );
-    return queryRunner.runPreparedQuery(
-      `INSERT INTO ${tableName}(conversationId, adminId, groupKey, name, description) VALUES (?, ?, ?, ?, ?)`,
-      [
-        info.lastInsertRowid,
-        groupConversationData.adminId,
-        groupConversationData.groupKey,
-        groupConversationData.name,
-        groupConversationData.description,
-      ]
-    );
-  });
+  const groupConversationId = queryRunner.runPreparedQuery(
+    `INSERT INTO ${tableName}(userId, adminId, groupKey, name, description, isFavorite) VALUES (@userId, @adminId, @groupKey, @name, @description, @isFavorite)`,
+    groupConversationData
+  );
+  return await findGroupConversation(groupConversationId);
 };
 const updateGroupConversation = async (groupConversationData) => {
-  db.transaction(async () => {
-    queryRunner.runPreparedQuery(
-    `UPDATE ${tableName} SET adminId = @adminId, groupKey = @groupKey, name = @name, description = @description WHERE id = @id`,
+  queryRunner.runPreparedQuery(
+    `UPDATE ${tableName} SET adminId = @adminId, groupKey = @groupKey, name = @name, description = @description, isFavorite = @isFavorite WHERE id = @id`,
     groupConversationData
-    );
-    let conversationData = groupConversation.toConversation(
-      groupConversationData
-    );
-    await conversationRepository.updateConversation(conversationData);
-  });
+  );
+  return await findGroupConversation(groupConversationData.id);
 };
-const deleteGroupConversation = async (groupConversationData) => {
+const deleteGroupConversation = async (id) => {
   db.transaction(() => {
-    queryRunner.deleteById(tableName, groupConversationData.id);
+    queryRunner.deleteById(tableName, id);
   });
 };
 const findGroupConversation = async (id) => {
-  return queryRunner.getFromPreparedQuery(
-    `SELECT
-      group_conversation.id,
-      group_conversation.conversationId,
-      group_conversation.adminId,
-      group_conversation.groupKey,
-      group_conversation.name,
-      group_conversation.description,
-      conversation.userId
-      conversation.isFavorite
-    FROM
-      ${tableName} group_conversation
-    INNER JOIN
-      ${conversationRepository.tableName} conversation on group_conversation.conversationId = conversation.id
-    WHERE group_conversation.id = ?`,
-    id
-  );
+  return queryRunner.findById(tableName, id);
 };
-const getAllGroupConversations = async () => {
+const getGroupConversationsByUserId = async (userId) => {
   return queryRunner.allFromPreparedQuery(
-    `SELECT
-      group_conversation.id,
-      group_conversation.conversationId,
-      group_conversation.adminId,
-      group_conversation.groupKey,
-      group_conversation.name,
-      group_conversation.description,
-      conversation.userId
-      conversation.isFavorite
-    FROM
-      ${tableName} group_conversation
-    INNER JOIN
-      ${conversationRepository.tableName} conversation on group_conversation.conversationId = conversation.id`
+    `SELECT * FROM ${tableName} WHERE userId = ?`,
+    userId
   );
 };
 export default {
@@ -80,5 +36,5 @@ export default {
   updateGroupConversation,
   deleteGroupConversation,
   findGroupConversation,
-  getAllGroupConversations,
+  getGroupConversationsByUserId,
 };

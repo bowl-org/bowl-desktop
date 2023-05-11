@@ -1,21 +1,22 @@
 import { ipcMain } from "electron";
 import contactConversationRepo from "../repository/contactConversationRepository";
 
-ipcMain.handle("insertContactConversation", async (event, args) => {
-  return await contactConversationRepo.insertContactConversation(args);
+ipcMain.handle("insertContactConversation", async (event, conversationData) => {
+  return await contactConversationRepo.insertContactConversation(
+    conversationData
+  );
 });
 ipcMain.handle("findContactConversation", async (event, id) => {
-  return await contactConversationRepo.findContactConversation(id)
+  return await contactConversationRepo.findContactConversation(id);
 });
-ipcMain.handle("deleteContactConversation", async (event, args ) => {
-  return await contactConversationRepo.deleteContactConversation(args)
+ipcMain.handle("updateContactConversation", async (event, conversationData) => {
+  return await contactConversationRepo.updateContactConversation(
+    conversationData
+  );
 });
-ipcMain.handle("updateContactConversation", async (event, args ) => {
-  return await contactConversationRepo.updateContactConversation(args)
+ipcMain.handle("deleteContactConversation", async (event, id) => {
+  return await contactConversationRepo.deleteContactConversation(id);
 });
-ipcMain.handle("getAllContactConversations", async (event) => {
-  return await contactConversationRepo.getAllContactConversations();
-});
-ipcMain.handle("findContactConversationByContactId", async (event, contactId) => {
-  return await contactConversationRepo.findContactConversationByContactId(contactId)
+ipcMain.handle("getContactConversationsByUserId", async (event, userId) => {
+  return await contactConversationRepo.getContactConversationsByUserId(userId);
 });

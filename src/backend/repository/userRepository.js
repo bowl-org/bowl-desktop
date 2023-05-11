@@ -6,10 +6,6 @@ import user from "../models/user";
 const tableName = "users";
 const insertUser = async (userData) => {
   const info = await personRepository.insertPerson(user.toPerson(userData));
-  //const info = queryRunner.runPreparedQuery(
-  //"INSERT INTO persons(public_key, name, email) VALUES (@publicKey, @name, @email)",
-  //userData
-  //);
   const userId = queryRunner.runPreparedQuery(
     `INSERT INTO ${tableName} (personId, privateKey) VALUES (?, ?)`,
     [info.lastInsertRowid, userData.privateKey]
@@ -24,15 +20,11 @@ const updateUser = async (userData) => {
     );
     let personData = user.toPerson(userData);
     await personRepository.updatePerson(personData);
-    //queryRunner.runPreparedQuery(
-    //"UPDATE persons SET publicKey = @publicKey, name = @name, email = @email WHERE id = @personId",
-    //{ ...userData, personId: info.lastInsertRowid }
-    //);
   });
 };
-const deleteUser = async (userData) => {
+const deleteUser = async (id) => {
   db.transaction(() => {
-    queryRunner.deleteById(tableName, userData.id);
+    queryRunner.deleteById(tableName, id);
   });
 };
 const findUser = async (id) => {

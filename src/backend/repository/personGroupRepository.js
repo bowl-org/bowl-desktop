@@ -8,21 +8,24 @@ const insertPersonGroup = async (personGroupData) => {
     personGroupData
   );
 };
-const deletePersonGroup = async (personGroupData) => {
+const deletePersonGroup = async (id) => {
   db.transaction(() => {
-    queryRunner.deleteById(tableName, personGroupData.id);
+    queryRunner.deleteById(tableName, id);
   });
 };
 const findPersonGroup = async (id) => {
   return queryRunner.findById(tableName, id);
 };
-const getAllPersonGroups = async () => {
-  return queryRunner.getAll();
+const getPersonGroupsByGroupConversationId = async (groupConversationId) => {
+  return queryRunner.allFromPreparedQuery(
+    `SELECT * FROM ${tableName} WHERE groupConversationId `,
+    groupConversationId
+  );
 };
 export default {
   tableName,
   insertPersonGroup,
   deletePersonGroup,
   findPersonGroup,
-  getAllPersonGroups,
+  getPersonGroupsByGroupConversationId,
 };

@@ -1,3 +1,4 @@
+import db from "./commons/db";
 import queryRunner from "./commons/queryRunner";
 
 const tableName = "persons";
@@ -13,8 +14,10 @@ const updatePerson = async (personData) => {
     personData
   );
 };
-const deletePerson = async (personData) => {
-  return queryRunner.deleteById(tableName, personData.id);
+const deletePerson = async (id) => {
+  db.transaction(() => {
+    queryRunner.deleteById(tableName, id);
+  });
 };
 const findPerson = async (id) => {
   return queryRunner.findById(tableName, id);
