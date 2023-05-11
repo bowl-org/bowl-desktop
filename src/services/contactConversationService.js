@@ -1,20 +1,30 @@
-import contactConversationRepository from "@/ipc-wrappers/contactConversationRepositoryWrapper";
-import contactRepository from "@/ipc-wrappers/contactRepositoryWrapper";
-// import Contact from "@/backend/models/contact";
-// import ContactConversation from "@/backend/models/contactConversation";
+import contactConversationRepo from "@/ipc-wrappers/contactConversationRepositoryWrapper";
+import personService from "./personService";
+import ContactConversation from "@/backend/models/contactConversation";
 
-const createContactChat = async (contactData) => {
+const createContactChat = async (contactPersonData, userId) => {
   try {
-    console.log("Contact chat creating...", contactData);
-    console.log(
-      "Inserted contact :",
-      await contactRepository.insertContact(contactData)
-    );
-    let contact = await contactRepository.findContactByEmail(contactData.email);
-    let contactConversation = await contactConversationRepository.insertContactConversation({
-      contactId: contact.id,
+    console.log("Contact chat creating...", {
+      ...contactPersonData,
+      userId: userId,
     });
-    console.log("Contact conversation added:", contactConversation)
+    //Create new person if contact person not exists
+    let contactPerson = await personService.findPersonByEmail(
+      contactPersonData.email
+    );
+    if (contactPerson == null) {
+      contactPerson = await personService.createPerson(contactPersonData);
+    }
+
+    let contactConversationData = ContactConversation.contactConversationModel;
+    contactConversationData.userId = userId;
+    contactConversationData.contactPersonId = contactPerson.id;
+
+    let contactConversation =
+      await contactConversationRepo.insertContactConversation(
+        contactConversationData
+      );
+    console.log("Contact conversation added:", contactConversation);
   } catch (ex) {
     console.log(ex);
   }

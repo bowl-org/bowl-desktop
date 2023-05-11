@@ -9,7 +9,7 @@ const deleteContactMessage = async (id) => {
 const updateContactMessage = async (messageData) => {
   return ipcRendererHelper.invokeEvent("updateContactMessage", messageData);
 };
-const insertContactMessageMessage = async (messageData) => {
+const insertContactMessage = async (messageData) => {
   return ipcRendererHelper.invokeEvent("insertContactMessage", messageData);
 };
 const getContactMessagesByContactConversationId = async (contactConversationId) => {
@@ -20,6 +20,6 @@ export default {
   findContactMessage,
   deleteContactMessage,
   updateContactMessage,
-  insertContactMessageMessage,
+  insertContactMessage,
   getContactMessagesByContactConversationId,
 };

@@ -1,6 +1,6 @@
 import Store from "@/store/index";
-import groupRequestNotificationRepository from "../ipc-wrappers/groupRequestNotificationRepositoryWrapper";
-import contactRequestNotificationRepository from "../ipc-wrappers/contactRequestNotificationRepositoryWrapper";
+import groupRequestNotificationRepository from "@/ipc-wrappers/groupRequestNotificationRepositoryWrapper";
+import contactRequestNotificationRepository from "@/ipc-wrappers/contactRequestNotificationRepositoryWrapper";
 import socketService from "./socketService";
 import contactConversationService from "./contactConversationService";
 
