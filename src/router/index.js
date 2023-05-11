@@ -62,17 +62,17 @@ const routes = [
         ],
       },
       {
-        path: "/newconversation",
+        path: "newconversation",
         name: "newconversation",
         component: () => import("@/views/NewConversation.vue"),
         children: [
           {
-            path: "/newgroup",
+            path: "newgroup",
             name: "newgroup",
             component: () => import("@/views/NewGroup.vue"),
           },
           {
-            path: "/newcontact",
+            path: "newcontact",
             name: "newcontact",
             component: () => import("@/views/NewContact.vue"),
           },
@@ -80,31 +80,31 @@ const routes = [
       },
 
       {
-        path: "/notification",
+        path: "notification",
         name: "notification",
         component: () => import("@/views/NotificationView.vue"),
       },
-    ],
-  },
-  {
-    path: "/settings",
-    name: "settings",
-    component: TheSettingsView,
-    children: [
       {
-        path: "about",
-        name: "about",
-        component: () => import("@/views/AboutView.vue"),
-      },
-      {
-        path: "security",
-        name: "security",
-        component: () => import("@/views/TheSecurity.vue"),
-      },
-      {
-        path: "profile",
-        name: "profile",
-        component: () => import("@/views/TheProfile.vue"),
+        path: "settings",
+        name: "settings",
+        component: TheSettingsView,
+        children: [
+          {
+            path: "about",
+            name: "about",
+            component: () => import("@/views/AboutView.vue"),
+          },
+          {
+            path: "security",
+            name: "security",
+            component: () => import("@/views/TheSecurity.vue"),
+          },
+          {
+            path: "profile",
+            name: "profile",
+            component: () => import("@/views/TheProfile.vue"),
+          },
+        ],
       },
     ],
   },

@@ -12,13 +12,13 @@ const deleteGroupConversation = async (groupConversationData) => {
 const updateGroupConversation = async (groupConversationData) => {
   return ipcRendererHelper.invokeEvent("updateGroupConversation", groupConversationData);
 };
-const getGroupConversationByUserId = async (userId) => {
-  return ipcRendererHelper.invokeEvent("getGroupConversationByUserId", userId);
+const getGroupConversationsByUserId = async (userId) => {
+  return ipcRendererHelper.invokeEvent("getGroupConversationsByUserId", userId);
 };
 export default{
   insertGroupConversation,
   findGroupConversation,
   deleteGroupConversation,
   updateGroupConversation,
-  getGroupConversationByUserId
+  getGroupConversationsByUserId,
 }

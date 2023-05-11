@@ -28,6 +28,14 @@ const getGroupMessagesByGroupConversationId = async (groupConversationId) => {
     groupConversationId
   );
 };
+const getLastGroupMessageByGroupConversationId = async (
+  groupConversationId
+) => {
+  return queryRunner.getFromPreparedQuery(
+    `SELECT * FROM ${tableName} WHERE groupConversationId = ? ORDER BY id DESC LIMIT 1`,
+    groupConversationId
+  );
+};
 
 export default {
   insertGroupMessage,
@@ -35,4 +43,5 @@ export default {
   deleteGroupMessage,
   findGroupMessage,
   getGroupMessagesByGroupConversationId,
+  getLastGroupMessageByGroupConversationId
 };

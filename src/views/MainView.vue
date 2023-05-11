@@ -19,7 +19,7 @@ export default {
   },
   created(){
     socketService.initSocket();
-    this.$router.push({name: 'chat', params: {id: 0}});
+    // this.$router.push({name: 'chat', params: {id: 0}});
   },
   components: {
     //TheChat,

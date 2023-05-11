@@ -35,6 +35,15 @@ const getContactMessagesByContactConversationId = async (
   );
 };
 
+const getLastContactMessageByContactConversationId = async (
+  contactConversationId
+) => {
+  return queryRunner.getFromPreparedQuery(
+    `SELECT * FROM ${tableName} WHERE contactConversationId = ? ORDER BY id DESC LIMIT 1`,
+    contactConversationId
+  );
+};
+
 export default {
   insertContactMessage,
   updateContactMessage,
@@ -42,4 +51,5 @@ export default {
   findContactMessage,
   getMessagesByContactConversationId,
   getContactMessagesByContactConversationId,
+  getLastContactMessageByContactConversationId,
 };

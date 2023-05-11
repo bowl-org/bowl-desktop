@@ -1,4 +1,5 @@
 import contactConversationRepo from "@/ipc-wrappers/contactConversationRepositoryWrapper";
+import contactMessageRepo from "@/ipc-wrappers/contactMessageRepositoryWrapper";
 import personService from "./personService";
 import ContactConversation from "@/backend/models/contactConversation";
 
@@ -13,7 +14,7 @@ const createContactChat = async (contactPersonData, userId) => {
       contactPersonData.email
     );
     if (contactPerson == null) {
-      console.log("Contact person not found, new person creating...")
+      console.log("Contact person not found, new person creating...");
       contactPerson = await personService.createPerson(contactPersonData);
     }
 
@@ -30,6 +31,27 @@ const createContactChat = async (contactPersonData, userId) => {
     console.log(ex);
   }
 };
+const getAllContactChatsOfUser = async (userId) => {
+  let contactChats = [];
+  let contactConversations =
+    await contactConversationRepo.getContactConversationsByUserId(userId);
+  for (const contactConversation of contactConversations) {
+    contactChats.push({
+      ...contactConversation,
+      name: (
+        await personService.getPersonById(contactConversation.contactPersonId)
+      ).name,
+    });
+  }
+  return contactChats;
+};
+const getLastMessageDetailsOfChat = async (contactConversationId) => {
+  return await contactMessageRepo.getLastContactMessageByContactConversationId(
+    contactConversationId
+  );
+};
 export default {
   createContactChat,
+  getLastMessageDetailsOfChat,
+  getAllContactChatsOfUser,
 };

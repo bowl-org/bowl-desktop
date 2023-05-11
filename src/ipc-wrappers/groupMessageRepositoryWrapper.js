@@ -15,11 +15,14 @@ const insertGroupMessage = async (messageData) => {
 const getGroupMessagesByGroupConversationId = async (groupConversationId) => {
   return ipcRendererHelper.invokeEvent("getGroupMessagesByGroupConversationId", groupConversationId);
 };
-
+const getLastGroupMessageByGroupConversationId = async (groupConversationId) => {
+  return ipcRendererHelper.invokeEvent("getLastGroupMessageByGroupConversationId", groupConversationId);
+};
 export default {
   findGroupMessage,
   deleteGroupMessage,
   updateGroupMessage,
   insertGroupMessage,
   getGroupMessagesByGroupConversationId,
+  getLastGroupMessageByGroupConversationId,
 };

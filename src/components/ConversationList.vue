@@ -23,16 +23,13 @@
 
 <script>
 import ConversationBox from "./ConversationBox.vue";
-// import messageService from "../services/messageService";
+import contactConversationService from "@/services/contactConversationService";
+import groupConversationService from "@/services/groupConversationService";
+import socketService from "@/services/socketService";
 export default {
   name: "ConversationList",
   components: {
     ConversationBox,
-  },
-  data() {
-    return {
-      conversations: [],
-    };
   },
   props: {
     conversationType: {
@@ -49,13 +46,15 @@ export default {
   methods: {
     selectConversation(index) {
       let activeConversationId = this.$store.getters.activeConversationId;
-      let lastActiveIndex = this.conversations.findIndex(
+      let lastActiveIndex = this.$store.getters.conversations.findIndex(
         (x) => x.conversationId == activeConversationId
       );
       console.log("Last active index:", lastActiveIndex);
       console.log("Active conversation id:", activeConversationId);
-      this.conversations[lastActiveIndex].isActive = "false";
-      this.filteredConversationList[index].isActive = "true";
+      if (lastActiveIndex != -1) {
+        this.$store.getters.conversations[lastActiveIndex].isActive = false;
+      }
+      this.filteredConversationList[index].isActive = true;
       this.$store.dispatch(
         "setActiveConversationId",
         this.filteredConversationList[index].conversationId
@@ -65,61 +64,77 @@ export default {
         params: { id: this.$store.getters.activeConversationId },
       });
     },
-    loadConversations() {
-      //Testing purposes
-      // messageService.getAllMessages().then((messages) => {
-      // let lastMessage = messages[messages.length - 1].message;
-      let lastMessage = "This is last message";
-      this.conversations = [
-        {
-          conversationId: 123,
-          name: "Mehmet Okul",
-          onlineStatus: "online",
-          isActive: "false",
-          lastMessageTimestamp: "01/11/2022",
-          lastMessage: lastMessage,
-          isFav: true,
-          conversationType: "Contact",
-        },
-        {
-          conversationId: 0,
-          name: "Bill Joy",
-          onlineStatus: "offline",
-          isActive: "false",
-          lastMessageTimestamp: "08/10/2022",
-          lastMessage: "Hello, did you tried vi editor ",
-          isFav: false,
-          conversationType: "Contact",
-        },
-        {
-          conversationId: 1,
-          name: "Linus Torvalds",
-          onlineStatus: "offline",
-          isActive: "false",
-          lastMessageTimestamp: "20/08/2022",
-          lastMessage: "Talk is cheap. Show me the code.",
-          isFav: true,
-          conversationType: "Contact",
-        },
-        {
-          conversationId: 3,
-          name: "Demo Group",
-          //onlineStatus: "offline",
-          isActive: "false",
-          lastMessageTimestamp: "20/08/2022",
-          // lastMessage: "This is group last message.",
-          isFav: true,
-          conversationType: "Group",
-        },
-      ];
-      //Demonstration purposes
+    async initGroupConversation(conversation) {
+      let lastMessageInfo =
+        await groupConversationService.getLastMessageDetailsOfChat(
+          conversation.id
+        );
+      return {
+        conversationId: conversation.id,
+        name: conversation.name,
+        isActive: false,
+        lastMessageTimestamp: lastMessageInfo.date ?? "",
+        lastMessage: lastMessageInfo.message ?? "",
+        isFav: conversation.isFavorite == 1 ? true : false,
+        conversationType: "Group",
+      };
+    },
+    async initContactConversation(conversation) {
+      let isOnline = socketService.getOnlineStatus();
+      let lastMessageInfo =
+        await contactConversationService.getLastMessageDetailsOfChat(
+          conversation.id
+        );
+      return {
+        conversationId: conversation.id,
+        name: conversation.name,
+        onlineStatus: isOnline ? "online" : "offline",
+        isActive: false,
+        lastMessageTimestamp: lastMessageInfo?.date ?? "",
+        lastMessage: lastMessageInfo?.message ?? "",
+        isFav: conversation.isFavorite == 1 ? true : false,
+        conversationType: "Contact",
+      };
+    },
+
+    async loadConversations() {
       this.$store.dispatch("deleteConversations");
-      this.conversations.forEach((x) =>
+
+      let groupConvesations =
+        await groupConversationService.getAllGroupConversationsOfUser(
+          this.$store.getters.user.id
+        );
+      groupConvesations.forEach(async (conv) =>
+        this.$store.getters.conversations.push(
+          await this.initGroupConversation(conv)
+        )
+      );
+      let contactConversations =
+        await contactConversationService.getAllContactChatsOfUser(
+          this.$store.getters.user.id
+        );
+      contactConversations.forEach(async (conv) => {
+        console.log("CONV for each:", conv);
+        this.$store.getters.conversations.push(
+          await this.initContactConversation(conv)
+        );
+      });
+
+      this.$store.getters.conversations.forEach((x) =>
         this.$store.dispatch("addConversation", x)
       );
       console.log("CONVERSATIONS VUEX:", this.$store.getters.conversations);
-      this.$store.dispatch("setActiveConversationId", 1);
-      this.selectConversation(1);
+      if (this.$store.getters.conversations.length > 0) {
+        console.log(
+          "Conversation SELECT:",
+          this.$store.getters.conversations[0]
+        );
+        console.log(
+          "Conversation length",
+          this.$store.getters.conversations.length
+        );
+        this.selectConversation(this.$store.getters.conversations[0].id);
+      }
     },
   },
   computed: {

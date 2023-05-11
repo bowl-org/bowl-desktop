@@ -140,7 +140,7 @@ const sendContactChatMessage = async (message) => {
   console.log("Sent message data ", msgData);
   //////////// let msg = await messageService.insertMessage(msgData);
   //this.messages.push(msgData);
-  contactMessageService.updateLastMessage(message, 123);
+  contactMessageService.updateLastMessage(message, Store.getters.activeConversationId);
   socket.emit("chatMessage", JSON.stringify(msgData));
   //Unencrypted message
   msgData.message = message;
@@ -150,6 +150,11 @@ const sendGroupChatMessage = async (message) => {
   console.log("sendGroupChatMessage not implemented yet!", message);
   return;
 };
+//TODO
+//Online status of persons
+const getOnlineStatus = () =>{
+  return true;
+}
 export default {
   initSocket,
   sendContactChatMessage,
@@ -160,4 +165,5 @@ export default {
   acceptGroupRequest,
   declineGroupRequest,
   sendGroupRequest,
+  getOnlineStatus,
 };

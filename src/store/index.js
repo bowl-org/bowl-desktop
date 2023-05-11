@@ -7,7 +7,7 @@ export default createStore({
     user: User.userModel,
     token: Token.authTokenModel,
     notificationCount: 1,
-    activeConversationId: 0,
+    activeConversationId: -1,
     conversations: [],
   },
   getters: {

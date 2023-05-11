@@ -16,3 +16,6 @@ ipcMain.handle("deleteGroupMessage", async (event, id) => {
 ipcMain.handle("findGroupMessage", async (event, id) => {
   return await groupMessageRepo.findGroupMessage(id);
 });
+ipcMain.handle("getLastGroupMessageByGroupConversationId", async (event, groupConversationId) => {
+  return await groupMessageRepo.getLastGroupMessageByGroupConversationId(groupConversationId);
+});

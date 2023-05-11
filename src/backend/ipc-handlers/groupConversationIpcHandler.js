@@ -18,6 +18,6 @@ ipcMain.handle("deleteGroupConversation", async (event, id) => {
 ipcMain.handle("findGroupConversation", async (event, id) => {
   return await groupConversationRepo.findGroupConversation(id);
 });
-ipcMain.handle("getGroupConversationByUserId", async (event, userId) => {
+ipcMain.handle("getGroupConversationsByUserId", async (event, userId) => {
   return await groupConversationRepo.getGroupConversationsByUserId(userId);
 });

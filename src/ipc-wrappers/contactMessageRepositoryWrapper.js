@@ -15,6 +15,9 @@ const insertContactMessage = async (messageData) => {
 const getContactMessagesByContactConversationId = async (contactConversationId) => {
   return ipcRendererHelper.invokeEvent("getContactMessagesByContactConversationId", contactConversationId);
 };
+const getLastContactMessageByContactConversationId = async (contactConversationId) => {
+  return ipcRendererHelper.invokeEvent("getLastContactMessageByContactConversationId", contactConversationId);
+};
 
 export default {
   findContactMessage,
@@ -22,4 +25,5 @@ export default {
   updateContactMessage,
   insertContactMessage,
   getContactMessagesByContactConversationId,
+  getLastContactMessageByContactConversationId
 };

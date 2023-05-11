@@ -3,7 +3,7 @@
     @click="openConversation"
     class="cursor-pointer select-none flex justify-between items-center mt-5 rounded-xl min-w-[95%] max-w-[95%]"
     :class="
-      isActive == 'true'
+      isActive
         ? 'conversation-box-active hover:bg-green-100'
         : 'conversation-box-default hover:bg-black/60'
     "
@@ -25,21 +25,21 @@
       <div class="flex justify-between items-center">
         <p
           class="font-medium overflow-hidden truncate w-44 text-base justify-items-start text-start"
-          :class="isActive == 'true' ? 'text-black' : 'text-white'"
+          :class="isActive ? 'text-black' : 'text-white'"
         >
           {{ conversationName }}
         </p>
 
         <div
           class="conversation-info"
-          :class="isActive == 'true' ? 'text-neutral-500' : 'text-neutral-200'"
+          :class="isActive ? 'text-neutral-500' : 'text-neutral-200'"
         >
           <p class="text-xs">{{ lastMessageTimestamp }}</p>
         </div>
       </div>
       <p
         class="text-start text-sm overflow-hidden truncate w-56"
-        :class="isActive == 'true' ? 'text-neutral-500' : 'text-neutral-200'"
+        :class="isActive ? 'text-neutral-500' : 'text-neutral-200'"
       >
         {{ lastMessage }}
       </p>
@@ -70,7 +70,7 @@ export default {
       required: true,
     },
     isActive: {
-      type: String,
+      type: Boolean,
     },
   },
   components: {

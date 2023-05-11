@@ -16,3 +16,6 @@ ipcMain.handle("findContactMessage", async (event, id) => {
 ipcMain.handle("getContactMessagesByContactConversationId", async (event, contactConversationId) => {
   return await contactMessageRepo.getContactMessagesByContactConversationId(contactConversationId);
 });
+ipcMain.handle("getLastContactMessageByContactConversationId", async (event, contactConversationId) => {
+  return await contactMessageRepo.getLastContactMessageByContactConversationId(contactConversationId);
+});
