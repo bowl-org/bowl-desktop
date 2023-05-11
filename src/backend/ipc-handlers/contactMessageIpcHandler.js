@@ -1,18 +1,18 @@
 import { ipcMain } from "electron";
-import messageRepo from "../repository/messageRepository";
+import contactMessageRepo from "../repository/contactMessageRepository";
 
-ipcMain.handle("findMessage", async (event, args) => {
-  return await messageRepo.findMessage(args);
+ipcMain.handle("insertContactMessage", async (event, args) => {
+  return await contactMessageRepo.insertContactMessage(args);
 });
-ipcMain.handle("deleteMessage", async (event, args) => {
-  return await messageRepo.deleteMessage(args);
+ipcMain.handle("updateContactMessage", async (event, args) => {
+  return await contactMessageRepo.updateContactMessage(args);
 });
-ipcMain.handle("updateMessage", async (event, args) => {
-  return await messageRepo.updateMessage(args);
+ipcMain.handle("deleteContactMessage", async (event, id) => {
+  return await contactMessageRepo.deleteContactMessage(id);
 });
-ipcMain.handle("insertMessage", async (event, args) => {
-  return await messageRepo.insertMessage(args);
+ipcMain.handle("findContactMessage", async (event, id) => {
+  return await contactMessageRepo.findContactMessage(id);
 });
-ipcMain.handle("getAllMessages", async (event, args) => {
-  return await messageRepo.getAllMessages(args);
+ipcMain.handle("getContactMessagesByContactConversationId", async (event, contactConversationId) => {
+  return await contactMessageRepo.getContactMessagesByContactConversationId(contactConversationId);
 });

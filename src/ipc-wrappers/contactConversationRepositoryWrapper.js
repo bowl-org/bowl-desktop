@@ -11,18 +11,13 @@ const deleteContactConversation = async (contactConversationData) => {
 const updateContactConversation = async (contactConversationData) => {
   return ipcRendererHelper.invokeEvent("updateContactConversation", contactConversationData);
 };
-const getAllContactConversations = async () => {
-  return ipcRendererHelper.invokeEvent("getAllContactConversation");
-};
-const findContactConversationByContactId = async (contactId) => {
-  return ipcRendererHelper.invokeEvent("findContactConversationByContactId", contactId);
+const getContactConversationByUserId = async (userId) => {
+  return ipcRendererHelper.invokeEvent("getContactConversationByUserId", userId);
 };
 export default{
   insertContactConversation,
   findContactConversation,
   deleteContactConversation,
   updateContactConversation,
-  getAllContactConversations,
-  findContactConversationByContactId
-
+  getContactConversationByUserId
 }
