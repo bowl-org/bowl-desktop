@@ -15,8 +15,8 @@ const addMessage = async (messageData) => {
   await groupMessageRepo.insertMessage(messageData);
   updateLastMessage(messageData.message, messageData.groupConversationId);
 };
-const getAllMessages = async (groupConversationId) => {
-  return groupMessageRepo.getAllMessages(groupConversationId);
+const getGroupMessages = async (groupConversationId) => {
+  return groupMessageRepo.getGroupMessagesByGroupConversationId(groupConversationId);
 };
 // eslint-disable-next-line no-unused-vars
 const updateLastMessage = (msg, groupConversationId) => {
@@ -33,6 +33,6 @@ export default {
   deleteMessage,
   updateMessage,
   addMessage,
-  getAllMessages,
-  // updateLastMessage,
+  getGroupMessages,
+  updateLastMessage,
 };

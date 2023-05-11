@@ -15,8 +15,8 @@ const addMessage = async (messageData) => {
   await contactMessageRepo.insertContactMessage(messageData);
   updateLastMessage(messageData.message, messageData.contactConversationId);
 };
-const getAllMessages = async (conversationId) => {
-  return contactMessageRepo.getAllMessages(conversationId);
+const getContactMessages = async (conversationId) => {
+  return contactMessageRepo.getContactMessagesByContactConversationId(conversationId);
 };
 // eslint-disable-next-line no-unused-vars
 const updateLastMessage = (msg, contactConversationId) => {
@@ -35,6 +35,6 @@ export default {
   deleteMessage,
   updateMessage,
   addMessage,
-  getAllMessages,
-  // updateLastMessage,
+  getContactMessages,
+  updateLastMessage,
 };

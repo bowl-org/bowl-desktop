@@ -33,7 +33,8 @@
 <script>
 import ChatMessage from "./ChatMessage.vue";
 import ChatDateSpan from "./ChatDateSpan.vue";
-import messageService from "../services/messageService";
+import contactMessageService from "../services/contactMessageService";
+import groupMessageService from "../services/groupMessageService";
 import socketService from "../services/socketService";
 export default {
   name: "ChatMessageList",
@@ -70,19 +71,42 @@ export default {
         "Load messages from db, ID:",
         this.$store.getters.activeConversationId
       );
-      messageService
-        .getAllMessages(this.$store.getters.activeConversationId)
-        .then((messages) => {
-          this.messages = messages;
-        })
-        .catch((err) => {
-          console.log("Couldn't load messages!");
-          console.log(err);
-        });
+      let conversation = this.$store.getters.getConversationById(
+        this.$store.getters.activeConversationId
+      );
+      if (conversation.conversationType == "Contact") {
+        contactMessageService
+          .getContactMessages(this.$store.getters.activeConversationId)
+          .then((messages) => {
+            this.messages = messages;
+          })
+          .catch((err) => {
+            console.log("Couldn't load messages!");
+            console.log(err);
+          });
+      } else if (conversation.conversationType == "Group") {
+        groupMessageService
+          .getGroupMessages(this.$store.getters.activeConversationId)
+          .then((messages) => {
+            this.messages = messages;
+          })
+          .catch((err) => {
+            console.log("Couldn't load messages!");
+            console.log(err);
+          });
+      }
     },
     async sendMessage(message) {
       try {
-        let msgData = await socketService.sendChatMessage(message);
+        let conversation = this.$store.getters.getConversationById(
+          this.$store.getters.activeConversationId
+        );
+        let msgData;
+        if (conversation.conversationType == "Contact")
+          msgData = await socketService.sendContactChatMessage(message);
+        else if (conversation.conversationType == "Group")
+          msgData = await socketService.sendGroupChatMessage(message);
+        else throw new Error("Invalid conversation type!");
         this.messages.push(msgData);
       } catch (err) {
         console.log("Send message err:", err);

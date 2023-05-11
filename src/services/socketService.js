@@ -1,9 +1,9 @@
 import io from "socket.io-client";
 import Store from "@/store/index";
-import messageService from "../services/messageService";
-import requestNotificationService from "../services/requestNotificationService";
-import cryptionService from "../services/cryptionService.js";
-// import contactConversationService from "./contactConversationService";
+import contactMessageService from "./contactMessageService";
+// import groupMessageService from "./groupMessageService";
+import requestNotificationService from "./requestNotificationService";
+import cryptionService from "./cryptionService.js";
 
 let socket;
 const initSocket = () => {
@@ -123,11 +123,10 @@ const sendContactRequest = (email) => {
     );
   });
 };
-const sendChatMessage = async (message) => {
+const sendContactChatMessage = async (message) => {
   console.log("message sent");
   let today = new Date();
   let todaySplit = today.toString().split(" ");
-  // message = await cryptionService.encryptData( "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAj/Tz5uudUfOSNO5otkrxDn6xmQK8iuoHVyf4E4osxd5vQT9HEzrVHR1sJ7ok6bjyaa1DdJXUeoHAPAdvWrcNl+A9s7IopsYdCFIPuaTMsxatax3Mbw8ENwSdn8zkj0BWZ6OZJuQeKDyGFvKvEpJV3jPYvYXAeU1kowKPhOQBtzFqWK7EgbgiiORLAG0X9dGGKyZP/Pc81gD5e/EpteBdw9VaEPmDtNCMPpJhtD2gJMicSDtye2ABnUuEEfnmA584Xnu2P4wiHy9TBALs5c7bP4mQOOuM4R6fQOLlvLXr/0to8ASfhGMnT0w8eOuSIlSiY+FiwYhkpDI5Ja4U1ziEsQIDAQAB\n-----END PUBLIC KEY-----", message);
   let msgData = {
     date: todaySplit[2] + " " + todaySplit[1] + " " + todaySplit[3],
     time: today.getHours() + ":" + String(today.getMinutes()).padStart(2, "0"),
@@ -141,15 +140,20 @@ const sendChatMessage = async (message) => {
   console.log("Sent message data ", msgData);
   //////////// let msg = await messageService.insertMessage(msgData);
   //this.messages.push(msgData);
-  messageService.updateLastMessage(message, 123);
+  contactMessageService.updateLastMessage(message, 123);
   socket.emit("chatMessage", JSON.stringify(msgData));
   //Unencrypted message
   msgData.message = message;
   return msgData;
 };
+const sendGroupChatMessage = async (message) => {
+  console.log("sendGroupChatMessage not implemented yet!", message);
+  return;
+};
 export default {
   initSocket,
-  sendChatMessage,
+  sendContactChatMessage,
+  sendGroupChatMessage,
   sendContactRequest,
   acceptContactRequest,
   declineContactRequest,

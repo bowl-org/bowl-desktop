@@ -30,7 +30,7 @@ const getContactMessagesByContactConversationId = async (
   contactConversationId
 ) => {
   return queryRunner.allFromPreparedQuery(
-    `SELECT * FROM ${tableName} WHERE contactConversationId `,
+    `SELECT * FROM ${tableName} WHERE contactConversationId = ?`,
     contactConversationId
   );
 };
