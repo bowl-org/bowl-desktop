@@ -6,7 +6,7 @@
     >
       <ConversationBox
         v-if="
-          (conversationType == 'Favorites' && conversation.isFav) ||
+          (conversationType == 'Favorites' && conversation.isFav == 1) ||
           conversationType == conversation.conversationType
         "
         :conversationName="conversation.name"
@@ -75,7 +75,7 @@ export default {
         isActive: false,
         lastMessageTimestamp: lastMessageInfo.date ?? "",
         lastMessage: lastMessageInfo.message ?? "",
-        isFav: conversation.isFavorite == 1 ? true : false,
+        isFav: conversation.isFavorite ,
         conversationType: "Group",
       };
     },
@@ -92,7 +92,7 @@ export default {
         isActive: false,
         lastMessageTimestamp: lastMessageInfo?.date ?? "",
         lastMessage: lastMessageInfo?.message ?? "",
-        isFav: conversation.isFavorite == 1 ? true : false,
+        isFav: conversation.isFavorite,
         conversationType: "Contact",
       };
     },

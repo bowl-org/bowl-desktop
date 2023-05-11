@@ -6,7 +6,7 @@
         <p class="font-medium">{{ name }}</p>
         <button class="fav-btn active:animate-ping" @click="toggleFav">
           <font-awesome-icon
-            v-if="isFav"
+            v-if="isFav == 1"
             icon="fa-solid fa-heart"
             class="pl-3 text-lg fav"
           />
@@ -39,7 +39,7 @@ export default {
       required: true,
     },
     isFav: {
-      type: Boolean,
+      type: Number,
       required: true,
     },
     onlineStatus: {

@@ -2,8 +2,8 @@ import ipcRendererHelper from "@/helpers/ipcRendererHelper";
 const insertContactConversation = async (contactConversationData) => {
   return ipcRendererHelper.invokeEvent("insertContactConversation", contactConversationData);
 };
-const findContactConversation = async (contactConversationData) => {
-  return ipcRendererHelper.invokeEvent("findContactConversation", contactConversationData);
+const findContactConversation = async (id) => {
+  return ipcRendererHelper.invokeEvent("findContactConversation", id);
 };
 const deleteContactConversation = async (contactConversationData) => {
   return ipcRendererHelper.invokeEvent("deleteContactConversation", contactConversationData);

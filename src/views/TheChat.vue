@@ -1,17 +1,38 @@
 <template>
-  <div class="the-chat bg-neutral-100 flex flex-col  justify-between max-h-screen grow">
-    <div class="upper-chat relative bg-neutral-300 flex justify-between items-center">
-      <ConversationBar v-bind="conversation" @toggleFav="toggleFav"/>
+  <div
+    class="the-chat bg-neutral-100 flex flex-col justify-between max-h-screen grow"
+  >
+    <div
+      class="upper-chat relative bg-neutral-300 flex justify-between items-center"
+    >
+      <ConversationBar v-bind="conversation" @toggleFav="toggleFav" />
       <button @click="toggleChatMenu" class="w-12 h-12 text-3xl">
         <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
-      <ul v-if="showChatMenu" class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-16 right-5 font-medium bg-neutral-200 rounded-md ">
-        <li @click="openConversationInfo" class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75 ">Info</li>
-        <li class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75">Search</li>
-        <li @click="closeApp()" class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900" >Exit</li>
+      <ul
+        v-if="showChatMenu"
+        class="user-menu shadow-xl border-4 border-neutral-500/40 absolute top-16 right-5 font-medium bg-neutral-200 rounded-md"
+      >
+        <li
+          @click="openConversationInfo"
+          class="cursor-pointer bg-neutral-200 rounded-t px-3 py-1 text-left text-left hover:contrast-75"
+        >
+          Info
+        </li>
+        <li
+          class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75"
+        >
+          Search
+        </li>
+        <li
+          @click="closeApp()"
+          class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900"
+        >
+          Exit
+        </li>
       </ul>
     </div>
-    <ChatMessageList ref="chatMessageList"/>
+    <ChatMessageList ref="chatMessageList" />
     <EmojiSelection v-if="showEmojiSelection" @selectEmoji="selectEmoji" />
     <div
       class="bottom-chat bg-neutral-300 flex justify-center items-center p-4 pl-0"
@@ -37,7 +58,9 @@
 import ConversationBar from "@/components/ConversationBar.vue";
 import EmojiButton from "@/components/EmojiButton.vue";
 import EmojiSelection from "@/components/modals/EmojiSelection.vue";
-import ChatMessageList from "@/components/ChatMessageList.vue"
+import ChatMessageList from "@/components/ChatMessageList.vue";
+import contactConversationService from "@/services/contactConversationService";
+import groupConversationService from "@/services/groupConversationService";
 // eslint-disable-next-line no-unused-vars
 import electronIpcWrapper from "@/ipc-wrappers/electronIpcWrapper";
 
@@ -47,38 +70,66 @@ export default {
     EmojiButton,
     EmojiSelection,
     ChatMessageList,
-    ConversationBar
+    ConversationBar,
   },
   data() {
     return {
       messages: [],
       isInFav: true,
-      inputVal: '',
+      inputVal: "",
       showChatMenu: false,
-      showEmojiSelection: false
+      showEmojiSelection: false,
     };
   },
   computed: {
-    conversation(){
-      console.log("CONVERSATION:",this.$store.getters.getConversationById(this.$store.getters.activeConversationId));
+    conversation() {
+      console.log(
+        "CONVERSATION:",
+        this.$store.getters.getConversationById(
+          this.$store.getters.activeConversationId
+        )
+      );
       this.closeEmojiSelection();
-      return this.$store.getters.getConversationById(this.$store.getters.activeConversationId);
-    }
+      return this.$store.getters.getConversationById(
+        this.$store.getters.activeConversationId
+      );
+    },
   },
   methods: {
-    closeEmojiSelection(){
+    closeEmojiSelection() {
       this.showEmojiSelection = false;
     },
-    openConversationInfo(){
-      this.$router.push({name: 'conversationinfo', params: {id: this.$store.getters.activeConversationId}});
+    openConversationInfo() {
+      this.$router.push({
+        name: "conversationinfo",
+        params: { id: this.$store.getters.activeConversationId },
+      });
     },
-    closeApp(){
+    closeApp() {
       electronIpcWrapper.closeApp();
     },
-    toggleFav(){
-      this.$store.dispatch("toggleConversationFav", this.$store.getters.activeConversationId);
+    async toggleFav() {
+      this.$store.dispatch(
+        "toggleConversationFav",
+        this.$store.getters.activeConversationId
+      );
+      let conversation = this.$store.getters.getConversationById(
+        this.$store.getters.activeConversationId
+      );
+      console.log("Toggle Fav,Conversation Id:", conversation.conversationId)
+      if (conversation.conversationType == "Contact") {
+        await contactConversationService.setFavoriteOfChat(
+          conversation.conversationId,
+          conversation.isFav
+        );
+      } else if (conversation.conversationType == "Group") {
+        await groupConversationService.setFavoriteOfChat(
+          conversation.conversationId,
+          conversation.isFav
+        );
+      }
     },
-    sendMessage(){
+    sendMessage() {
       this.$refs.chatMessageList.sendMessage(this.inputVal);
       this.inputVal = "";
     },
@@ -88,10 +139,9 @@ export default {
     toggleEmojiSelection() {
       this.showEmojiSelection = !this.showEmojiSelection;
     },
-    selectEmoji(emoji){
+    selectEmoji(emoji) {
       this.inputVal += emoji;
-    }
-
+    },
   },
 };
 </script>
@@ -99,7 +149,7 @@ export default {
 .fav {
   color: #a499b3;
 }
-.btn-send{
-  background-color: #A499B3;
+.btn-send {
+  background-color: #a499b3;
 }
 </style>

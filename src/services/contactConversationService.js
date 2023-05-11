@@ -64,9 +64,24 @@ const dispatchLastMessageDetail = async (contactConversationId) => {
   console.log("Dispatch last message detail:", payload);
   Store.dispatch("setLastMessageDetailOfConversation", payload);
 };
+const getContactPersonDetail = async (contactConversationId) => {
+  let contactConversation =
+    await contactConversationRepo.findContactConversation(
+      contactConversationId
+    );
+  return await personService.getPersonById(contactConversation.contactPersonId);
+};
+const setFavoriteOfChat = async (contactConversationId, isFavorite) => {
+  await contactConversationRepo.updateContactConversation({
+    id: contactConversationId,
+    isFavorite: isFavorite,
+  });
+};
 export default {
   createContactChat,
+  getContactPersonDetail,
   getLastMessageDetailsOfChat,
   getAllContactChatsOfUser,
   dispatchLastMessageDetail,
+  setFavoriteOfChat
 };

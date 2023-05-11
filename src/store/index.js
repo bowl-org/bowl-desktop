@@ -99,7 +99,7 @@ export default createStore({
         getters.getConversationIndexById(conversationId);
       if (conversationIndex != -1) {
         state.conversations[conversationIndex].isFav =
-          !state.conversations[conversationIndex].isFav;
+          state.conversations[conversationIndex].isFav == 1 ? 0 : 1;
       }
     },
   },

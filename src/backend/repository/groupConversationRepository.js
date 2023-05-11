@@ -11,7 +11,8 @@ const insertGroupConversation = async (groupConversationData) => {
 };
 const updateGroupConversation = async (groupConversationData) => {
   queryRunner.runPreparedQuery(
-    `UPDATE ${tableName} SET adminId = @adminId, groupKey = @groupKey, name = @name, description = @description, isFavorite = @isFavorite WHERE id = @id`,
+    // `UPDATE ${tableName} SET adminId = @adminId, groupKey = @groupKey, name = @name, description = @description, isFavorite = @isFavorite WHERE id = @id`,
+    `UPDATE ${tableName} SET isFavorite = @isFavorite WHERE id = @id`,
     groupConversationData
   );
   return await findGroupConversation(groupConversationData.id);

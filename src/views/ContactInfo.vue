@@ -36,6 +36,7 @@
 <script>
 import ConversationAvatar from "@/components/ConversationAvatar.vue";
 import OnlineDot from "@/components/OnlineDot.vue";
+import contactConversationService from "@/services/contactConversationService";
 export default {
   name: "ContactInfo",
   components: {
@@ -52,15 +53,18 @@ export default {
       },
     };
   },
-  created() {
-    let activeContact = this.$store.getters.getConversationById(
+  async created() {
+    let activeContactConversation = this.$store.getters.getConversationById(
+      this.$store.getters.activeConversationId
+    );
+    let contactPerson = await contactConversationService.getContactPersonDetail(
       this.$store.getters.activeConversationId
     );
     let contactModel = {
-      name: activeContact?.name,
-      email: activeContact?.email,
-      publicKey: activeContact?.publicKey,
-      onlineStatus: activeContact?.onlineStatus,
+      name: contactPerson?.name,
+      email: contactPerson?.email,
+      publicKey: contactPerson?.publicKey,
+      onlineStatus: activeContactConversation?.onlineStatus,
     };
     this.contact = contactModel;
   },
