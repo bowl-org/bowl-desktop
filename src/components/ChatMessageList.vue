@@ -74,6 +74,8 @@ export default {
       let conversation = this.$store.getters.getConversationById(
         this.$store.getters.activeConversationId
       );
+      console.log("Load messages conversation:", conversation);
+      console.log("Conversations:", this.$store.getters.conversations);
       if (conversation.conversationType == "Contact") {
         contactMessageService
           .getContactMessages(this.$store.getters.activeConversationId)

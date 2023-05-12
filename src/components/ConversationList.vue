@@ -49,6 +49,7 @@ export default {
       let lastActiveIndex = this.$store.getters.conversations.findIndex(
         (x) => x.conversationId == activeConversationId
       );
+      console.log("Select conversation index:", index);
       console.log("Last active index:", lastActiveIndex);
       console.log("Active conversation id:", activeConversationId);
       if (lastActiveIndex != -1) {
@@ -75,7 +76,7 @@ export default {
         isActive: false,
         lastMessageTimestamp: lastMessageInfo.date ?? "",
         lastMessage: lastMessageInfo.message ?? "",
-        isFav: conversation.isFavorite ,
+        isFav: conversation.isFavorite,
         conversationType: "Group",
       };
     },
@@ -96,45 +97,45 @@ export default {
         conversationType: "Contact",
       };
     },
-
-    async loadConversations() {
-      this.$store.dispatch("deleteConversations");
-
+    async fetchConversations() {
+      let conversations = [];
       let groupConvesations =
         await groupConversationService.getAllGroupConversationsOfUser(
           this.$store.getters.user.id
         );
-      groupConvesations.forEach(async (conv) =>
-        this.$store.getters.conversations.push(
-          await this.initGroupConversation(conv)
-        )
-      );
+      for (const groupConversation of groupConvesations) {
+        conversations.push(await this.initGroupConversation(groupConversation));
+      }
       let contactConversations =
         await contactConversationService.getAllContactChatsOfUser(
           this.$store.getters.user.id
         );
-      contactConversations.forEach(async (conv) => {
-        console.log("CONV for each:", conv);
-        this.$store.getters.conversations.push(
-          await this.initContactConversation(conv)
+      for (const contactConversation of contactConversations) {
+        console.log("CONV for each:", contactConversation);
+        conversations.push(
+          await this.initContactConversation(contactConversation)
         );
-      });
-
-      this.$store.getters.conversations.forEach((x) =>
-        this.$store.dispatch("addConversation", x)
-      );
-      console.log("CONVERSATIONS VUEX:", this.$store.getters.conversations);
-      if (this.$store.getters.conversations.length > 0) {
-        console.log(
-          "Conversation SELECT:",
-          this.$store.getters.conversations[0]
-        );
-        console.log(
-          "Conversation length",
-          this.$store.getters.conversations.length
-        );
-        this.selectConversation(this.$store.getters.conversations[0].id);
       }
+      return conversations;
+    },
+    loadConversations() {
+      this.fetchConversations().then((conversations) => {
+        this.$store.dispatch("deleteConversations");
+        conversations.forEach((x) =>
+          this.$store.dispatch("addConversation", x)
+        );
+        console.log("CONVERSATIONS VUEX:", this.$store.getters.conversations);
+        if (this.$store.getters.conversations.length > 0) {
+          console.log(
+            "Conversation SELECT:",
+            this.$store.getters.conversations[0]
+          );
+          console.log(
+            "Conversation length",
+            this.$store.getters.conversations.length
+          );
+        }
+      });
     },
   },
   computed: {

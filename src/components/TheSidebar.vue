@@ -19,6 +19,12 @@
         >
           Log Out
         </li>
+        <li
+          @click="closeApp()"
+          class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900"
+        >
+          Exit
+        </li>
       </ul>
       <div class="upper-rigth-sidebar flex flex-row items-center justify-center">
         <NotificationBadge @click="$router.push({name:'notification'})"/>
@@ -65,6 +71,7 @@ import SearchSidebar from "./SearchSidebar.vue";
 import ConversationTypeMenu from "./ConversationTypeMenu.vue";
 import ConversationList from "./ConversationList.vue";
 import logInService from "../services/logInService";
+import electronIpcWrapper from "@/ipc-wrappers/electronIpcWrapper";
 
 export default {
   name: "TheSidebar",
@@ -113,6 +120,9 @@ export default {
           console.log("Log out error!", err);
         });
       //Log out
+    },
+    closeApp() {
+      electronIpcWrapper.closeApp();
     },
     openSettings() {
       this.$router.push({name: "settings"});

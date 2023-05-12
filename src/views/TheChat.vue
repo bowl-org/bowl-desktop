@@ -24,12 +24,6 @@
         >
           Search
         </li>
-        <li
-          @click="closeApp()"
-          class="cursor-pointer rounded-b px-3 py-1 text-left bg-neutral-200 hover:contrast-75 hover:text-red-900"
-        >
-          Exit
-        </li>
       </ul>
     </div>
     <ChatMessageList ref="chatMessageList" />
@@ -61,8 +55,6 @@ import EmojiSelection from "@/components/modals/EmojiSelection.vue";
 import ChatMessageList from "@/components/ChatMessageList.vue";
 import contactConversationService from "@/services/contactConversationService";
 import groupConversationService from "@/services/groupConversationService";
-// eslint-disable-next-line no-unused-vars
-import electronIpcWrapper from "@/ipc-wrappers/electronIpcWrapper";
 
 export default {
   name: "TheChat",
@@ -104,9 +96,6 @@ export default {
         name: "conversationinfo",
         params: { id: this.$store.getters.activeConversationId },
       });
-    },
-    closeApp() {
-      electronIpcWrapper.closeApp();
     },
     async toggleFav() {
       this.$store.dispatch(
