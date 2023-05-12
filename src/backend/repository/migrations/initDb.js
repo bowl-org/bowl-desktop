@@ -48,7 +48,8 @@ const initContactRequestNotifications = () =>
       userId INTEGER NOT NULL,
       publicKey TEXT NOT NULL,
       name TEXT NOT NULL,
-      email TEXT NOT NULL UNIQUE,
+      email TEXT NOT NULL,
+      UNIQUE(userId, email),
       FOREIGN KEY(userId) REFERENCES users(id))`
   );
 const initGroupRequestNotifications = () =>
@@ -59,6 +60,7 @@ const initGroupRequestNotifications = () =>
       key TEXT NOT NULL,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
+      UNIQUE(userId, key, name, description),
       FOREIGN KEY(userId) REFERENCES users(id))`
   );
 const initContactMessages = () =>
@@ -96,6 +98,7 @@ const initContactConversations = () =>
       contactPersonId INTEGER NOT NULL,
       userId INTEGER NOT NULL,
       isFavorite INTEGER NOT NULL DEFAULT 0,
+      UNIQUE(userId, contactPersonId),
       FOREIGN KEY(contactPersonId) REFERENCES persons(id),
       FOREIGN KEY(userId) REFERENCES users(id))`
   );
@@ -121,6 +124,7 @@ const initGroupConversations = () =>
       name TEXT NOT NULL,
       description TEXT NOT NULL,
       isFavorite INTEGER NOT NULL DEFAULT 0,
+      UNIQUE(userId, adminId, groupKey, name),
       FOREIGN KEY(userId) REFERENCES users(id),
       FOREIGN KEY(adminId) REFERENCES persons(id))`
   );
@@ -130,6 +134,7 @@ const initPersonGroups = () =>
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       groupConversationId INTEGER NOT NULL,
       personId INTEGER NOT NULL,
+      UNIQUE(personId, groupConversationId),
       FOREIGN KEY(groupConversationId) REFERENCES group_conversations(id),
       FOREIGN KEY(personId) REFERENCES persons(id))`
   );

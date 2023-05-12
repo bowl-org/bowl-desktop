@@ -91,34 +91,31 @@ const addGroupRequestNotification = async (data) => {
 const acceptRequest = async (requestData) => {
   let req;
   if (requestData.type == "Contact") {
-     req =
+    req =
       await contactRequestNotificationRepository.findContactRequestNotificationById(
         requestData.id
       );
-    contactConversationService.createContactChat(req, Store.getters.user.id )
     await contactRequestNotificationRepository.deleteContactRequestNotification(
       requestData.id
     );
-    //TODO add to contacts
     decreaseNotificationCount();
     socketService.acceptContactRequest(req.email);
+    await contactConversationService.createContactChat(req, Store.getters.user.id);
   } else if (requestData.type == "Group") {
-     req =
+    req =
       await groupRequestNotificationRepository.findGroupRequestNotificationById(
         requestData.id
       );
     await groupRequestNotificationRepository.deleteGroupRequestNotification(
       requestData.id
     );
-    //TODO add to groups
     decreaseNotificationCount();
-    socketService.acceptGroupRequest(req.email);
+    await socketService.acceptGroupRequest(req.email);
   }
   console.log("Notification accept:", req);
 };
 const declineRequest = async (requestData) => {
   if (requestData.type == "Contact") {
-    // eslint-disable-next-line no-unused-vars
     let contactReq =
       await contactRequestNotificationRepository.findContactRequestNotificationById(
         requestData.id
@@ -129,7 +126,6 @@ const declineRequest = async (requestData) => {
     decreaseNotificationCount();
     socketService.declineContactRequest(contactReq.email);
   } else if (requestData.type == "Group") {
-    // eslint-disable-next-line no-unused-vars
     let groupReq =
       await groupRequestNotificationRepository.findGroupRequestNotificationById(
         requestData.id

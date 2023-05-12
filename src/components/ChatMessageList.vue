@@ -2,9 +2,8 @@
   <div
     class="scroll-reverser-div grow overflow-y-auto overflow-x-hidden max-h-screen flex flex-col-reverse"
   >
-    <div class="flex grow justify-center items-center">
+    <div v-if="isFirstMessage" class="flex grow justify-center items-center">
       <div
-        v-if="isFirstMessage"
         class="flex flex-col items-center justify-between w-1/3 m-5 p-5 font-bold text-slate-500 bg-neutral-200 rounded-tr-xl rounded-xl"
       >
         <p>No messages here yet...</p>

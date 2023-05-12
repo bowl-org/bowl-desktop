@@ -70,7 +70,7 @@ const contactRequestListener = () => {
     }
   });
 };
-const acceptGroupRequest = () => {};
+const acceptGroupRequest = async() => {};
 const declineGroupRequest = () => {};
 const sendGroupRequest = () => {};
 const acceptContactRequest = (email) => {
@@ -112,9 +112,8 @@ const sendContactRequest = (email) => {
         if (res?.status != "OK") {
           reject(new Error(res?.error));
         } else {
-          // contactConversationService.createContactChat(res.contactData);
           console.log("Contact Req Callback Data:", res.contactData);
-          resolve();
+          resolve(res.contactData);
         }
       }
     );

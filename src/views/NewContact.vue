@@ -26,6 +26,7 @@
 import validationService from "@/services/validationService";
 import socketService from "@/services/socketService";
 import InfoMessage from "@/components/InfoMessage.vue";
+import contactConversationService from "@/services/contactConversationService";
 export default {
   name: "NewContact",
   components: {
@@ -47,7 +48,12 @@ export default {
         .then(() => {
           socketService
             .sendContactRequest(this.emailInput)
-            .then(() => {
+            .then(async (contactData) => {
+              //Create contact chat after send request
+              await contactConversationService.createContactChat(
+                contactData,
+                this.$store.getters.user.id
+              );
               this.infoMessageText = "Contact request sent successfully!";
               this.infoMessageStatus = "SUCCESS";
               this.emailInput = "";

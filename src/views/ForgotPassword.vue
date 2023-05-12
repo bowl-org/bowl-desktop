@@ -12,7 +12,7 @@
       </h3>
     </div>
     <div class="flex flex-col w-96">
-      <UserField class="" FieldType="Email" @fieldData="getEmailInp" />
+      <UserField class="" FieldType="Email" @fieldData="getEmailInp" @keyup.enter="resetPassword"/>
       <button
         @click="resetPassword()"
         class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"

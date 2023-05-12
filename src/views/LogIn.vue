@@ -12,7 +12,7 @@
     </div>
     <div class="flex flex-col w-96">
       <UserField FieldType="Email" @fieldData="getEmailInp" />
-      <UserField FieldType="Password" @fieldData="getPasswdInp" />
+      <UserField FieldType="Password" @fieldData="getPasswdInp" @keyup.enter="logIn"/>
       <div class="flex justify-between mx-8">
         <div class="flex justify-between items-center">
           <div

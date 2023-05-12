@@ -8,7 +8,7 @@ ipcMain.handle("findContactRequestNotificationByEmail", async (event, email) => 
   return await contactRequestNotificationRepository.findContactRequestNotificationByEmail(email);
 });
 ipcMain.handle("deleteContactRequestNotification", async (event, id) => {
-  return await contactRequestNotificationRepository.deleteContactRequestNotification(id);
+  return contactRequestNotificationRepository.deleteContactRequestNotification(id);
 });
 ipcMain.handle("insertContactRequestNotification", async (event, args) => {
   return await contactRequestNotificationRepository.insertContactRequestNotification(args);

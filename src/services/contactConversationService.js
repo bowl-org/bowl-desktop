@@ -30,6 +30,7 @@ const createContactChat = async (contactPersonData, userId) => {
     console.log("Contact conversation added:", contactConversation);
   } catch (ex) {
     console.log(ex);
+    throw new Error("Contact creation failed!")
   }
 };
 const getAllContactChatsOfUser = async (userId) => {

@@ -7,7 +7,7 @@ const insertContactRequestNotification = async (notificationData) => {
     notificationData
   );
 };
-const deleteContactRequestNotification = async (id) => {
+const deleteContactRequestNotification = (id) => {
   return queryRunner.deleteById(tableName, id);
 };
 const findContactRequestNotificationById = async (id) => {

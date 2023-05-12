@@ -12,7 +12,7 @@
     <div class="flex flex-col w-96 ">
       <UserField FieldType="Name" @fieldData="getNameInp" />
       <UserField FieldType="Email" @fieldData="getEmailInp" />
-      <UserField FieldType="Password" @fieldData="getPasswdInp" />
+      <UserField FieldType="Password" @fieldData="getPasswdInp" @keyup.enter="signUp"/>
       <button
         @click="signUp()"
         class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
