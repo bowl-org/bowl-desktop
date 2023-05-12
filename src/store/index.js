@@ -67,6 +67,11 @@ export default createStore({
     DELETE_CONVERSATIONS(state) {
       state.conversations = [];
     },
+    DELETE_CONVERSATION(state, { conversationId, getters }) {
+      let conversationIndex =
+        getters.getConversationIndexById(conversationId);
+      state.conversations.splice(conversationIndex,1);
+    },
     ADD_CONVERSATION(state, conversation) {
       state.conversations.push(conversation);
     },
@@ -118,6 +123,12 @@ export default createStore({
     },
     deleteConversations({ commit }) {
       commit("DELETE_CONVERSATIONS");
+    },
+    deleteConversation({ commit, getters }, {conversationId}) {
+      commit("DELETE_CONVERSATION", {
+        conversationId,
+        getters
+      });
     },
     setActiveConversationId({ commit }, activeConversationId) {
       commit("SET_ACTIVE_CONVERSATION_ID", activeConversationId);

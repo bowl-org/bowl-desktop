@@ -20,9 +20,16 @@
           Info
         </li>
         <li
+          @click="searchMessages"
           class="cursor-pointer px-3 py-1 text-left bg-neutral-200 hover:contrast-75"
         >
           Search
+        </li>
+        <li
+          @click="deleteConversation"
+          class="cursor-pointer text-red-500 px-3 py-1 text-left bg-neutral-200 hover:contrast-75"
+        >
+          Delete
         </li>
       </ul>
     </div>
@@ -106,7 +113,7 @@ export default {
       let conversation = this.$store.getters.getConversationById(
         this.$store.getters.activeConversationId
       );
-      console.log("Toggle Fav,Conversation Id:", conversation.conversationId)
+      console.log("Toggle Fav,Conversation Id:", conversation.conversationId);
       if (conversation.conversationType == "Contact") {
         await contactConversationService.setFavoriteOfChat(
           conversation.conversationId,
@@ -131,6 +138,25 @@ export default {
     },
     selectEmoji(emoji) {
       this.inputVal += emoji;
+    },
+    deleteConversation() {
+      this.toggleChatMenu();
+      let conversationType = this.conversation.conversationType;
+      console.log("Delete", conversationType);
+      if (conversationType == "Contact") {
+        contactConversationService.deleteContact(
+          this.$store.getters.activeConversationId
+        );
+        this.$router.push({
+          name: "main",
+        });
+      } else if (conversationType == "Group") {
+        //TODO
+      }
+    },
+    searchMessages() {
+      this.toggleChatMenu();
+      console.log("Search Messages");
     },
   },
 };

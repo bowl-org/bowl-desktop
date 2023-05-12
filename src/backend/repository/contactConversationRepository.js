@@ -18,9 +18,7 @@ const updateContactConversation = async (contactConversationData) => {
   return await findContactConversation(contactConversationData.id);
 };
 const deleteContactConversation = async (id) => {
-  db.transaction(() => {
-    queryRunner.deleteById(tableName, id);
-  });
+    return queryRunner.deleteById(tableName, id);
 };
 const findContactConversation = async (id) => {
   return queryRunner.findById(tableName, id);

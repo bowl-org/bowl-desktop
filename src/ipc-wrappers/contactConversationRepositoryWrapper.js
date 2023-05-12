@@ -5,8 +5,8 @@ const insertContactConversation = async (contactConversationData) => {
 const findContactConversation = async (id) => {
   return ipcRendererHelper.invokeEvent("findContactConversation", id);
 };
-const deleteContactConversation = async (contactConversationData) => {
-  return ipcRendererHelper.invokeEvent("deleteContactConversation", contactConversationData);
+const deleteContactConversation = async (id) => {
+  return ipcRendererHelper.invokeEvent("deleteContactConversation", id);
 };
 const updateContactConversation = async (contactConversationData) => {
   return ipcRendererHelper.invokeEvent("updateContactConversation", contactConversationData);

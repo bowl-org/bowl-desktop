@@ -107,6 +107,16 @@ const setFavoriteOfChat = async (contactConversationId, isFavorite) => {
     isFavorite: isFavorite,
   });
 };
+const deleteContact = async (contactConversationId) => {
+  try {
+    await contactConversationRepo.deleteContactConversation(
+      contactConversationId
+    );
+    Store.dispatch("deleteConversation", contactConversationId);
+  } catch (err) {
+    console.log("Contact deletion failed!", err);
+  }
+};
 export default {
   createContactChat,
   getContactPersonDetail,
@@ -115,4 +125,5 @@ export default {
   dispatchLastMessageDetail,
   setFavoriteOfChat,
   formatContactConversation,
+  deleteContact,
 };

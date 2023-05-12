@@ -23,7 +23,7 @@ const initUsers = () =>
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     personId INTEGER NOT NULL UNIQUE,
     privateKey TEXT NOT NULL,
-    FOREIGN KEY(personId) REFERENCES persons(id))`
+    FOREIGN KEY(personId) REFERENCES persons(id) ON DELETE CASCADE)`
   );
 const initPersons = () =>
   queryRunner.runQuery(
@@ -39,7 +39,7 @@ const initAuthToken = () =>
     id INTEGER PRIMARY KEY,
     userId INTEGER NOT NULL UNIQUE,
     data TEXT NOT NULL,
-    FOREIGN KEY(userId) REFERENCES users(id))`
+    FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE)`
   );
 const initContactRequestNotifications = () =>
   queryRunner.runQuery(
@@ -50,7 +50,7 @@ const initContactRequestNotifications = () =>
       name TEXT NOT NULL,
       email TEXT NOT NULL,
       UNIQUE(userId, email),
-      FOREIGN KEY(userId) REFERENCES users(id))`
+      FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE)`
   );
 const initGroupRequestNotifications = () =>
   queryRunner.runQuery(
@@ -61,7 +61,7 @@ const initGroupRequestNotifications = () =>
       name TEXT NOT NULL,
       description TEXT NOT NULL,
       UNIQUE(userId, key, name, description),
-      FOREIGN KEY(userId) REFERENCES users(id))`
+      FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE)`
   );
 const initContactMessages = () =>
   queryRunner.runQuery(
@@ -74,7 +74,7 @@ const initContactMessages = () =>
       messageType TEXT,
       date TEXT NOT NULL,
       time TEXT NOT NULL,
-      FOREIGN KEY(contactConversationId) REFERENCES contact_conversations(id),
+      FOREIGN KEY(contactConversationId) REFERENCES contact_conversations(id) ON DELETE CASCADE,
       FOREIGN KEY(hashTableId) REFERENCES hash_tables(id))`
   );
 const initGroupMessages = () =>
@@ -88,6 +88,7 @@ const initGroupMessages = () =>
       messageType TEXT,
       date TEXT NOT NULL,
       time TEXT NOT NULL,
+      FOREIGN KEY(groupConversationId) REFERENCES group_conversations(id) ON DELETE CASCADE,
       FOREIGN KEY(senderPersonId) REFERENCES persons(id),
       FOREIGN KEY(hashTableId) REFERENCES hash_tables(id))`
   );
@@ -135,7 +136,7 @@ const initPersonGroups = () =>
       groupConversationId INTEGER NOT NULL,
       personId INTEGER NOT NULL,
       UNIQUE(personId, groupConversationId),
-      FOREIGN KEY(groupConversationId) REFERENCES group_conversations(id),
+      FOREIGN KEY(groupConversationId) REFERENCES group_conversations(id) ON DELETE CASCADE,
       FOREIGN KEY(personId) REFERENCES persons(id))`
   );
 
