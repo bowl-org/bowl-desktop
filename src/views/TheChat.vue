@@ -35,6 +35,7 @@
       <input
         type="text"
         v-model="inputVal"
+        @keyup.enter="sendMessage"
         class="bg-white text-neutral-800 rounded-lg p-2 w-full ml-3"
         placeholder="Enter message"
       />

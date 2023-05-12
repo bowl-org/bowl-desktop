@@ -1,6 +1,6 @@
 <template>
   <div
-    class="scroll-reverser-div overflow-y-auto overflow-x-hidden max-h-screen flex flex-col-reverse"
+    class="scroll-reverser-div grow overflow-y-auto overflow-x-hidden max-h-screen flex flex-col-reverse"
   >
     <div class="flex justify-center items-center">
       <div

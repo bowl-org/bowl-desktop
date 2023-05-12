@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral-200 overflow-auto max-h-screen">
+  <div class="bg-neutral-200 overflow-auto h-1/4">
     <button
       v-for="emoji in emojiList"
       :key="emoji"
