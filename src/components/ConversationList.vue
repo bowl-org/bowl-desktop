@@ -134,6 +134,12 @@ export default {
             "Conversation length",
             this.$store.getters.conversations.length
           );
+          let activeConversationId = this.$store.getters.activeConversationId;
+          if (activeConversationId != -1) {
+            this.selectConversation(
+              this.$store.getters.getConversationIndexById(activeConversationId)
+            );
+          }
         }
       });
     },
