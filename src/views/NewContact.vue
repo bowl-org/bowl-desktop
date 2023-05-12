@@ -12,6 +12,7 @@
       v-model="emailInput"
       class="bg-neutral-100 text-neutral-800 rounded-lg p-5 w-full text-2xl"
       placeholder="Email"
+      @keyup.enter="sendContactRequest"
     />
 
     <div

@@ -1,12 +1,27 @@
 import groupConversationRepo from "@/ipc-wrappers/groupConversationRepositoryWrapper";
 import groupMessageRepo from "@/ipc-wrappers/groupMessageRepositoryWrapper";
 
-const getLastMessageDetailsOfChat = async (groupConversationId) => {
-return await groupMessageRepo.getLastGroupMessageByGroupConversationId(groupConversationId);
+const formatGroupConversation = async (conversation) => {
+  let lastMessageInfo = await getLastMessageDetailsOfChat(conversation.id);
+  return {
+    conversationId: conversation.id,
+    name: conversation.name,
+    isActive: false,
+    lastMessageTimestamp: lastMessageInfo.date ?? "",
+    lastMessage: lastMessageInfo.message ?? "",
+    isFav: conversation.isFavorite,
+    conversationType: "Group",
+  };
 };
-const getAllGroupConversationsOfUser = async(userId) =>{
+
+const getLastMessageDetailsOfChat = async (groupConversationId) => {
+  return await groupMessageRepo.getLastGroupMessageByGroupConversationId(
+    groupConversationId
+  );
+};
+const getAllGroupConversationsOfUser = async (userId) => {
   return await groupConversationRepo.getGroupConversationsByUserId(userId);
-}
+};
 const setFavoriteOfChat = async (contactConversationId, isFavorite) => {
   await groupConversationRepo.updateGroupConversation({
     id: contactConversationId,
@@ -16,5 +31,6 @@ const setFavoriteOfChat = async (contactConversationId, isFavorite) => {
 export default {
   getLastMessageDetailsOfChat,
   getAllGroupConversationsOfUser,
-  setFavoriteOfChat
+  setFavoriteOfChat,
+  formatGroupConversation
 };

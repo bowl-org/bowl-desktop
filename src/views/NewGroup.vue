@@ -11,12 +11,14 @@
       v-model="groupName"
       class="bg-neutral-100 text-neutral-800 rounded-lg p-5 w-full text-2xl"
       placeholder="Group Name"
+      @keyup.enter="createGroup"
     />
     <input
       type="text"
       v-model="groupDescription"
       class="bg-neutral-100 text-neutral-800 rounded-lg p-5 mt-5 w-full text-2xl"
       placeholder="Group Description"
+      @keyup.enter="createGroup"
     />
     <div
       @click="createGroup"

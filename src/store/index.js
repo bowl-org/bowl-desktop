@@ -6,7 +6,7 @@ export default createStore({
   state: {
     user: User.userModel,
     token: Token.authTokenModel,
-    notificationCount: 1,
+    notificationCount: 0,
     activeConversationId: -1,
     conversations: [],
   },

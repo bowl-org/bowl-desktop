@@ -26,33 +26,6 @@ const loadNotifications = async () => {
       type: "Contact",
     });
   });
-  //notificationList = [
-  //  {
-  //    id: 1,
-  //    name: "Bill Joy",
-  //    type: "Contact",
-  //  },
-  //  {
-  //    id: 4,
-  //    name: "Demo Group",
-  //    type: "Group",
-  //  },
-  //  {
-  //    id: 3,
-  //    name: "Linus Torvalds",
-  //    type: "Contact",
-  //  },
-  //  {
-  //    id: 2,
-  //    name: "Richard Stallman",
-  //    type: "Contact",
-  //  },
-  //  {
-  //    id: 5,
-  //    name: "Dennis Ritchie",
-  //    type: "Contact",
-  //  },
-  //];
   Store.dispatch("setNotificationCount", notificationList.length);
   return notificationList;
 };

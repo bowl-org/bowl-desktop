@@ -33,15 +33,25 @@ export default {
   },
   created() {
     this.loadNotifications();
+    //Watch changes
+    this.$store.watch(
+      (state, getters) => getters.notificationCount,
+      () => {
+        this.loadNotifications();
+      }
+    );
   },
   methods: {
     async loadNotifications() {
-      this.notificationList = await requestNotificationService.loadNotifications();
+      this.notificationList =
+        await requestNotificationService.loadNotifications();
       console.log(this.notificationList);
     },
     async acceptRequest(index) {
       console.log("Accept:", this.notificationList[index]);
-      await requestNotificationService.acceptRequest(this.notificationList[index]);
+      await requestNotificationService.acceptRequest(
+        this.notificationList[index]
+      );
       this.notificationList.splice(index, 1);
     },
     declineRequest(index) {

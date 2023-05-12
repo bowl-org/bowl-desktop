@@ -3,7 +3,22 @@ import contactMessageRepo from "@/ipc-wrappers/contactMessageRepositoryWrapper";
 import personService from "./personService";
 import ContactConversation from "@/backend/models/contactConversation";
 import Store from "@/store/index";
+import socketService from "./socketService";
 
+const formatContactConversation = async (conversation) => {
+  let isOnline = socketService.getOnlineStatus();
+  let lastMessageInfo = await getLastMessageDetailsOfChat(conversation.id);
+  return {
+    conversationId: conversation.id,
+    name: conversation.name,
+    onlineStatus: isOnline ? "online" : "offline",
+    isActive: false,
+    lastMessageTimestamp: lastMessageInfo?.date ?? "",
+    lastMessage: lastMessageInfo?.message ?? "",
+    isFav: conversation.isFavorite,
+    conversationType: "Contact",
+  };
+};
 const createContactChat = async (contactPersonData, userId) => {
   try {
     console.log("Contact chat creating...", {
@@ -27,10 +42,24 @@ const createContactChat = async (contactPersonData, userId) => {
       await contactConversationRepo.insertContactConversation(
         contactConversationData
       );
-    console.log("Contact conversation added:", contactConversation);
+
+    let contactChat = {
+      ...contactConversation,
+      name: (
+        await personService.getPersonById(contactConversation.contactPersonId)
+      ).name,
+    };
+    Store.dispatch(
+      "addConversation",
+      await formatContactConversation(contactChat)
+    );
+    console.log(
+      "Contact conversation added:",
+      await formatContactConversation(contactChat)
+    );
   } catch (ex) {
     console.log(ex);
-    throw new Error("Contact creation failed!")
+    throw new Error("Contact creation failed!");
   }
 };
 const getAllContactChatsOfUser = async (userId) => {
@@ -84,5 +113,6 @@ export default {
   getLastMessageDetailsOfChat,
   getAllContactChatsOfUser,
   dispatchLastMessageDetail,
-  setFavoriteOfChat
+  setFavoriteOfChat,
+  formatContactConversation,
 };

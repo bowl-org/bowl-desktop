@@ -25,7 +25,7 @@
 import ConversationBox from "./ConversationBox.vue";
 import contactConversationService from "@/services/contactConversationService";
 import groupConversationService from "@/services/groupConversationService";
-import socketService from "@/services/socketService";
+
 export default {
   name: "ConversationList",
   components: {
@@ -65,38 +65,6 @@ export default {
         params: { id: this.$store.getters.activeConversationId },
       });
     },
-    async initGroupConversation(conversation) {
-      let lastMessageInfo =
-        await groupConversationService.getLastMessageDetailsOfChat(
-          conversation.id
-        );
-      return {
-        conversationId: conversation.id,
-        name: conversation.name,
-        isActive: false,
-        lastMessageTimestamp: lastMessageInfo.date ?? "",
-        lastMessage: lastMessageInfo.message ?? "",
-        isFav: conversation.isFavorite,
-        conversationType: "Group",
-      };
-    },
-    async initContactConversation(conversation) {
-      let isOnline = socketService.getOnlineStatus();
-      let lastMessageInfo =
-        await contactConversationService.getLastMessageDetailsOfChat(
-          conversation.id
-        );
-      return {
-        conversationId: conversation.id,
-        name: conversation.name,
-        onlineStatus: isOnline ? "online" : "offline",
-        isActive: false,
-        lastMessageTimestamp: lastMessageInfo?.date ?? "",
-        lastMessage: lastMessageInfo?.message ?? "",
-        isFav: conversation.isFavorite,
-        conversationType: "Contact",
-      };
-    },
     async fetchConversations() {
       let conversations = [];
       let groupConvesations =
@@ -104,7 +72,7 @@ export default {
           this.$store.getters.user.id
         );
       for (const groupConversation of groupConvesations) {
-        conversations.push(await this.initGroupConversation(groupConversation));
+        conversations.push(await groupConversationService.formatGroupConversation(groupConversation));
       }
       let contactConversations =
         await contactConversationService.getAllContactChatsOfUser(
@@ -113,7 +81,7 @@ export default {
       for (const contactConversation of contactConversations) {
         console.log("CONV for each:", contactConversation);
         conversations.push(
-          await this.initContactConversation(contactConversation)
+          await contactConversationService.formatContactConversation(contactConversation)
         );
       }
       return conversations;
