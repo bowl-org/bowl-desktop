@@ -1,15 +1,15 @@
 <template>
   <div class="m-5 flex justify-center w-75" >
-    <button class="conversetaion-type-btn rounded-l-lg p-3 grow " @click="selectConversationType('Favorites')" :class="selectedConversationType === 'Favorites' ? 'selectedType' : 'notSelectedType hover:contrast-75'">
-      Favorites
-    </button>
     <button
-      class="conversetaion-type-btn p-3 grow" @click="selectConversationType('Contact')" :class="selectedConversationType === 'Contact' ? 'selectedType' : 'notSelectedType hover:contrast-75'"
+      class="conversetaion-type-btn rounded-l-lg p-3 grow" @click="selectConversationType('Contact')" :class="selectedConversationType === 'Contact' ? 'selectedType' : 'notSelectedType hover:contrast-75'"
     >
       Contacts
     </button>
-    <button class="conversetaion-type-btn rounded-r-lg p-3 grow " @click="selectConversationType('Group')" :class="selectedConversationType === 'Group' ? 'selectedType' : 'notSelectedType hover:contrast-75'">
+    <button class="conversetaion-type-btn  p-3 grow " @click="selectConversationType('Group')" :class="selectedConversationType === 'Group' ? 'selectedType' : 'notSelectedType hover:contrast-75'">
       Groups
+    </button>
+    <button class="conversetaion-type-btn rounded-r-lg p-3 grow " @click="selectConversationType('Favorites')" :class="selectedConversationType === 'Favorites' ? 'selectedType' : 'notSelectedType hover:contrast-75'">
+      Favorites
     </button>
   </div>
 </template>
@@ -29,7 +29,7 @@ export default {
     },
   },
   created(){
-    this.selectConversationType("Favorites");
+    this.selectConversationType("Contact");
   }
 };
 </script>
