@@ -88,6 +88,15 @@ export default createStore({
     SET_NOTIFICATION_COUNT(state, count) {
       state.notificationCount = count;
     },
+    ADD_MESSAGE(state, message){
+      state.messages.push(message);
+    },
+    SET_MESSAGES(state, messages){
+      state.messages = messages;
+    },
+    DELETE_MESSAGES(state) {
+      state.messages = [];
+    },
     SET_LAST_MESSAGE_OF_CONVERSATION(state, { conversationId, lastMessage, getters }) {
       let conversationIndex =
         getters.getConversationIndexById(conversationId);
@@ -165,6 +174,15 @@ export default createStore({
     setNotificationCount({ commit }, notificationCount) {
       commit("SET_NOTIFICATION_COUNT", notificationCount);
     },
+    setMessages({commit}, messages){
+      commit("SET_MESSAGES", messages);
+    },
+    addMessage({commit}, message){
+      commit("ADD_MESSAGE", message);
+    },
+    deleteMessages({commit}){
+      commit("DELETE_MESSAGES");
+    }
   },
   modules: {
     //Can be useful not needed for now

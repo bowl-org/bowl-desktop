@@ -45,15 +45,18 @@ export default {
   data() {
     return {
       //name: "",
-      messages: [],
+      // messages: [],
     };
   },
   computed: {
+    messages() {
+      return this.$store.getters.messages;
+    },
     name() {
       return this.$store.getters.user.name;
     },
     isFirstMessage() {
-      return this.messages.length == 0 ? true : false;
+      return this.$store.getters.messages.length == 0 ? true : false;
     },
   },
   methods: {
@@ -80,7 +83,7 @@ export default {
         contactMessageService
           .getContactMessages(this.$store.getters.activeConversationId)
           .then((messages) => {
-            this.messages = messages;
+            this.$store.dispatch("setMessages", messages);
           })
           .catch((err) => {
             console.log("Couldn't load messages!");
@@ -90,7 +93,7 @@ export default {
         groupMessageService
           .getGroupMessages(this.$store.getters.activeConversationId)
           .then((messages) => {
-            this.messages = messages;
+            this.$store.dispatch("setMessages", messages);
           })
           .catch((err) => {
             console.log("Couldn't load messages!");
@@ -109,7 +112,7 @@ export default {
         else if (conversation.conversationType == "Group")
           msgData = await socketService.sendGroupChatMessage(message);
         else throw new Error("Invalid conversation type!");
-        this.messages.push(msgData);
+        this.$store.dispatch("addMessage", msgData);
       } catch (err) {
         console.log("Send message err:", err);
       }

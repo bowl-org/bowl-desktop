@@ -40,11 +40,12 @@ const receiveChatMessageListener = () => {
     msgData.isSenderUser = 0;
     //TODO
     msgData.contactConversationId = Store.getters.activeConversationId;
+
     await contactConversationService.addMessageToChat(msgData);
-    // await contactMessageService.addMessage(msgData);
-    // await contactConversationService.dispatchLastMessageDetail(
-    //   Store.getters.activeConversationId
-    // );
+    await contactConversationService.dispatchNewMessage(
+      Store.getters.activeConversationId,
+      msgData
+    );
     console.log("Received message inserted successfully!: ", msgData.message);
   });
 };
