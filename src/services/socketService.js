@@ -40,10 +40,11 @@ const receiveChatMessageListener = () => {
     msgData.isSenderUser = 0;
     //TODO
     msgData.contactConversationId = Store.getters.activeConversationId;
-    await contactMessageService.addMessage(msgData);
-    await contactConversationService.dispatchLastMessageDetail(
-      Store.getters.activeConversationId
-    );
+    await contactConversationService.addMessageToChat(msgData);
+    // await contactMessageService.addMessage(msgData);
+    // await contactConversationService.dispatchLastMessageDetail(
+    //   Store.getters.activeConversationId
+    // );
     console.log("Received message inserted successfully!: ", msgData.message);
   });
 };
@@ -129,9 +130,8 @@ const sendContactChatMessage = async (message) => {
     date: `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`,
     time: String(today.getHours()).padStart(2,"0") + ":" + String(today.getMinutes()).padStart(2, "0"),
     messageType: "",
-    //Testing
     message: await cryptionService.encryptData(
-      "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAhPCWGrvSJpRMWq/aBmFmJhG+b4b2Mvm8QiVit+9nQKMLAp5rA+h1grBb36ZesmlAWxHcgVokIxdK6JHmXKHTBfzwE8X3Udb7O3CZBIKIkDeCXSblZN93tu3gYyFca4aqVLSpmR53IEQC+oxvhGWZ6VQg3ivV+IKtWZL6iYTAUWfXn+wmz6cj7zLMHss00Isz1b2b4y/s0vIZc6zF3/lOrQvytp/Djt+HYF05KR0vWD+o3hbBg2ignxZLcC1l2Gae/kXvoN3CsWtdU8TOvEaBUah6bdMpsZ0ZdqNVvV6ZkV6yBanZqcj8lbQKWjudD5YeTRqC2HdRvcDnadxJGQdcuQIDAQAB",
+      await contactConversationService.getContactPublicKey(Store.getters.activeConversationId),
       message
     ),
   };

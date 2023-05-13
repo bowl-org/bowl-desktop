@@ -9,6 +9,7 @@ export default createStore({
     notificationCount: 0,
     activeConversationId: -1,
     conversations: [],
+    messages: []
   },
   getters: {
     user(state) {
@@ -22,6 +23,9 @@ export default createStore({
     },
     conversations(state) {
       return state.conversations;
+    },
+    messages(state) {
+      return state.messages;
     },
     notificationCount(state) {
       return state.notificationCount;

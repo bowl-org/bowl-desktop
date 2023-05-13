@@ -4,6 +4,7 @@ import personService from "./personService";
 import ContactConversation from "@/backend/models/contactConversation";
 import Store from "@/store/index";
 import socketService from "./socketService";
+import contactMessageService from "./contactMessageService";
 
 const formatContactConversation = async (conversation) => {
   let isOnline = socketService.getOnlineStatus();
@@ -117,6 +118,19 @@ const deleteContact = async (contactConversationId) => {
     console.log("Contact deletion failed!", err);
   }
 };
+const addMessageToChat = async (messageData) => {
+  try {
+    await contactMessageService.addMessage(messageData);
+    await dispatchLastMessageDetail(messageData.contactConversationId);
+  } catch (err) {
+    console.log("Add message to chat failed!", err);
+  }
+};
+const getContactPublicKey = async (contactConversationId) => {
+  let contactPerson = await getContactPersonDetail(contactConversationId);
+  console.log("Contact Public Key:", contactPerson?.publicKey);
+  return contactPerson?.publicKey;
+};
 export default {
   createContactChat,
   getContactPersonDetail,
@@ -126,4 +140,6 @@ export default {
   setFavoriteOfChat,
   formatContactConversation,
   deleteContact,
+  addMessageToChat,
+  getContactPublicKey,
 };

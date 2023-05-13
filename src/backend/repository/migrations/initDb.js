@@ -6,13 +6,12 @@ const up = () => {
 
   initPersons();
   initUsers();
-  initGroupMessages();
-  initGroupConversations();
-  initContactMessages();
-  initContactConversations();
-  initGroupConversations();
-  initPersonGroups();
   initHashTables();
+  initGroupConversations();
+  initGroupMessages();
+  initContactConversations();
+  initContactMessages();
+  initPersonGroups();
 };
 const down = () => {
   throw new Error("Down not implemented yet!");
@@ -112,8 +111,7 @@ const initHashTables = () =>
       previousHashValue TEXT NOT NULL,
       hashMessageData TEXT NOT NULL,
       hashValue TEXT NOT NULL,
-      FOREIGN KEY(previousHashId) REFERENCES hash_tables(id),
-      FOREIGN KEY(conversationId) REFERENCES conversations(id))`
+      FOREIGN KEY(previousHashId) REFERENCES hash_tables(id))`
   );
 const initGroupConversations = () =>
   queryRunner.runQuery(
