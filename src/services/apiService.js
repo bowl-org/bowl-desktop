@@ -5,8 +5,8 @@ const baseUrl = `${process.env.VUE_APP_BASE_URL}${process.env.VUE_APP_API_TOKEN}
 export const generateAuthHeader = (token) => {
   return {'Authorization': `${token}`}
 }
-export const GET = async (endPoint, headers) => {
-  return await axios.get(`${baseUrl}${endPoint}`, {headers: headers})
+export const GET = async (endPoint, query, headers) => {
+  return await axios.get(`${baseUrl}${endPoint}?${query ?? ''}`, {headers: headers})
 };
 export const POST = async (endPoint, bodyData, headers) => {
   console.log(`${baseUrl}${endPoint}`)

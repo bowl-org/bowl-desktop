@@ -9,8 +9,12 @@ const createPerson = async(personData)=> {
 const getPersonById = async(id)=> {
   return personRepo.findPerson(id);
 }
+const updatePerson = async(personData) => {
+  return personRepo.updatePerson(personData);
+}
 export default{
   findPersonByEmail,
   createPerson,
-  getPersonById
+  getPersonById,
+  updatePerson
 }

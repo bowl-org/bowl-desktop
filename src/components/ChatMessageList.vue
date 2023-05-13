@@ -36,6 +36,7 @@ import ChatDateSpan from "./ChatDateSpan.vue";
 import contactMessageService from "../services/contactMessageService";
 import groupMessageService from "../services/groupMessageService";
 import socketService from "../services/socketService";
+import contactConversationService from "@/services/contactConversationService";
 export default {
   name: "ChatMessageList",
   components: {
@@ -80,6 +81,9 @@ export default {
       console.log("Load messages conversation:", conversation);
       console.log("Conversations:", this.$store.getters.conversations);
       if (conversation.conversationType == "Contact") {
+        contactConversationService.updateContactDetailIfChanged(
+          this.$store.getters.activeConversationId
+        );
         contactMessageService
           .getContactMessages(this.$store.getters.activeConversationId)
           .then((messages) => {

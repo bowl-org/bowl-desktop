@@ -5,6 +5,7 @@ import ContactConversation from "@/backend/models/contactConversation";
 import Store from "@/store/index";
 import socketService from "./socketService";
 import contactMessageService from "./contactMessageService";
+import * as apiService from "@/services/apiService";
 
 const formatContactConversation = async (conversation) => {
   let isOnline = socketService.getOnlineStatus();
@@ -135,6 +136,17 @@ const getContactPublicKey = async (contactConversationId) => {
   console.log("Contact Public Key:", contactPerson?.publicKey);
   return contactPerson?.publicKey;
 };
+const updateContactDetailIfChanged = async (contactConversationId) => {
+  let contactPerson = await getContactPersonDetail(contactConversationId);
+  let res = await apiService.GET("/user/getUserDetails", `email=${contactPerson.email}`)
+  let data = res.data;
+  if(data.public_key != contactPerson.publicKey || data.name != contactPerson.name ){
+    contactPerson.publicKey = data.public_key
+    contactPerson.name = data.name
+    console.log("Contact person details changed!:",contactPerson)
+    return await personService.updatePerson(contactPerson);
+  }
+};
 export default {
   createContactChat,
   getContactPersonDetail,
@@ -147,4 +159,5 @@ export default {
   deleteContact,
   addMessageToChat,
   getContactPublicKey,
+  updateContactDetailIfChanged,
 };

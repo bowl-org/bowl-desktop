@@ -11,7 +11,7 @@ const insertPerson = async (personData) => {
 };
 const updatePerson = async (personData) => {
   return queryRunner.runPreparedQuery(
-    `UPDATE ${tableName} SET publicKey = @publicKey , name = @name, email = @email WHERE id = @id`,
+    `UPDATE ${tableName} SET publicKey = @publicKey , name = @name WHERE id = @id`,
     personData
   );
 };
