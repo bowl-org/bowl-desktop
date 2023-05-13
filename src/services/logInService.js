@@ -17,12 +17,18 @@ const logIn = async (logInData, rememberMe) => {
     console.log("User not found in local db, creating new user...");
     //Set name which we get from server
     logInData.name = res.data.user.name;
+    //Update user public key on server if user not exists in local db
     user = await userService.createNewUser(logInData);
-    //TODO update user public key on server
+    res.data.token = { userId: user.id, data: res.data.data };
+    await apiService.PUT(
+      userService.userUpdatePath,
+      { public_key: user.publicKey },
+      apiService.generateAuthHeader(res.data.token.data)
+    );
   }
-    console.log("LOGIN USER:", user)
   //res.data.data -> response token object
   res.data.token = { userId: user.id, data: res.data.data };
+  console.log("LOGIN USER:", user);
   res.data.user = user;
   //Save token to database
   if (rememberMe) {

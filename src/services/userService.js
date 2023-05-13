@@ -1,6 +1,7 @@
 import userRepo from "@/ipc-wrappers/userRepositoryWrapper";
 import cryptionService from "@/services/cryptionService";
 
+const userUpdatePath = "/user/update";
 const createNewUser = async (newUser) => {
   //Create key pair if not exists
   if (newUser.privateKey == null || newUser.privateKey == "") {
@@ -18,6 +19,7 @@ const findUser = async (id) => {
   return await userRepo.findUser(id);
 };
 export default {
+  userUpdatePath,
   createNewUser,
   findUser,
   findByEmail,
