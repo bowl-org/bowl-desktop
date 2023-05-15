@@ -39,7 +39,6 @@ const encryptData = (publicKey, data) => {
     .toString("base64");
 };
 const decryptData = (privateKey, data) => {
-  crypto.createPrivateKey;
   return crypto
     .privateDecrypt(
       { key: privateKey, padding: crypto.constants.RSA_PKCS1_PADDING },
@@ -55,10 +54,28 @@ const derTopemFormat = (derFormattedKey, isPublic) => {
     `\n-----END ${keyType} KEY-----`
   );
 };
+const generatePublicKeyFromPrivate = (privateKey) => {
+  let publicKey = crypto
+    .createPublicKey({
+      key: privateKey,
+      type: "pkcs8",
+      format: "pem",
+    })
+    .export({
+      type: "spki",
+      format: "der",
+    });
+  return Buffer.from(publicKey).toString("base64");
+};
+const generateHash = async(data) => {
+  return crypto.createHash('sha1').update(data).digest("base64");
+}
 export default {
   generateKeyPair,
   createPublicKeyFromString,
   createPrivateKeyFromString,
   encryptData,
   decryptData,
+  generatePublicKeyFromPrivate,
+  generateHash
 };

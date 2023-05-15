@@ -5,7 +5,7 @@ const userModel = {
   privateKey: "",
 };
 
-const toPerson = (data) => {
+export const toPerson = (data) => {
   let newPerson = person.personModel;
   Object.keys(data).forEach((key) => {
     Object.prototype.hasOwnProperty.call(person.personModel, key)

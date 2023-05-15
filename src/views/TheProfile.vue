@@ -88,7 +88,7 @@ export default {
       this.isEditingName = false;
       try {
         console.log("New name:", this.name);
-        await userService.updateCurrentUser(this.name);
+        await userService.updateCurrentUserDetail(this.name);
       } catch (err) {
         console.log("Save name error:", err);
       }

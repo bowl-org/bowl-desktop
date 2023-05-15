@@ -13,14 +13,14 @@ const insertUser = async (userData) => {
   return await findUser(userId);
 };
 const updateUser = async (userData) => {
-  db.transaction(async () => {
-    queryRunner.runPreparedQuery(
+  // db.transaction(async () => {
+    return queryRunner.runPreparedQuery(
       `UPDATE ${tableName} SET privateKey = @privateKey WHERE id = @id`,
       userData
     );
-    let personData = user.toPerson(userData);
-    await personRepository.updatePerson(personData);
-  });
+    // let personData = user.toPerson(userData);
+    // await personRepository.updatePerson(personData);
+  // });
 };
 const deleteUser = async (id) => {
   db.transaction(() => {

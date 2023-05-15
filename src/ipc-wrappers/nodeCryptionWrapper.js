@@ -1,21 +1,33 @@
-
+import ipcRendererHelper from "@/helpers/ipcRendererHelper";
 const generateKeyPair = async () => {
-  return window.ipcRenderer.invoke("generateKeyPair");
+  return ipcRendererHelper.invokeEvent("generateKeyPair");
 };
 const createPublicKeyFromString = async (publicKeyData) => {
-  return window.ipcRenderer.invoke("createPublickeyFromString", publicKeyData);
+  return ipcRendererHelper.invokeEvent(
+    "createPublickeyFromString",
+    publicKeyData
+  );
 };
 const createPrivateKeyFromString = async (privateKeyData) => {
-  return window.ipcRenderer.invoke(
+  return ipcRendererHelper.invokeEvent(
     "createPrivateKeyFromString",
     privateKeyData
   );
 };
 const encryptData = async (publicKey, data) => {
-  return window.ipcRenderer.invoke("encryptData", [publicKey, data]);
+  return ipcRendererHelper.invokeEvent("encryptData", [publicKey, data]);
 };
 const decryptData = async (privateKey, data) => {
-  return window.ipcRenderer.invoke("decryptData", [privateKey, data]);
+  return ipcRendererHelper.invokeEvent("decryptData", [privateKey, data]);
+};
+const generatePublicKeyFromPrivate = async (privateKey) => {
+  return ipcRendererHelper.invokeEvent(
+    "generatePublicKeyFromPrivate",
+    privateKey
+  );
+};
+const generateHash = async (data) => {
+  return ipcRendererHelper.invokeEvent("generateHash", data);
 };
 export default {
   generateKeyPair,
@@ -23,4 +35,6 @@ export default {
   createPrivateKeyFromString,
   encryptData,
   decryptData,
+  generatePublicKeyFromPrivate,
+  generateHash
 };
