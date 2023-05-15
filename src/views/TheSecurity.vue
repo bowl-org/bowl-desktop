@@ -5,7 +5,7 @@
     @yes="generateNewKeypair"
     @no="showPopup = false"
   />
-  <PopupError v-if="showError" @ok="showError = false" :errorMsg="errorMsg" />
+  <PopupError ref="popupError" @ok="showError = false" @alertError="showError = true" />
   <div
     v-if="!showPopup && !showError"
     class="flex flex-col justify-center mx-10"
@@ -115,8 +115,7 @@ export default {
         const keypair = await cryptionService.generateKeyPair();
         await userService.updateCurrentUserKeypair(keypair);
       } catch (err) {
-        this.errorMsg = err;
-        this.showError = true;
+        this.$refs.popupError.alertError(err);
       }
     },
     editKeys() {
@@ -150,16 +149,14 @@ export default {
         );
         await userService.updateCurrentUserKeypair(keypair);
       } catch (err) {
-        this.errorMsg = err?.message ?? err;
         this.privateKey = this.user.privateKey;
-        this.showError = true;
+        this.$refs.popupError.alertError(err);
       }
     },
-    cancelEditing(){
+    cancelEditing() {
       this.isKeysEditing = false;
       this.privateKey = this.user.privateKey;
-
-    }
+    },
   },
 };
 </script>

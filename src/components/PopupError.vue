@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="showError"
     class="bg-slate-300 w-full h-full flex flex-col justify-center items-center"
   >
     <h1 class="text-4xl font-medium p-9">Something went wrong!</h1>
@@ -16,17 +17,24 @@
 </template>
 <script>
 export default {
+  //USAGE
+  //<PopupError ref="popupError" @ok="showError = false" @alertError="showError = true" />
+  //this.$refs.popupError.alertError(err);
   name: "PopupError",
-  props: {
-    errorMsg: {
-      type: String,
-      required: true,
-    },
+  data() {
+    return {
+      showError: false,
+    };
   },
-  created() {},
   methods: {
     ok() {
+      this.showError = false;
       this.$emit("ok");
+    },
+    alertError(err) {
+      this.errorMsg = err;
+      this.showError = true;
+      this.$emit("alertError");
     },
   },
 };

@@ -42,7 +42,7 @@ const updateCurrentUserKeypair = async (keypair) => {
   }
 };
 const sendUpdateUserRequest = async (publicKey, name) => {
-  await apiService.PUT(
+  return apiService.PUT(
     userUpdatePath,
     { public_key: publicKey, name: name },
     apiService.generateAuthHeader(Store.getters.token.data)

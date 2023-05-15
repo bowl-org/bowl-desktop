@@ -1,5 +1,6 @@
 <template>
-  <div class="flex flex-col justify-center">
+  <PopupError ref="popupError" @ok="showError = false" @alertError="showError = true" />
+  <div v-if="!showError" class="flex flex-col justify-center">
     <!--<h1 class="text-3xl font-medium text-slate-600 p-5">Profile</h1>-->
     <div class="flex flex-col items-center">
       <ConversationAvatar
@@ -61,15 +62,18 @@
 <script>
 import userService from "@/services/userService";
 import ConversationAvatar from "../components/ConversationAvatar.vue";
+import PopupError from "@/components/PopupError";
 export default {
   name: "TheProfile",
   components: {
     ConversationAvatar,
+    PopupError,
   },
   data() {
     return {
       isEditingName: false,
       name: "",
+      showError: false,
     };
   },
   computed: {
@@ -91,6 +95,7 @@ export default {
         await userService.updateCurrentUserDetail(this.name);
       } catch (err) {
         console.log("Save name error:", err);
+        this.$refs.popupError.alertError(err);
       }
     },
   },
