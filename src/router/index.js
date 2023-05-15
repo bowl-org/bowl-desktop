@@ -40,6 +40,11 @@ const routes = [
     component: MainView,
     children: [
       {
+        path: "logo",
+        name: "logo",
+        component: () => import("@/views/TheLogo.vue"),
+      },
+      {
         path: "chat/:id",
         name: "chat",
         component: () => import("@/views/TheChat.vue"),

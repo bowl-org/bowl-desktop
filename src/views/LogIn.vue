@@ -12,7 +12,11 @@
     </div>
     <div class="flex flex-col w-96">
       <UserField FieldType="Email" @fieldData="getEmailInp" />
-      <UserField FieldType="Password" @fieldData="getPasswdInp" @keyup.enter="logIn"/>
+      <UserField
+        FieldType="Password"
+        @fieldData="getPasswdInp"
+        @keyup.enter="logIn"
+      />
       <div class="flex justify-between mx-8">
         <div class="flex justify-between items-center">
           <div
@@ -89,16 +93,12 @@ export default {
         console.log("Store user:", this.$store.getters.user);
         console.log("Store token:", this.$store.getters.token);
         this.$router.push({
-          path: "main",
-          //query: { rememberme: this.rememberMe },
+          path: "main/logo",
         });
       })
       .catch((err) => {
         console.log("Auto log in token not found!", err);
       });
-    //DEV
-    //Redirect directly to chat window
-    //this.$router.push({path: 'main', query: {rememberme: this.rememberMe}})
   },
   methods: {
     getPasswdInp(passwdInp) {
@@ -119,12 +119,12 @@ export default {
           let token = res.data.token;
           let user = res.data.user;
 
-          console.log("RES USER: ", user)
+          console.log("RES USER: ", user);
           this.$store.dispatch("setUser", user);
           this.$store.dispatch("setToken", token);
 
           this.$router.push({
-            path: "main",
+            path: "main/logo",
             //query: { rememberme: this.rememberMe },
             //params: { user, token },
           });
