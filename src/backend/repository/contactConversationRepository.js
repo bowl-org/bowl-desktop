@@ -17,7 +17,7 @@ const updateContactConversation = async (contactConversationData) => {
   return await findContactConversation(contactConversationData.id);
 };
 const deleteContactConversation = async (id) => {
-    return queryRunner.deleteById(tableName, id);
+  return queryRunner.deleteById(tableName, id);
 };
 const findContactConversation = async (id) => {
   return queryRunner.findById(tableName, id);
@@ -28,6 +28,12 @@ const getContactConversationsByUserId = async (userId) => {
     userId
   );
 };
+const getContactConversationByContactPersonId = async (contactPersonId) => {
+  return queryRunner.getFromPreparedQuery(
+    `SELECT * FROM ${tableName} WHERE contactPersonId = ?`,
+    contactPersonId
+  );
+};
 export default {
   tableName,
   insertContactConversation,
@@ -35,4 +41,5 @@ export default {
   deleteContactConversation,
   findContactConversation,
   getContactConversationsByUserId,
+  getContactConversationByContactPersonId,
 };

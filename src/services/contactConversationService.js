@@ -167,6 +167,17 @@ const updateContactDetailIfChanged = async (contactConversationId) => {
 const getHashTablesOfConversation = async (contactConversationId) => {
   await contactMessageService.getContactHashTables(contactConversationId);
 };
+const getContactConversationByContactPersonId = async (contactPersonId) => {
+  return await contactConversationRepo.getContactConversationByContactPersonId(contactPersonId);
+};
+const getContactConversationByContactMail = async (contactMail) => {
+  try {
+    let contactPerson = await personService.findPersonByEmail(contactMail);
+    return await getContactConversationByContactPersonId(contactPerson.id);
+  } catch (err) {
+    throw new Error("Contact mail not found!");
+  }
+};
 export default {
   createContactChat,
   getContactPersonDetail,
@@ -182,4 +193,6 @@ export default {
   getContactPublicKey,
   updateContactDetailIfChanged,
   getHashTablesOfConversation,
+  getContactConversationByContactMail,
+  getContactConversationByContactPersonId
 };

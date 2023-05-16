@@ -39,14 +39,20 @@ const receiveChatMessageListener = () => {
     );
     msgData.isSenderUser = 0;
     //TODO
-    msgData.contactConversationId = Store.getters.activeConversationId;
-    if(msgData.contactConversationId == -1){
-      throw new Error("TODO: Select conversation to receive message")
+    // msgData.contactConversationId = Store.getters.activeConversationId;
+    let fromEmail = msgData.from;
+    msgData.contactConversationId = (
+      await contactConversationService.getContactConversationByContactMail(
+        fromEmail
+      )
+    ).id;
+    if (msgData.contactConversationId == -1) {
+      throw new Error("TODO: Select conversation to receive message");
     }
 
     await contactConversationService.addMessageToChat(msgData);
     await contactConversationService.dispatchNewMessage(
-      Store.getters.activeConversationId,
+      msgData.contactConversationId,
       msgData
     );
     console.log("Received message inserted successfully!: ", msgData.message);
@@ -75,7 +81,7 @@ const contactRequestListener = () => {
     }
   });
 };
-const acceptGroupRequest = async() => {};
+const acceptGroupRequest = async () => {};
 const declineGroupRequest = () => {};
 const sendGroupRequest = () => {};
 const acceptContactRequest = (email) => {
@@ -127,20 +133,38 @@ const sendContactRequest = (email) => {
 const sendContactChatMessage = async (message) => {
   console.log("message sent");
   let today = new Date();
+  let activeConversationId = Store.getters.activeConversationId;
   // let todaySplit = today.toString().split(" ");
   let msgData = {
     // date: todaySplit[2] + " " + todaySplit[1] + " " + todaySplit[3],
     //In javascript months starts from 0 :)
     date: `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`,
-    time: String(today.getHours()).padStart(2,"0") + ":" + String(today.getMinutes()).padStart(2, "0"),
+    time:
+      String(today.getHours()).padStart(2, "0") +
+      ":" +
+      String(today.getMinutes()).padStart(2, "0"),
     messageType: "",
     message: await cryptionService.encryptData(
-      await contactConversationService.getContactPublicKey(Store.getters.activeConversationId),
+      await contactConversationService.getContactPublicKey(
+        activeConversationId
+      ),
       message
     ),
   };
-  console.log("Sent message data ", msgData);
-  socket.emit("chatMessage", JSON.stringify(msgData));
+  let toEmail = (
+    await contactConversationService.getContactPersonDetail(
+      activeConversationId
+    )
+  ).email;
+  let payload = { ...msgData, to: toEmail };
+  console.log("Sent message data ", payload);
+  //Magic to wait calback
+  await new Promise((resolve, reject) => {
+    socket.emit("chatMessage", JSON.stringify(payload), (res) => {
+      if (res.status == "ERROR") reject(new Error(res.error));
+      else resolve();
+    });
+  });
   //Unencrypted message
   msgData.message = message;
   msgData.isSenderUser = 1;
