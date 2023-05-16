@@ -19,5 +19,5 @@ export default{
   findContactConversation,
   deleteContactConversation,
   updateContactConversation,
-  getContactConversationsByUserId
+  getContactConversationsByUserId,
 }

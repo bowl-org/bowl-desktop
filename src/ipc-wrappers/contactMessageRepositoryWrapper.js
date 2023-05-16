@@ -18,6 +18,12 @@ const getContactMessagesByContactConversationId = async (contactConversationId) 
 const getLastContactMessageByContactConversationId = async (contactConversationId) => {
   return ipcRendererHelper.invokeEvent("getLastContactMessageByContactConversationId", contactConversationId);
 };
+const getHashTablesByContactConversationId = async(contactConversationId) => {
+  return ipcRendererHelper.invokeEvent("getHashTablesByContactConversationId", contactConversationId);
+}
+const getMessageCountByContactConversationId = async (contactConversationId) => {
+  return ipcRendererHelper.invokeEvent("getMessageCountByContactConversationId", contactConversationId);
+};
 
 export default {
   findContactMessage,
@@ -25,5 +31,7 @@ export default {
   updateContactMessage,
   insertContactMessage,
   getContactMessagesByContactConversationId,
-  getLastContactMessageByContactConversationId
+  getLastContactMessageByContactConversationId,
+  getHashTablesByContactConversationId,
+  getMessageCountByContactConversationId
 };

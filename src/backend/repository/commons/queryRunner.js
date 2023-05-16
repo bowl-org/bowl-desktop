@@ -22,6 +22,9 @@ const deleteById = (tableName, id) => {
 const getAll = (tableName) => {
   return allFromPreparedQuery(`SELECT * FROM ${tableName}`);
 };
+const getCountWhere = (tableName, where, data) => {
+  return db.prepare(`SELECT COUNT(*) AS count FROM ${tableName} WHERE ${where}`).get(data).count;
+}
 export default {
   runQuery,
   runPreparedQuery,
@@ -30,4 +33,5 @@ export default {
   findById,
   deleteById,
   getAll,
+  getCountWhere,
 };

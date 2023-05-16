@@ -1,6 +1,6 @@
 <template>
   <div class="current-chat-box flex items-center">
-    <ConversationAvatar :letter="name?.charAt(0)" class="m-5 rounded-md" />
+    <ConversationAvatar :letter="name?.charAt(0)" class="m-5 rounded-md" @click="openConversationInfo" />
     <div class="chat-box-info">
       <div class="flex items-center">
         <p class="font-medium">{{ name }}</p>
@@ -53,6 +53,12 @@ export default {
     toggleFav() {
       this.$emit("toggleFav");
     },
+    openConversationInfo(){
+      this.$router.push({
+        name: "conversationinfo",
+        params: { id: this.$store.getters.activeConversationId },
+      });
+    }
   },
 };
 </script>

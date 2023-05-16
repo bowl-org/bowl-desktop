@@ -20,6 +20,7 @@ const findByEmail = async (email) => {
   return await userRepo.findUserByEmail(email);
 };
 const findUser = async (id) => {
+  console.log("Finding user:",id);
   return await userRepo.findUser(id);
 };
 const updateUser = async (id, userData) => {

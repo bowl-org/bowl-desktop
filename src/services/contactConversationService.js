@@ -1,11 +1,11 @@
 import contactConversationRepo from "@/ipc-wrappers/contactConversationRepositoryWrapper";
-import contactMessageRepo from "@/ipc-wrappers/contactMessageRepositoryWrapper";
 import personService from "./personService";
 import ContactConversation from "@/backend/models/contactConversation";
 import Store from "@/store/index";
 import socketService from "./socketService";
 import contactMessageService from "./contactMessageService";
 import * as apiService from "@/services/apiService";
+import userService from "./userService";
 
 const formatContactConversation = async (conversation) => {
   let isOnline = socketService.getOnlineStatus();
@@ -79,12 +79,12 @@ const getAllContactChatsOfUser = async (userId) => {
   return contactChats;
 };
 const getLastMessageDetailsOfChat = async (contactConversationId) => {
-  return await contactMessageRepo.getLastContactMessageByContactConversationId(
+  return await contactMessageService.getLastMessageOfChat(
     contactConversationId
   );
 };
 const dispatchNewMessage = async (contactConversationId, messageData) => {
-  console.log("Dispatch new Mesage:",messageData)
+  console.log("Dispatch new Mesage:", messageData);
   await dispatchLastMessageDetail(contactConversationId);
   Store.dispatch("addMessage", messageData);
 };
@@ -94,8 +94,8 @@ const dispatchLastMessageDetail = async (contactConversationId) => {
   );
   let payload = {
     conversationId: contactConversationId,
-    lastMessageTimestamp: lastMessageDetail.date ?? "",
-    lastMessage: lastMessageDetail.message ?? "",
+    lastMessageTimestamp: lastMessageDetail?.date ?? "",
+    lastMessage: lastMessageDetail?.message ?? "",
   };
   console.log("Dispatch last message detail:", payload);
   Store.dispatch("setLastMessageDetailOfConversation", payload);
@@ -123,9 +123,20 @@ const deleteContact = async (contactConversationId) => {
     console.log("Contact deletion failed!", err);
   }
 };
+const getContactConversation = async (contactConversationId) => {
+  return contactConversationRepo.findContactConversation(contactConversationId);
+};
 const addMessageToChat = async (messageData) => {
   try {
-    await contactMessageService.addMessage(messageData);
+    let conversation = await getContactConversation(
+      messageData.contactConversationId
+    );
+    let senderId = messageData.isSenderUser
+      ? (await userService.findUser(conversation.userId)).personId
+      : conversation.contactPersonId;
+    let senderPublicKey = (await personService.getPersonById(senderId))
+      .publicKey;
+    await contactMessageService.addMessage(messageData, senderPublicKey);
     await dispatchLastMessageDetail(messageData.contactConversationId);
   } catch (err) {
     console.log("Add message to chat failed!", err);
@@ -138,18 +149,28 @@ const getContactPublicKey = async (contactConversationId) => {
 };
 const updateContactDetailIfChanged = async (contactConversationId) => {
   let contactPerson = await getContactPersonDetail(contactConversationId);
-  let res = await apiService.GET("/user/getUserDetails", `email=${contactPerson.email}`)
+  let res = await apiService.GET(
+    "/user/getUserDetails",
+    `email=${contactPerson.email}`
+  );
   let data = res.data;
-  if(data.public_key != contactPerson.publicKey || data.name != contactPerson.name ){
-    contactPerson.publicKey = data.public_key
-    contactPerson.name = data.name
-    console.log("Contact person details changed!:",contactPerson)
+  if (
+    data.public_key != contactPerson.publicKey ||
+    data.name != contactPerson.name
+  ) {
+    contactPerson.publicKey = data.public_key;
+    contactPerson.name = data.name;
+    console.log("Contact person details changed!:", contactPerson);
     return await personService.updatePerson(contactPerson);
   }
+};
+const getHashTablesOfConversation = async (contactConversationId) => {
+  await contactMessageService.getContactHashTables(contactConversationId);
 };
 export default {
   createContactChat,
   getContactPersonDetail,
+  getContactConversation,
   getLastMessageDetailsOfChat,
   getAllContactChatsOfUser,
   dispatchNewMessage,
@@ -160,4 +181,5 @@ export default {
   addMessageToChat,
   getContactPublicKey,
   updateContactDetailIfChanged,
+  getHashTablesOfConversation,
 };

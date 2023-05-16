@@ -19,3 +19,9 @@ ipcMain.handle("getContactMessagesByContactConversationId", async (event, contac
 ipcMain.handle("getLastContactMessageByContactConversationId", async (event, contactConversationId) => {
   return await contactMessageRepo.getLastContactMessageByContactConversationId(contactConversationId);
 });
+ipcMain.handle("getHashTablesByContactConversationId", async (event, contactConversationId) => {
+  return await contactMessageRepo.getHashTablesByContactConversationId(contactConversationId);
+});
+ipcMain.handle("getMessageCountByContactConversationId", async (event, contactConversationId) => {
+  return await contactMessageRepo.getMessageCountByContactConversationId(contactConversationId);
+});

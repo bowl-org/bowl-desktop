@@ -1,7 +1,7 @@
 import io from "socket.io-client";
 import Store from "@/store/index";
 import contactConversationService from "./contactConversationService";
-import contactMessageService from "./contactMessageService";
+// import contactMessageService from "./contactMessageService";
 // import groupMessageService from "./groupMessageService";
 import requestNotificationService from "./requestNotificationService";
 import cryptionService from "./cryptionService.js";
@@ -40,6 +40,9 @@ const receiveChatMessageListener = () => {
     msgData.isSenderUser = 0;
     //TODO
     msgData.contactConversationId = Store.getters.activeConversationId;
+    if(msgData.contactConversationId == -1){
+      throw new Error("TODO: Select conversation to receive message")
+    }
 
     await contactConversationService.addMessageToChat(msgData);
     await contactConversationService.dispatchNewMessage(
@@ -142,10 +145,7 @@ const sendContactChatMessage = async (message) => {
   msgData.message = message;
   msgData.isSenderUser = 1;
   msgData.contactConversationId = Store.getters.activeConversationId;
-  await contactMessageService.addMessage(msgData);
-  await contactConversationService.dispatchLastMessageDetail(
-    Store.getters.activeConversationId
-  );
+  await contactConversationService.addMessageToChat(msgData);
   return msgData;
 };
 const sendGroupChatMessage = async (message) => {

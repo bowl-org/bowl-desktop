@@ -1,4 +1,5 @@
 import queryRunner from "./commons/queryRunner";
+import hashTableRepository from "./hashTableRepository";
 
 const tableName = "contact_messages";
 const insertContactMessage = async (messageData) => {
@@ -43,6 +44,25 @@ const getLastContactMessageByContactConversationId = async (
     contactConversationId
   );
 };
+const getHashTablesByContactConversationId = async (contactConversationId) => {
+  return queryRunner.allFromPreparedQuery(
+    `SELECT
+      hash_table.id,
+      hash_table.previousHashId,
+      hash_table.previousHashValue,
+      hash_table.hashMessageData,
+      hash_table.hashValue,
+    FROM
+      ${tableName} contact_message
+    INNER JOIN
+      ${hashTableRepository.tableName} hash_table on contact_message.hashTableId = hash_table.id
+    WHERE contact_message.conversationId = ?`,
+    contactConversationId
+  );
+};
+const getMessageCountByContactConversationId = async(contactConversationId) => {
+  return queryRunner.getCountWhere(tableName, "contactConversationId = ?", contactConversationId);
+}
 
 export default {
   insertContactMessage,
@@ -52,4 +72,6 @@ export default {
   getMessagesByContactConversationId,
   getContactMessagesByContactConversationId,
   getLastContactMessageByContactConversationId,
+  getHashTablesByContactConversationId,
+  getMessageCountByContactConversationId,
 };

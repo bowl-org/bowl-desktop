@@ -106,12 +106,11 @@ const initHashTables = () =>
   queryRunner.runQuery(
     `CREATE TABLE IF NOT EXISTS hash_tables(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      previousHashId INTEGER NOT NULL UNIQUE DEFAULT 0,
-      conversationId INTEGER NOT NULL,
+      previousHashId INTEGER NOT NULL DEFAULT -1,
       previousHashValue TEXT NOT NULL,
       hashMessageData TEXT NOT NULL,
-      hashValue TEXT NOT NULL,
-      FOREIGN KEY(previousHashId) REFERENCES hash_tables(id))`
+      hashValue TEXT NOT NULL)`
+      //FOREIGN KEY(previousHashId) REFERENCES hash_tables(id))`
   );
 const initGroupConversations = () =>
   queryRunner.runQuery(

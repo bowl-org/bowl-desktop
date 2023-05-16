@@ -1,12 +1,12 @@
-import db from "./commons/db";
 import queryRunner from "./commons/queryRunner";
 
 const tableName = "hash_tables";
 const insertHashTable = async (hashTableData) => {
-  return queryRunner.runPreparedQuery(
+  const info = queryRunner.runPreparedQuery(
     `INSERT INTO ${tableName} (previousHashId, previousHashValue, hashMessageData, hashValue) VALUES (@previousHashId, @previousHashValue, @hashMessageData, @hashValue)`,
     hashTableData
   );
+  return findHashTable(info.lastInsertRowid);
 };
 const updateHashTable = async (hashTableData) => {
   return queryRunner.runPreparedQuery(
@@ -15,9 +15,7 @@ const updateHashTable = async (hashTableData) => {
   );
 };
 const deleteHashTable = async (id) => {
-  db.transaction(() => {
-    queryRunner.deleteById(tableName, id);
-  });
+  return queryRunner.deleteById(tableName, id);
 };
 const findHashTable = async (id) => {
   return queryRunner.findById(tableName, id);
