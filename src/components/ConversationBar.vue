@@ -18,8 +18,8 @@
         </button>
       </div>
       <div v-if="conversationType != 'Group'" class="active-info flex items-center">
-        <OnlineDot :status="onlineStatus" />
-        <p class="text-sm ml-3 text-gray-500">{{ onlineStatus }}</p>
+        <OnlineDot :status="isOnline" />
+        <p class="text-sm ml-3 text-gray-500">{{ isOnline ? 'online' : 'offline' }}</p>
       </div>
     </div>
   </div>
@@ -42,8 +42,8 @@ export default {
       type: Number,
       required: true,
     },
-    onlineStatus: {
-      type: String,
+    isOnline: {
+      type: Boolean,
     },
     conversationType: {
       type: String,

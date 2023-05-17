@@ -10,7 +10,7 @@
           conversationType == conversation.conversationType
         "
         :conversationName="conversation.name"
-        :onlineStatus="conversation.onlineStatus"
+        :isOnline="conversation.isOnline"
         :isActive="conversation.isActive"
         :lastMessageTimestamp="conversation.lastMessageTimestamp"
         :lastMessage="conversation.lastMessage"

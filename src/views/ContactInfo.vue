@@ -14,9 +14,9 @@
     <div
       class="online-status-container flex flex-row justify-center items-center mt-3"
     >
-      <OnlineDot :status="contact.onlineStatus" class="p-2" />
+      <OnlineDot :status="contact.isOnline" class="p-2" />
       <p class="text-3xl font-medium ml-3 text-gray-500">
-        {{ contact.onlineStatus }}
+        {{ contact.isOnline ? 'online' : 'offline' }}
       </p>
     </div>
     <div class="email flex flex-col justify-center items-center">
@@ -49,7 +49,7 @@ export default {
         name: "",
         email: "",
         publicKey: "",
-        onlineStatus: "",
+        isOnline: false,
       },
     };
   },
@@ -64,7 +64,7 @@ export default {
       name: contactPerson?.name,
       email: contactPerson?.email,
       publicKey: contactPerson?.publicKey,
-      onlineStatus: activeContactConversation?.onlineStatus,
+      isOnline: activeContactConversation?.isOnline,
     };
     this.contact = contactModel;
   },

@@ -7,7 +7,7 @@
     </button>
     <OnlineDot
       :class="showOnlineDot != 'true' ? 'hidden' : ''"
-      :status="onlineStatus"
+      :status="isOnline"
       class="absolute right-0 bottom-0"
     />
   </div>
@@ -20,7 +20,7 @@ export default {
   props: {
     letter: String,
     showOnlineDot: String,
-    onlineStatus: String,
+    isOnline: Boolean,
   },
   components: {
     OnlineDot,

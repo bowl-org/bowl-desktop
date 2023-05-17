@@ -19,7 +19,7 @@
       class="flex-none rounded-lg m-3 w-12 h-12"
       showOnlineDot="true"
       :letter="conversationName[0]"
-      :onlineStatus="onlineStatus"
+      :isOnline="isOnline"
     />
     <div class="flex flex-col justify-center grow mr-2">
       <div class="flex justify-between items-center">
@@ -58,8 +58,8 @@ export default {
       type: String,
       required: true,
     },
-    onlineStatus: {
-      type: String,
+    isOnline: {
+      type: Boolean,
     },
     conversationName: {
       type: String,

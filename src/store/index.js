@@ -9,7 +9,7 @@ export default createStore({
     notificationCount: 0,
     activeConversationId: -1,
     conversations: [],
-    messages: []
+    messages: [],
   },
   getters: {
     user(state) {
@@ -72,9 +72,8 @@ export default createStore({
       state.conversations = [];
     },
     DELETE_CONVERSATION(state, { conversationId, getters }) {
-      let conversationIndex =
-        getters.getConversationIndexById(conversationId);
-      state.conversations.splice(conversationIndex,1);
+      let conversationIndex = getters.getConversationIndexById(conversationId);
+      state.conversations.splice(conversationIndex, 1);
     },
     ADD_CONVERSATION(state, conversation) {
       state.conversations.push(conversation);
@@ -88,36 +87,52 @@ export default createStore({
     SET_NOTIFICATION_COUNT(state, count) {
       state.notificationCount = count;
     },
-    ADD_MESSAGE(state, message){
+    ADD_MESSAGE(state, message) {
       state.messages.push(message);
     },
-    SET_MESSAGES(state, messages){
+    SET_MESSAGES(state, messages) {
       state.messages = messages;
     },
     DELETE_MESSAGES(state) {
       state.messages = [];
     },
-    SET_LAST_MESSAGE_OF_CONVERSATION(state, { conversationId, lastMessage, getters }) {
-      let conversationIndex =
-        getters.getConversationIndexById(conversationId);
+    SET_LAST_MESSAGE_OF_CONVERSATION(
+      state,
+      { conversationId, lastMessage, getters }
+    ) {
+      let conversationIndex = getters.getConversationIndexById(conversationId);
       if (conversationIndex != -1) {
         state.conversations[conversationIndex].lastMessage = lastMessage;
       }
     },
-    SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION(state, { lastMessageDetail, getters }) {
-      let conversationIndex =
-        getters.getConversationIndexById(lastMessageDetail.conversationId);
+    SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION(
+      state,
+      { lastMessageDetail, getters }
+    ) {
+      let conversationIndex = getters.getConversationIndexById(
+        lastMessageDetail.conversationId
+      );
       if (conversationIndex != -1) {
-        state.conversations[conversationIndex].lastMessage = lastMessageDetail.lastMessage ?? "";
-        state.conversations[conversationIndex].lastMessageTimestamp = lastMessageDetail.lastMessageTimestamp ?? "";
+        state.conversations[conversationIndex].lastMessage =
+          lastMessageDetail.lastMessage ?? "";
+        state.conversations[conversationIndex].lastMessageTimestamp =
+          lastMessageDetail.lastMessageTimestamp ?? "";
       }
     },
-    TOGGLE_CONVERSATION_FAV(state, {conversationId, getters}) {
-      let conversationIndex =
-        getters.getConversationIndexById(conversationId);
+    TOGGLE_CONVERSATION_FAV(state, { conversationId, getters }) {
+      let conversationIndex = getters.getConversationIndexById(conversationId);
       if (conversationIndex != -1) {
         state.conversations[conversationIndex].isFav =
           state.conversations[conversationIndex].isFav == 1 ? 0 : 1;
+      }
+    },
+    SET_ONLINE_STATUS_OF_CONVERSATION(
+      state,
+      { conversationId, isOnline, getters }
+    ) {
+      let conversationIndex = getters.getConversationIndexById(conversationId);
+      if (conversationIndex != -1) {
+        state.conversations[conversationIndex].isOnline = isOnline;
       }
     },
   },
@@ -137,10 +152,10 @@ export default createStore({
     deleteConversations({ commit }) {
       commit("DELETE_CONVERSATIONS");
     },
-    deleteConversation({ commit, getters }, {conversationId}) {
+    deleteConversation({ commit, getters }, { conversationId }) {
       commit("DELETE_CONVERSATION", {
         conversationId,
-        getters
+        getters,
       });
     },
     setActiveConversationId({ commit }, activeConversationId) {
@@ -149,21 +164,40 @@ export default createStore({
     addConversation({ commit }, conversation) {
       commit("ADD_CONVERSATION", conversation);
     },
-    setLastMessageOfConversation({ commit, getters}, { conversationId, lastMessage }) {
+    setLastMessageOfConversation(
+      { commit, getters },
+      { conversationId, lastMessage }
+    ) {
       commit("SET_LAST_MESSAGE_OF_CONVERSATION", {
         conversationId,
         lastMessage,
-        getters
+        getters,
       });
     },
-    setLastMessageDetailOfConversation({ commit, getters}, lastMessageDetail) {
+    setLastMessageDetailOfConversation({ commit, getters }, lastMessageDetail) {
       commit("SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION", {
         lastMessageDetail,
-        getters
+        getters,
       });
     },
     toggleConversationFav({ commit, getters }, conversationId) {
-      commit("TOGGLE_CONVERSATION_FAV", {conversationId, getters});
+      commit("TOGGLE_CONVERSATION_FAV", { conversationId, getters });
+    },
+    setOnlineStatusOfConversation(
+      { commit, getters },
+      { conversationId, isOnline }
+    ) {
+      console.log(
+        "Set online status of conversation:",
+        conversationId,
+        " is ",
+        isOnline
+      );
+      commit("SET_ONLINE_STATUS_OF_CONVERSATION", {
+        conversationId,
+        isOnline,
+        getters,
+      });
     },
     increaseNotificationCount({ commit }) {
       commit("INCREASE_NOTIFICATION_COUNT");
@@ -174,15 +208,15 @@ export default createStore({
     setNotificationCount({ commit }, notificationCount) {
       commit("SET_NOTIFICATION_COUNT", notificationCount);
     },
-    setMessages({commit}, messages){
+    setMessages({ commit }, messages) {
       commit("SET_MESSAGES", messages);
     },
-    addMessage({commit}, message){
+    addMessage({ commit }, message) {
       commit("ADD_MESSAGE", message);
     },
-    deleteMessages({commit}){
+    deleteMessages({ commit }) {
       commit("DELETE_MESSAGES");
-    }
+    },
   },
   modules: {
     //Can be useful not needed for now

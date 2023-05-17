@@ -1,7 +1,7 @@
 <template>
   <div
     class="rounded-full w-2.5 h-2.5 inline-block"
-    :class="status == 'online' ? 'bg-sky-500 ' : 'bg-red-500'"
+    :class="status ? 'bg-sky-500 ' : 'bg-red-500'"
   />
 </template>
 <script>
@@ -10,7 +10,7 @@ export default {
   components: {},
   props: {
     status: {
-      type: String,
+      type: Boolean,
     },
   },
 };

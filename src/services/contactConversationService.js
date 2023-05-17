@@ -8,12 +8,12 @@ import * as apiService from "@/services/apiService";
 import userService from "./userService";
 
 const formatContactConversation = async (conversation) => {
-  let isOnline = socketService.getOnlineStatus();
+  let isOnline = socketService.getOnlineStatusOfContact(conversation.id);
   let lastMessageInfo = await getLastMessageDetailsOfChat(conversation.id);
   return {
     conversationId: conversation.id,
     name: conversation.name,
-    onlineStatus: isOnline ? "online" : "offline",
+    isOnline: isOnline,
     isActive: false,
     lastMessageTimestamp: lastMessageInfo?.date ?? "",
     lastMessage: lastMessageInfo?.message ?? "",
@@ -113,6 +113,12 @@ const setFavoriteOfChat = async (contactConversationId, isFavorite) => {
     isFavorite: isFavorite,
   });
 };
+const setOnlineStatusOfChat = async (contactConversationId, isOnline) => {
+  Store.dispatch("setOnlineStatusOfConversation", {
+    conversationId: contactConversationId,
+    isOnline: isOnline,
+  });
+};
 const deleteContact = async (contactConversationId) => {
   try {
     await contactConversationRepo.deleteContactConversation(
@@ -168,7 +174,9 @@ const getHashTablesOfConversation = async (contactConversationId) => {
   await contactMessageService.getContactHashTables(contactConversationId);
 };
 const getContactConversationByContactPersonId = async (contactPersonId) => {
-  return await contactConversationRepo.getContactConversationByContactPersonId(contactPersonId);
+  return await contactConversationRepo.getContactConversationByContactPersonId(
+    contactPersonId
+  );
 };
 const getContactConversationByContactMail = async (contactMail) => {
   try {
@@ -194,5 +202,6 @@ export default {
   updateContactDetailIfChanged,
   getHashTablesOfConversation,
   getContactConversationByContactMail,
-  getContactConversationByContactPersonId
+  getContactConversationByContactPersonId,
+  setOnlineStatusOfChat,
 };

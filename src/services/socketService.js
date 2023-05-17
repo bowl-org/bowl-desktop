@@ -7,6 +7,7 @@ import requestNotificationService from "./requestNotificationService";
 import cryptionService from "./cryptionService.js";
 
 let socket;
+const onlineTimeout = 10000
 const initSocket = () => {
   socket = io(process.env.VUE_APP_BASE_URL, {
     path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
@@ -23,8 +24,8 @@ const initSocket = () => {
 };
 const initOnlinePingSender = () => {
   setInterval(() => {
-    socket.emit("online", Store.getters.user.name);
-  }, 10000);
+    socket.emit("online");
+  }, onlineTimeout);
 };
 const receiveChatMessageListener = () => {
   socket.on("chatMessage", async (msgData) => {
@@ -65,8 +66,22 @@ const errorListener = () => {
   });
 };
 const onlineListener = () => {
-  socket.on("online", (friendName) => {
-    console.log(friendName + " is online");
+  socket.on("online", async (data) => {
+    console.log("Online:", data);
+    let contactConversation =
+      await contactConversationService.getContactConversationByContactMail(
+        data.email
+      );
+    await contactConversationService.setOnlineStatusOfChat(
+      contactConversation.id,
+      true
+    );
+    setTimeout(() => {
+      contactConversationService.setOnlineStatusOfChat(
+        contactConversation.id,
+        false
+      );
+    }, onlineTimeout + 5000);
   });
 };
 const contactRequestListener = () => {
@@ -176,10 +191,10 @@ const sendGroupChatMessage = async (message) => {
   console.log("sendGroupChatMessage not implemented yet!", message);
   return;
 };
-//TODO
-//Online status of persons
-const getOnlineStatus = () => {
-  return true;
+
+const getOnlineStatusOfContact = (conversationId) => {
+  let conversation = Store.getters.getConversationById(conversationId);
+  return conversation == null ? false : conversation.isOnline;
 };
 export default {
   initSocket,
@@ -191,5 +206,5 @@ export default {
   acceptGroupRequest,
   declineGroupRequest,
   sendGroupRequest,
-  getOnlineStatus,
+  getOnlineStatusOfContact,
 };

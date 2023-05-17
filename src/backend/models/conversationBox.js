@@ -1,7 +1,7 @@
 const ConversationBoxModel = {
   conversationId: 0,
   name: "",
-  onlineStatus: "",
+  isOnline: false,
   isActive: false,
   conversationType: "",
   lastMessageTimestamp: "",
