@@ -14,9 +14,9 @@
     <div
       class="online-status-container flex flex-row justify-center items-center mt-3"
     >
-      <OnlineDot :status="contact.isOnline" class="p-2" />
+      <OnlineDot :status="isOnline" class="p-2" />
       <p class="text-3xl font-medium ml-3 text-gray-500">
-        {{ contact.isOnline ? 'online' : 'offline' }}
+        {{ isOnline ? "online" : "offline" }}
       </p>
     </div>
     <div class="email flex flex-col justify-center items-center">
@@ -53,10 +53,15 @@ export default {
       },
     };
   },
+  computed: {
+    isOnline() {
+      let activeContactConversation = this.$store.getters.getConversationById(
+        this.$store.getters.activeConversationId
+      );
+      return activeContactConversation?.isOnline;
+    },
+  },
   async created() {
-    let activeContactConversation = this.$store.getters.getConversationById(
-      this.$store.getters.activeConversationId
-    );
     let contactPerson = await contactConversationService.getContactPersonDetail(
       this.$store.getters.activeConversationId
     );
@@ -64,7 +69,7 @@ export default {
       name: contactPerson?.name,
       email: contactPerson?.email,
       publicKey: contactPerson?.publicKey,
-      isOnline: activeContactConversation?.isOnline,
+      isOnline: this.isOnline,
     };
     this.contact = contactModel;
   },
