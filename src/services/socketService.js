@@ -7,7 +7,6 @@ import requestNotificationService from "./requestNotificationService";
 import cryptionService from "./cryptionService.js";
 
 let socket;
-const onlineTimeout = 10000
 const initSocket = () => {
   socket = io(process.env.VUE_APP_BASE_URL, {
     path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
@@ -15,17 +14,28 @@ const initSocket = () => {
       token: Store.getters.token.data,
     },
   });
+  onlineChatsHandler();
   errorListener();
   onlineListener();
-  initOnlinePingSender();
-
+  offlineListener();
   receiveChatMessageListener();
   contactRequestListener();
 };
-const initOnlinePingSender = () => {
-  setInterval(() => {
-    socket.emit("online");
-  }, onlineTimeout);
+const onlineChatsHandler = () => {
+  socket.on("onlineChats", async (onlineChatsData) => {
+    console.log("Online contacts:", onlineChatsData.contacts);
+    console.log("Online groups:", onlineChatsData.groups);
+    onlineChatsData.contacts.map(async (contactEmail) => {
+      let contactConversation =
+        await contactConversationService.getContactConversationByContactMail(
+          contactEmail
+        );
+      await contactConversationService.setOnlineStatusOfChat(
+        contactConversation.id,
+        true
+      );
+    });
+  });
 };
 const receiveChatMessageListener = () => {
   socket.on("chatMessage", async (msgData) => {
@@ -76,12 +86,19 @@ const onlineListener = () => {
       contactConversation.id,
       true
     );
-    setTimeout(() => {
-      contactConversationService.setOnlineStatusOfChat(
-        contactConversation.id,
-        false
+  });
+};
+const offlineListener = () => {
+  socket.on("offline", async (data) => {
+    console.log("Offline:", data);
+    let contactConversation =
+      await contactConversationService.getContactConversationByContactMail(
+        data.email
       );
-    }, onlineTimeout + 5000);
+    await contactConversationService.setOnlineStatusOfChat(
+      contactConversation.id,
+      false
+    );
   });
 };
 const contactRequestListener = () => {
