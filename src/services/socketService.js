@@ -8,7 +8,8 @@ import cryptionService from "./cryptionService.js";
 
 let socket;
 const initSocket = () => {
-  socket = io(process.env.VUE_APP_BASE_URL, {
+
+  socket = socket ?? io(process.env.VUE_APP_BASE_URL, {
     path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
     extraHeaders: {
       token: Store.getters.token.data,
