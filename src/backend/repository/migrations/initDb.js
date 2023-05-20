@@ -74,7 +74,7 @@ const initContactMessages = () =>
       date TEXT NOT NULL,
       time TEXT NOT NULL,
       FOREIGN KEY(contactConversationId) REFERENCES contact_conversations(id) ON DELETE CASCADE,
-      FOREIGN KEY(hashTableId) REFERENCES hash_tables(id))`
+      FOREIGN KEY(hashTableId) REFERENCES hash_tables(id) ON DELETE CASCADE)`
   );
 const initGroupMessages = () =>
   queryRunner.runQuery(
@@ -89,7 +89,7 @@ const initGroupMessages = () =>
       time TEXT NOT NULL,
       FOREIGN KEY(groupConversationId) REFERENCES group_conversations(id) ON DELETE CASCADE,
       FOREIGN KEY(senderPersonId) REFERENCES persons(id),
-      FOREIGN KEY(hashTableId) REFERENCES hash_tables(id))`
+      FOREIGN KEY(hashTableId) REFERENCES hash_tables(id) ON DELETE CASCADE)`
   );
 const initContactConversations = () =>
   queryRunner.runQuery(

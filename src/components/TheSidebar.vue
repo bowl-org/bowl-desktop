@@ -72,6 +72,7 @@ import ConversationTypeMenu from "./ConversationTypeMenu.vue";
 import ConversationList from "./ConversationList.vue";
 import logInService from "../services/logInService";
 import electronIpcWrapper from "@/ipc-wrappers/electronIpcWrapper";
+import socketService from "@/services/socketService";
 
 export default {
   name: "TheSidebar",
@@ -111,9 +112,10 @@ export default {
     logOut() {
       logInService
         .logOut()
-        .then(() => {
+        .then(async() => {
           this.$store.dispatch("deleteUser");
           this.$store.dispatch("deleteToken");
+          await socketService.disconnectFromSocket();
           this.$router.push("/");
         })
         .catch((err) => {

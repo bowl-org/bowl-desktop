@@ -8,13 +8,14 @@ import cryptionService from "./cryptionService.js";
 
 let socket;
 const initSocket = () => {
-
-  socket = socket ?? io(process.env.VUE_APP_BASE_URL, {
-    path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
-    extraHeaders: {
-      token: Store.getters.token.data,
-    },
-  });
+  socket =
+    socket ??
+    io(process.env.VUE_APP_BASE_URL, {
+      path: `${process.env.VUE_APP_API_TOKEN}/socket.io`,
+      extraHeaders: {
+        token: Store.getters.token.data,
+      },
+    });
   onlineChatsHandler();
   errorListener();
   onlineListener();
@@ -22,8 +23,13 @@ const initSocket = () => {
   receiveChatMessageListener();
   contactRequestListener();
 };
+const disconnectFromSocket = async () => {
+  await socket.disconnect();
+  console.log("Socket connection closed!");
+};
 const onlineChatsHandler = () => {
   socket.on("onlineChats", async (onlineChatsData) => {
+    console.log("Online chat data:", onlineChatsData);
     console.log("Online contacts:", onlineChatsData.contacts);
     console.log("Online groups:", onlineChatsData.groups);
     onlineChatsData.contacts.map(async (contactEmail) => {
@@ -38,11 +44,11 @@ const onlineChatsHandler = () => {
     });
   });
 };
-const receiveChatMessageListener = () => {
-  socket.on("chatMessage", async (msgData) => {
-    console.log("Message received: ", msgData);
+const contactChatMessageListener = () => {
+  socket.on("contactChatMessage", async (msgData) => {
+    console.log("Contact message received: ", msgData);
     msgData = JSON.parse(msgData);
-    console.log("Message received after: ", msgData);
+    console.log("Contact message received after: ", msgData);
     //Make sure message type is not sent
     // msgData["messageType"]= "";
     msgData.message = await cryptionService.decryptData(
@@ -69,6 +75,15 @@ const receiveChatMessageListener = () => {
     );
     console.log("Received message inserted successfully!: ", msgData.message);
   });
+};
+const groupChatMessageListener = () => {
+  socket.on("groupChatMessage", async (msgData) => {
+    console.log("Group message received: ", msgData);
+  });
+};
+const receiveChatMessageListener = () => {
+  contactChatMessageListener();
+  groupChatMessageListener();
 };
 const errorListener = () => {
   socket.on("connect_error", (data) => {
@@ -114,9 +129,15 @@ const contactRequestListener = () => {
     }
   });
 };
-const acceptGroupRequest = async () => {};
-const declineGroupRequest = () => {};
-const sendGroupRequest = () => {};
+const acceptGroupRequest = async () => {
+  //TODO
+};
+const declineGroupRequest = () => {
+  //TODO
+};
+const sendGroupRequest = () => {
+  //TODO
+};
 const acceptContactRequest = (email) => {
   return new Promise((resolve, reject) => {
     socket.emit(
@@ -193,7 +214,7 @@ const sendContactChatMessage = async (message) => {
   console.log("Sent message data ", payload);
   //Magic to wait calback
   await new Promise((resolve, reject) => {
-    socket.emit("chatMessage", JSON.stringify(payload), (res) => {
+    socket.emit("contactChatMessage", JSON.stringify(payload), (res) => {
       if (res.status == "ERROR") reject(new Error(res.error));
       else resolve();
     });
@@ -216,6 +237,7 @@ const getOnlineStatusOfContact = (conversationId) => {
 };
 export default {
   initSocket,
+  disconnectFromSocket,
   sendContactChatMessage,
   sendGroupChatMessage,
   sendContactRequest,

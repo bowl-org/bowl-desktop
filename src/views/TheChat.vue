@@ -139,12 +139,12 @@ export default {
     selectEmoji(emoji) {
       this.inputVal += emoji;
     },
-    deleteConversation() {
+    async deleteConversation() {
       this.toggleChatMenu();
       let conversationType = this.conversation.conversationType;
       console.log("Delete", conversationType);
       if (conversationType == "Contact") {
-        contactConversationService.deleteContact(
+        await contactConversationService.deleteContact(
           this.$store.getters.activeConversationId
         );
         this.$router.push({
