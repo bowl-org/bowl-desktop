@@ -12,6 +12,9 @@ const deleteGroupConversation = async (groupConversationData) => {
 const updateGroupConversation = async (groupConversationData) => {
   return ipcRendererHelper.invokeEvent("updateGroupConversation", groupConversationData);
 };
+const setFavoriteOfGroupConversation = async (groupConversationData) => {
+  return ipcRendererHelper.invokeEvent("setFavoriteOfGroupConversation", groupConversationData);
+};
 const getGroupConversationsByUserId = async (userId) => {
   return ipcRendererHelper.invokeEvent("getGroupConversationsByUserId", userId);
 };
@@ -20,5 +23,6 @@ export default{
   findGroupConversation,
   deleteGroupConversation,
   updateGroupConversation,
+  setFavoriteOfGroupConversation,
   getGroupConversationsByUserId,
 }

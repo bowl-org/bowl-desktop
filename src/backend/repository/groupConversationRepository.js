@@ -3,15 +3,22 @@ import queryRunner from "./commons/queryRunner";
 
 const tableName = "group_conversations";
 const insertGroupConversation = async (groupConversationData) => {
+  console.log("Insert group conversation:", groupConversationData);
   const groupConversationId = queryRunner.runPreparedQuery(
-    `INSERT INTO ${tableName}(userId, adminId, groupKey, name, description, isFavorite) VALUES (@userId, @adminId, @groupKey, @name, @description, @isFavorite)`,
+    `INSERT INTO ${tableName}(userId, groupKey, name, description, isFavorite) VALUES (@userId, @groupKey, @name, @description, @isFavorite)`,
     groupConversationData
-  );
+  ).lastInsertRowid;
   return await findGroupConversation(groupConversationId);
 };
 const updateGroupConversation = async (groupConversationData) => {
   queryRunner.runPreparedQuery(
-    // `UPDATE ${tableName} SET adminId = @adminId, groupKey = @groupKey, name = @name, description = @description, isFavorite = @isFavorite WHERE id = @id`,
+    `UPDATE ${tableName} SET groupKey = @groupKey, name = @name, description = @description, isFavorite = @isFavorite WHERE id = @id`,
+    groupConversationData
+  );
+  return await findGroupConversation(groupConversationData.id);
+};
+const setFavoriteOfGroupConversation = async (groupConversationData) => {
+  queryRunner.runPreparedQuery(
     `UPDATE ${tableName} SET isFavorite = @isFavorite WHERE id = @id`,
     groupConversationData
   );
@@ -38,4 +45,5 @@ export default {
   deleteGroupConversation,
   findGroupConversation,
   getGroupConversationsByUserId,
+  setFavoriteOfGroupConversation
 };

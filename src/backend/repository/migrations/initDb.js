@@ -117,14 +117,11 @@ const initGroupConversations = () =>
     `CREATE TABLE IF NOT EXISTS group_conversations(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       userId INTEGER NOT NULL,
-      adminId INTEGER NOT NULL,
       groupKey TEXT NOT NULL,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
       isFavorite INTEGER NOT NULL DEFAULT 0,
-      UNIQUE(userId, adminId, groupKey, name),
-      FOREIGN KEY(userId) REFERENCES users(id),
-      FOREIGN KEY(adminId) REFERENCES persons(id))`
+      FOREIGN KEY(userId) REFERENCES users(id))`
   );
 const initPersonGroups = () =>
   queryRunner.runQuery(
@@ -132,6 +129,7 @@ const initPersonGroups = () =>
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       groupConversationId INTEGER NOT NULL,
       personId INTEGER NOT NULL,
+      isAdmin INTEGER NOT NULL DEFAULT 0,
       UNIQUE(personId, groupConversationId),
       FOREIGN KEY(groupConversationId) REFERENCES group_conversations(id) ON DELETE CASCADE,
       FOREIGN KEY(personId) REFERENCES persons(id))`

@@ -12,6 +12,9 @@ ipcMain.handle(
 ipcMain.handle("updateGroupConversation", async (event, conversationData) => {
   return await groupConversationRepo.updateGroupConversation(conversationData);
 });
+ipcMain.handle("setFavoriteOfGroupConversation", async (event, conversationData) => {
+  return await groupConversationRepo.setFavoriteOfGroupConversation(conversationData);
+});
 ipcMain.handle("deleteGroupConversation", async (event, id) => {
   return await groupConversationRepo.deleteGroupConversation(id);
 });

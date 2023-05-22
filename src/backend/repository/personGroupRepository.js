@@ -4,7 +4,7 @@ import queryRunner from "./commons/queryRunner";
 const tableName = "person_groups";
 const insertPersonGroup = async (personGroupData) => {
   return queryRunner.runPreparedQuery(
-    `INSERT INTO ${tableName}(groupConversationId, personId) VALUES (@groupConversationId, @personId)`,
+    `INSERT INTO ${tableName}(groupConversationId, personId, isAdmin) VALUES (@groupConversationId, @personId, @isAdmin)`,
     personGroupData
   );
 };
