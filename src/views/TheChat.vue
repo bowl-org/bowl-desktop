@@ -144,12 +144,13 @@ export default {
       let conversationType = this.conversation.conversationType;
       console.log("Delete", conversationType);
       if (conversationType == "Contact") {
+        this.$router.push({
+          name: "logo",
+        });
         await contactConversationService.deleteContact(
           this.$store.getters.activeConversationId
         );
-        this.$router.push({
-          name: "main",
-        });
+        this.$store.dispatch("setActiveConversationId", -1);
       } else if (conversationType == "Group") {
         //TODO
       }
