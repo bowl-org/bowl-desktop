@@ -1,4 +1,3 @@
-import db from "./commons/db";
 import queryRunner from "./commons/queryRunner";
 
 const tableName = "group_conversations";
@@ -25,9 +24,7 @@ const setFavoriteOfGroupConversation = async (groupConversationData) => {
   return await findGroupConversation(groupConversationData.id);
 };
 const deleteGroupConversation = async (id) => {
-  db.transaction(() => {
-    queryRunner.deleteById(tableName, id);
-  });
+    return queryRunner.deleteById(tableName, id);
 };
 const findGroupConversation = async (id) => {
   return queryRunner.findById(tableName, id);

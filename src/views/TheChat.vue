@@ -142,18 +142,17 @@ export default {
     async deleteConversation() {
       this.toggleChatMenu();
       let conversationType = this.conversation.conversationType;
+      let activeConversationId = this.$store.getters.activeConversationId;
       console.log("Delete", conversationType);
+      this.$router.push({
+        name: "logo",
+      });
       if (conversationType == "Contact") {
-        this.$router.push({
-          name: "logo",
-        });
-        await contactConversationService.deleteContact(
-          this.$store.getters.activeConversationId
-        );
-        this.$store.dispatch("setActiveConversationId", -1);
+        await contactConversationService.deleteContact(activeConversationId);
       } else if (conversationType == "Group") {
-        //TODO
+        await groupConversationService.deleteGroup(activeConversationId);
       }
+      this.$store.dispatch("setActiveConversationId", -1);
     },
     searchMessages() {
       this.toggleChatMenu();

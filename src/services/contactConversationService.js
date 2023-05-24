@@ -124,7 +124,7 @@ const deleteContact = async (contactConversationId) => {
     await contactConversationRepo.deleteContactConversation(
       contactConversationId
     );
-    Store.dispatch("deleteConversation", contactConversationId);
+    await Store.dispatch("deleteConversation", contactConversationId);
   } catch (err) {
     console.log("Contact deletion failed!", err);
   }

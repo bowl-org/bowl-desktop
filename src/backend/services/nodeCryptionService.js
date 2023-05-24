@@ -1,5 +1,7 @@
 import crypto from "crypto";
 
+//TODO
+//Initialization Vector should be changed in every encryption attempt
 const IV = "0000000000000000";
 
 const encryptSym = (key, data) => {

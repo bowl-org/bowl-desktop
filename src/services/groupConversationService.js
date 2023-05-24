@@ -63,10 +63,23 @@ const setFavoriteOfChat = async (contactConversationId, isFavorite) => {
     isFavorite: isFavorite,
   });
 };
+
+const deleteGroup = async (groupConversationId) => {
+  try {
+    console.log("Deleting group: ID", groupConversationId)
+    await groupConversationRepo.deleteGroupConversation(
+      groupConversationId
+    );
+    await Store.dispatch("deleteConversation", groupConversationId);
+  } catch (err) {
+    console.log("Group deletion failed!", err);
+  }
+};
 export default {
   createGroupChat,
   getLastMessageDetailsOfChat,
   getAllGroupConversationsOfUser,
   setFavoriteOfChat,
   formatGroupConversation,
+  deleteGroup
 };

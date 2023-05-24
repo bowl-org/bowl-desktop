@@ -152,10 +152,11 @@ export default createStore({
     deleteConversations({ commit }) {
       commit("DELETE_CONVERSATIONS");
     },
-    deleteConversation({ commit, getters }, { conversationId }) {
+    deleteConversation({ commit,getters }, conversationId) {
+      console.log("Action delete conversationId:", conversationId)
       commit("DELETE_CONVERSATION", {
         conversationId,
-        getters,
+        getters
       });
     },
     setActiveConversationId({ commit }, activeConversationId) {

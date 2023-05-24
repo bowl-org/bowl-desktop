@@ -72,6 +72,7 @@ export default {
           this.$store.getters.user.id
         );
       for (const groupConversation of groupConvesations) {
+        console.log("Group conversation for each:", groupConversation);
         conversations.push(await groupConversationService.formatGroupConversation(groupConversation));
       }
       let contactConversations =
@@ -79,7 +80,7 @@ export default {
           this.$store.getters.user.id
         );
       for (const contactConversation of contactConversations) {
-        console.log("CONV for each:", contactConversation);
+        console.log("Contact conversation for each:", contactConversation);
         conversations.push(
           await contactConversationService.formatContactConversation(contactConversation)
         );
