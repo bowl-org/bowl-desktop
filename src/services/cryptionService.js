@@ -1,4 +1,13 @@
 import nodeCryptionWrapper from "@/ipc-wrappers/nodeCryptionWrapper";
+const decryptSym = async (key, encrypted) => {
+  return nodeCryptionWrapper.decryptSym(key, encrypted);
+};
+const encryptSym = async (key, data) => {
+  return nodeCryptionWrapper.encryptSym(key, data);
+};
+const generateKey = async () => {
+  return nodeCryptionWrapper.generateKey();
+};
 const generateKeyPair = async () => {
   return nodeCryptionWrapper.generateKeyPair();
 };
@@ -33,6 +42,9 @@ const generateHash = async(data) => {
   return nodeCryptionWrapper.generateHash(data);
 }
 export default {
+  generateKey,
+  decryptSym,
+  encryptSym,
   generateKeyPair,
   createPublicKeyFromString,
   createPrivateKeyFromString,

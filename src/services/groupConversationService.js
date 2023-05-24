@@ -2,7 +2,7 @@ import groupConversationRepo from "@/ipc-wrappers/groupConversationRepositoryWra
 import groupMessageRepo from "@/ipc-wrappers/groupMessageRepositoryWrapper";
 import GroupConversation from "@/backend/models/groupConversation";
 import Store from "@/store/index";
-// import cryptionService from "./cryptionService";
+import cryptionService from "./cryptionService";
 
 const createGroupChat = async (userId, groupData) => {
   try {
@@ -15,9 +15,7 @@ const createGroupChat = async (userId, groupData) => {
     groupConversation.userId = userId;
     groupConversation.name = groupData.name;
     groupConversation.description = groupData.description;
-    //TODO
-    //groupConversation.groupKey = cryptionService.
-    groupConversation.groupKey = "A"
+    groupConversation.groupKey = await cryptionService.generateKey();
 
     let groupChat = await groupConversationRepo.insertGroupConversation(
       groupConversation

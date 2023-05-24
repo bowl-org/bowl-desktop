@@ -1,4 +1,24 @@
 import crypto from "crypto";
+
+const IV = "0000000000000000";
+
+const encryptSym = (key, data) => {
+  let cipher = crypto.createCipheriv("aes-256-cbc", Buffer.from(key, "base64"), IV);
+  let encrypted = cipher.update(data, "utf8", "base64");
+  encrypted += cipher.final("base64");
+  return encrypted;
+};
+
+const decryptSym = (key, encrypted) => {
+  let decipher = crypto.createDecipheriv("aes-256-cbc", Buffer.from(key, "base64"), IV);
+  let decrypted = decipher.update(encrypted, "base64", "utf8");
+  return decrypted + decipher.final("utf8");
+};
+
+const generateKey = () => {
+  let keyBuffer =  crypto.randomBytes(32);
+  return keyBuffer.toString("base64")
+};
 const generateKeyPair = () => {
   let keyPair = crypto.generateKeyPairSync("rsa", {
     modulusLength: 2048,
@@ -67,15 +87,18 @@ const generatePublicKeyFromPrivate = (privateKey) => {
     });
   return Buffer.from(publicKey).toString("base64");
 };
-const generateHash = async(data) => {
-  return crypto.createHash('sha1').update(data).digest("base64");
-}
+const generateHash = async (data) => {
+  return crypto.createHash("sha1").update(data).digest("base64");
+};
 export default {
+  generateKey,
+  decryptSym,
+  encryptSym,
   generateKeyPair,
   createPublicKeyFromString,
   createPrivateKeyFromString,
   encryptData,
   decryptData,
   generatePublicKeyFromPrivate,
-  generateHash
+  generateHash,
 };
