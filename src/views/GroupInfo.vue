@@ -23,14 +23,21 @@
         {{ group.groupKey }}
       </p>
     </div>
+    <div class="group-members flex flex-col justify-center items-center w-full px-12">
+      <h2 class="text-4xl font-bold text-slate-600 p-5">Group Members</h2>
+      <GroupMembers/>
+    </div>
+
   </div>
 </template>
 <script>
 import ConversationAvatar from "@/components/ConversationAvatar.vue";
+import GroupMembers from "@/components/GroupMembers.vue";
 export default {
   name: "GroupInfo",
   components: {
     ConversationAvatar,
+    GroupMembers
   },
   data() {
     return {

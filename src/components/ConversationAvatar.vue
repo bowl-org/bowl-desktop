@@ -8,6 +8,7 @@
     <OnlineDot
       :class="showOnlineDot != 'true' ? 'hidden' : ''"
       :status="isOnline"
+      :dotSize="dotSize"
       class="absolute right-0 bottom-0"
     />
   </div>
@@ -21,6 +22,10 @@ export default {
     letter: String,
     showOnlineDot: String,
     isOnline: Boolean,
+    dotSize:{
+      type: String,
+      default: ' '
+    }
   },
   components: {
     OnlineDot,
