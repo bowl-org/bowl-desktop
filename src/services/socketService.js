@@ -5,6 +5,8 @@ import contactConversationService from "./contactConversationService";
 // import groupMessageService from "./groupMessageService";
 import requestNotificationService from "./requestNotificationService";
 import cryptionService from "./cryptionService.js";
+import groupConversationService from "./groupConversationService";
+import * as apiService from "./apiService";
 
 let socket;
 const initSocket = () => {
@@ -22,6 +24,8 @@ const initSocket = () => {
   offlineListener();
   receiveChatMessageListener();
   contactRequestListener();
+  groupRequestListener();
+  newGroupMemberListener();
 };
 const disconnectFromSocket = async () => {
   await socket.disconnect();
@@ -32,16 +36,17 @@ const onlineChatsHandler = () => {
     console.log("Online chat data:", onlineChatsData);
     console.log("Online contacts:", onlineChatsData.contacts);
     console.log("Online groups:", onlineChatsData.groups);
-    onlineChatsData.contacts.map(async (contactEmail) => {
+    for (const contactEmail of onlineChatsData.contacts) {
       let contactConversation =
         await contactConversationService.getContactConversationByContactMail(
           contactEmail
         );
+      console.log("Contact conversation Online handler:", contactConversation)
       await contactConversationService.setOnlineStatusOfChat(
         contactConversation.id,
         true
       );
-    });
+    }
   });
 };
 const contactChatMessageListener = () => {
@@ -129,14 +134,112 @@ const contactRequestListener = () => {
     }
   });
 };
-const acceptGroupRequest = async () => {
-  //TODO
+const newGroupMemberListener = () => {
+  socket.on("newGroupMember", async (data) => {
+    try {
+      console.log("New GroupMember joined:", data);
+      let personData = {
+        name: data.name,
+        email: data.email,
+        publicKey: data.publicKey,
+      };
+      await groupConversationService.newGroupMemberJoined(
+        Store.getters.user.id,
+        data.groupId,
+        personData
+      );
+    } catch (err) {
+      console.log(err);
+      console.log("New group member add failed!");
+    }
+  });
 };
-const declineGroupRequest = () => {
-  //TODO
+const groupRequestListener = () => {
+  socket.on("groupRequestReceived", async (data) => {
+    try {
+      let notificationData = { ...data };
+      console.log("GROUP REQUEST RECEIVED:", data);
+      notificationData.groupKey = await cryptionService.decryptData(
+        Store.getters.user.privateKey,
+        data.encryptedGroupKey
+      );
+      delete notificationData.encryptedGroupKey;
+      await requestNotificationService.addGroupRequestNotification(
+        notificationData
+      );
+      console.log("Group request added! ", notificationData);
+    } catch (err) {
+      console.log(err);
+      console.log("Group request received add failed!");
+    }
+  });
 };
-const sendGroupRequest = () => {
-  //TODO
+const acceptGroupRequest = async (groupId) => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "acceptGroupRequest",
+      JSON.stringify({ groupId: groupId }),
+      (res) => {
+        if (res?.status != "OK") {
+          reject(new Error(res?.error));
+        } else {
+          resolve(res?.members);
+        }
+      }
+    );
+  });
+};
+const declineGroupRequest = (groupId) => {
+  return new Promise((resolve, reject) => {
+    socket.emit(
+      "declineGroupRequest",
+      JSON.stringify({ groupId: groupId }),
+      (res) => {
+        if (res?.status != "OK") {
+          reject(new Error(res?.error));
+        } else {
+          resolve(res?.members);
+        }
+      }
+    );
+  });
+};
+const sendGroupRequest = async (memberEmail) => {
+  try {
+    let activeConversationId = Store.getters.activeConversationId;
+    let group = await groupConversationService.getGroupConversationById(
+      activeConversationId
+    );
+    let res = await apiService.GET(
+      "/user/getUserDetails",
+      `email=${memberEmail}`
+    );
+    let encryptedGroupKey = await cryptionService.encryptData(
+      res.data.public_key,
+      group.groupKey
+    );
+    let groupRequestData = {
+      groupId: group.groupId,
+      encryptedGroupKey: encryptedGroupKey,
+      email: memberEmail,
+    };
+    return new Promise((resolve, reject) => {
+      socket.emit(
+        "sendGroupRequest",
+        JSON.stringify(groupRequestData),
+        (res) => {
+          if (res?.status != "OK") {
+            reject(Error(res?.error));
+          } else {
+            resolve();
+          }
+        }
+      );
+    });
+  } catch (err) {
+    console.log(err);
+    throw new Error("Send group request failed!");
+  }
 };
 const acceptContactRequest = (email) => {
   return new Promise((resolve, reject) => {

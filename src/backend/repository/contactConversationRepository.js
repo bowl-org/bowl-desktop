@@ -28,10 +28,10 @@ const getContactConversationsByUserId = async (userId) => {
     userId
   );
 };
-const getContactConversationByContactPersonId = async (contactPersonId) => {
+const getContactConversationByContactPersonId = async (userId, contactPersonId) => {
   return queryRunner.getFromPreparedQuery(
-    `SELECT * FROM ${tableName} WHERE contactPersonId = ?`,
-    contactPersonId
+    `SELECT * FROM ${tableName} WHERE userId = ? AND contactPersonId = ?`,
+    [ userId, contactPersonId ]
   );
 };
 export default {

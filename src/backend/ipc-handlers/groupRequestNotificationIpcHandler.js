@@ -4,6 +4,9 @@ import groupRequestNotificationRepository from "../repository/groupRequestNotifi
 ipcMain.handle("findGroupRequestNotificationById", async (event, args) => {
   return await groupRequestNotificationRepository.findGroupRequestNotificationById(args);
 });
+ipcMain.handle("findGroupRequestNotificationByGroupId", async (event, args) => {
+  return await groupRequestNotificationRepository.findGroupRequestNotificationByGroupId(args);
+});
 ipcMain.handle("deleteGroupRequestNotification", async (event, args) => {
   return await groupRequestNotificationRepository.deleteGroupRequestNotification(args);
 });

@@ -1,5 +1,5 @@
 <template>
-  <PopupError ref="popupError" @ok="showError = false" @alertError="showError = true" />
+  <PopupError class="h-full" ref="popupError" @ok="showError = false" @alertError="showError = true" />
   <div v-if="!showError" class="flex flex-col justify-center">
     <!--<h1 class="text-3xl font-medium text-slate-600 p-5">Profile</h1>-->
     <div class="flex flex-col items-center">

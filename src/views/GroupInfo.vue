@@ -5,6 +5,12 @@
       class="w-48 h-48 text-5xl"
     />
 
+    <div class="groupId flex flex-col justify-center items-center">
+      <h2 class="text-4xl font-bold text-slate-600 p-5">Group Id:</h2>
+      <p class="text-4xl font-medium text-slate-600 mx-20 p-5">
+        {{ group.groupId }}
+      </p>
+    </div>
     <div class="name flex flex-col justify-center items-center">
       <h2 class="text-4xl font-bold text-slate-600 p-5">Group Name:</h2>
       <p class="text-4xl font-medium text-slate-600 mx-20 p-5">
@@ -43,6 +49,7 @@ export default {
     return {
       group: {
         groupKey: "",
+        groupId: "",
         name: "",
         description: "",
       },

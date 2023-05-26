@@ -3,6 +3,7 @@ import groupRequestNotificationRepository from "@/ipc-wrappers/groupRequestNotif
 import contactRequestNotificationRepository from "@/ipc-wrappers/contactRequestNotificationRepositoryWrapper";
 import socketService from "./socketService";
 import contactConversationService from "./contactConversationService";
+import groupConversationService from "./groupConversationService";
 
 const loadNotifications = async () => {
   let groupReqNotifications =
@@ -13,6 +14,8 @@ const loadNotifications = async () => {
   groupReqNotifications.forEach((notification) => {
     notificationList.push({
       id: notification.id,
+      groupId: notification.groupId,
+      groupKey: notification.groupKey,
       name: notification.name,
       description: notification.description,
       type: "Group",
@@ -52,8 +55,12 @@ const addContactRequestNotification = async (data) => {
 };
 const addGroupRequestNotification = async (data) => {
   try {
+    console.log(
+      "ADD GROUP REQUEST NOTIFICATION CURR USER: ",
+      Store.getters.user
+    );
     await groupRequestNotificationRepository.insertGroupRequestNotification(
-      data
+      { userId: Store.getters.user.id, ...data }
     );
     increaseNotificationCount();
     console.log("Notification:", data);
@@ -72,8 +79,8 @@ const acceptRequest = async (requestData) => {
       requestData.id
     );
     decreaseNotificationCount();
-    socketService.acceptContactRequest(req.email);
     await contactConversationService.createContactChat(req, Store.getters.user.id);
+    await socketService.acceptContactRequest(req.email);
   } else if (requestData.type == "Group") {
     req =
       await groupRequestNotificationRepository.findGroupRequestNotificationById(
@@ -83,7 +90,8 @@ const acceptRequest = async (requestData) => {
       requestData.id
     );
     decreaseNotificationCount();
-    await socketService.acceptGroupRequest(req.email);
+    let members = await socketService.acceptGroupRequest(req.groupId);
+    await groupConversationService.joinGroupConversation(Store.getters.user.id, req, members);
   }
   console.log("Notification accept:", req);
 };
@@ -107,7 +115,7 @@ const declineRequest = async (requestData) => {
       requestData.id
     );
     decreaseNotificationCount();
-    socketService.declineGroupRequest(groupReq.email);
+    socketService.declineGroupRequest(groupReq.groupId);
     console.log("Notification decline:", requestData);
   }
 };

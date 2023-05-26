@@ -5,7 +5,7 @@
     @yes="generateNewKeypair"
     @no="showPopup = false"
   />
-  <PopupError ref="popupError" @ok="showError = false" @alertError="showError = true" />
+  <PopupError class="h-full" ref="popupError" @ok="showError = false" @alertError="showError = true" />
   <div
     v-if="!showPopup && !showError"
     class="flex flex-col justify-center mx-10"

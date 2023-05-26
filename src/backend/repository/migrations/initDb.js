@@ -56,10 +56,11 @@ const initGroupRequestNotifications = () =>
     `CREATE TABLE IF NOT EXISTS group_request_notifications(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       userId INTEGER NOT NULL,
-      key TEXT NOT NULL,
+      groupId INTEGER NOT NULL,
+      groupKey TEXT NOT NULL,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
-      UNIQUE(userId, key, name, description),
+      UNIQUE(userId, groupId),
       FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE)`
   );
 const initContactMessages = () =>
@@ -117,10 +118,12 @@ const initGroupConversations = () =>
     `CREATE TABLE IF NOT EXISTS group_conversations(
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       userId INTEGER NOT NULL,
+      groupId TEXT NOT NULL,
       groupKey TEXT NOT NULL,
       name TEXT NOT NULL,
       description TEXT NOT NULL,
       isFavorite INTEGER NOT NULL DEFAULT 0,
+      UNIQUE(userId, groupId),
       FOREIGN KEY(userId) REFERENCES users(id))`
   );
 const initPersonGroups = () =>
