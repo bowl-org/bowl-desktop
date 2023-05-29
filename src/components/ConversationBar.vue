@@ -56,7 +56,7 @@ export default {
     openConversationInfo(){
       this.$router.push({
         name: "conversationinfo",
-        params: { id: this.$store.getters.activeConversationId },
+        params: { index: this.$store.getters.activeConversationIndex },
       });
     }
   },

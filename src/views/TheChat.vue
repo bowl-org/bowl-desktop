@@ -85,13 +85,13 @@ export default {
     conversation() {
       console.log(
         "CONVERSATION:",
-        this.$store.getters.getConversationById(
-          this.$store.getters.activeConversationId
+        this.$store.getters.getConversationByIndex(
+          this.$store.getters.activeConversationIndex
         )
       );
       this.closeEmojiSelection();
-      return this.$store.getters.getConversationById(
-        this.$store.getters.activeConversationId
+      return this.$store.getters.getConversationByIndex(
+        this.$store.getters.activeConversationIndex
       );
     },
   },
@@ -102,18 +102,18 @@ export default {
     openConversationInfo() {
       this.$router.push({
         name: "conversationinfo",
-        params: { id: this.$store.getters.activeConversationId },
+        params: { index: this.$store.getters.activeConversationIndex },
       });
     },
     async toggleFav() {
       this.$store.dispatch(
         "toggleConversationFav",
-        this.$store.getters.activeConversationId
+        this.$store.getters.activeConversationIndex
       );
-      let conversation = this.$store.getters.getConversationById(
-        this.$store.getters.activeConversationId
+      let conversation = this.$store.getters.getConversationByIndex(
+        this.$store.getters.activeConversationIndex
       );
-      console.log("Toggle Fav,Conversation Id:", conversation.conversationId);
+      console.log("Toggle Fav,Conversation Index:", conversation.index);
       if (conversation.conversationType == "Contact") {
         await contactConversationService.setFavoriteOfChat(
           conversation.conversationId,
@@ -152,7 +152,7 @@ export default {
       } else if (conversationType == "Group") {
         await groupConversationService.deleteGroup(activeConversationId);
       }
-      this.$store.dispatch("setActiveConversationId", -1);
+      this.$store.dispatch("setActiveConversationIndex", -1);
     },
     searchMessages() {
       this.toggleChatMenu();

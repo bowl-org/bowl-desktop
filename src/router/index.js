@@ -45,12 +45,17 @@ const routes = [
         component: () => import("@/views/TheLogo.vue"),
       },
       {
-        path: "chat/:id",
+        path: "chat/:index",
         name: "chat",
         component: () => import("@/views/TheChat.vue"),
       },
       {
-        path: "conversationinfo/:id",
+        path: "addmember",
+        name: "addmember",
+        component: () => import("@/views/AddMemberView.vue"),
+      },
+      {
+        path: "conversationinfo/:index",
         name: "conversationinfo",
         component: () => import("@/views/ConversationInfo.vue"),
         children: [

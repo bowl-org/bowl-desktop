@@ -63,20 +63,20 @@ export default {
   methods: {
     watchActiveConversationChanges() {
       this.$store.watch(
-        (state, getters) => getters.activeConversationId,
+        (state, getters) => getters.activeConversationIndex,
         () => {
-          console.log("WATCHER:", this.$store.getters.activeConversationId);
+          console.log("WATCHER:", this.$store.getters.activeConversationIndex);
           this.loadMessages();
         }
       );
     },
     loadMessages() {
       console.log(
-        "Load messages from db, ID:",
-        this.$store.getters.activeConversationId
+        "Load messages from db, Index:",
+        this.$store.getters.activeConversationIndex
       );
-      let conversation = this.$store.getters.getConversationById(
-        this.$store.getters.activeConversationId
+      let conversation = this.$store.getters.getConversationByIndex(
+        this.$store.getters.activeConversationIndex
       );
       console.log("Load messages conversation:", conversation);
       console.log("Conversations:", this.$store.getters.conversations);
@@ -107,8 +107,8 @@ export default {
     },
     async sendMessage(message) {
       try {
-        let conversation = this.$store.getters.getConversationById(
-          this.$store.getters.activeConversationId
+        let conversation = this.$store.getters.getConversationByIndex(
+          this.$store.getters.activeConversationIndex
         );
         let msgData;
         if (conversation.conversationType == "Contact")

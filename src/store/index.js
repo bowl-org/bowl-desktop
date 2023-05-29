@@ -7,7 +7,7 @@ export default createStore({
     user: User.userModel,
     token: Token.authTokenModel,
     notificationCount: 0,
-    activeConversationId: -1,
+    activeConversationIndex: -1,
     conversations: [],
     messages: [],
   },
@@ -18,8 +18,13 @@ export default createStore({
     token(state) {
       return state.token;
     },
+    activeConversationIndex(state) {
+      return state.activeConversationIndex;
+    },
     activeConversationId(state) {
-      return state.activeConversationId;
+      return state.conversations.find(
+        (conversation) => conversation.index == state.activeConversationIndex
+      )?.conversationId;
     },
     conversations(state) {
       return state.conversations;
@@ -30,16 +35,43 @@ export default createStore({
     notificationCount(state) {
       return state.notificationCount;
     },
-    getConversationIndexById: (state) => (conversationId) => {
-      return state.conversations.findIndex(
-        (x) => x.conversationId == conversationId
-      );
-    },
-    getConversationById: (state) => (conversationId) => {
+    getConversationIdByIndex: (state) => (conversationIndex) => {
       return state.conversations.find(
-        (x) => x.conversationId == conversationId
+        (conversation) => conversation.index == conversationIndex
+      ).conversationId;
+    },
+    getConversationByIndex: (state) => (conversationIndex) => {
+      return state.conversations.find(
+        (conversation) => conversation.index == conversationIndex
       );
     },
+    getContactConversationById: (state) => (conversationId) => {
+      return state.conversations.find(
+        (conversation) =>
+          conversation.conversationType == "Contact" &&
+          conversation.conversationId == conversationId
+      );
+    },
+    getGroupConversationById: (state) => (conversationId) => {
+      return state.conversations.find(
+        (conversation) =>
+          conversation.conversationType == "Group" &&
+          conversation.conversationId == conversationId
+      );
+    },
+    getRealIndex: (state) => (conversationIndex) => {
+      return state.conversations.findIndex((x) => x.index == conversationIndex);
+    },
+    // getConversationIndexById: (state) => (conversationId) => {
+    //   return state.conversations.findIndex(
+    //     (x) => x.conversationId == conversationId
+    //   );
+    // },
+    // getConversationById: (state) => (conversationId) => {
+    //   return state.conversations.find(
+    //     (x) => x.conversationId == conversationId
+    //   );
+    // },
 
     //Method style access
     //token: (state) =>{
@@ -47,8 +79,8 @@ export default createStore({
     //}
   },
   mutations: {
-    SET_ACTIVE_CONVERSATION_ID(state, conversationId) {
-      state.activeConversationId = conversationId;
+    SET_ACTIVE_CONVERSATION_INDEX(state, conversationIndex) {
+      state.activeConversationIndex = conversationIndex;
     },
     SET_USER(state, userData) {
       //set if not null
@@ -71,9 +103,9 @@ export default createStore({
     DELETE_CONVERSATIONS(state) {
       state.conversations = [];
     },
-    DELETE_CONVERSATION(state, { conversationId, getters }) {
-      let conversationIndex = getters.getConversationIndexById(conversationId);
-      state.conversations.splice(conversationIndex, 1);
+    DELETE_CONVERSATION(state, { conversationIndex }) {
+       let index = state.conversations.findIndex((x) => x.index == conversationIndex);
+      state.conversations.splice(index, 1);
     },
     ADD_CONVERSATION(state, conversation) {
       state.conversations.push(conversation);
@@ -98,41 +130,34 @@ export default createStore({
     },
     SET_LAST_MESSAGE_OF_CONVERSATION(
       state,
-      { conversationId, lastMessage, getters }
+      { conversationIndex, lastMessage }
     ) {
-      let conversationIndex = getters.getConversationIndexById(conversationId);
       if (conversationIndex != -1) {
-        state.conversations[conversationIndex].lastMessage = lastMessage;
+       let index = state.conversations.findIndex((x) => x.index == conversationIndex);
+        state.conversations[index].lastMessage = lastMessage;
       }
     },
-    SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION(
-      state,
-      { lastMessageDetail, getters }
-    ) {
-      let conversationIndex = getters.getConversationIndexById(
-        lastMessageDetail.conversationId
-      );
+    SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION(state, { lastMessageDetail }) {
+      let conversationIndex = lastMessageDetail.conversationIndex;
       if (conversationIndex != -1) {
-        state.conversations[conversationIndex].lastMessage =
+       let index = state.conversations.findIndex((x) => x.index == conversationIndex);
+        state.conversations[index].lastMessage =
           lastMessageDetail.lastMessage ?? "";
-        state.conversations[conversationIndex].lastMessageTimestamp =
+        state.conversations[index].lastMessageTimestamp =
           lastMessageDetail.lastMessageTimestamp ?? "";
       }
     },
-    TOGGLE_CONVERSATION_FAV(state, { conversationId, getters }) {
-      let conversationIndex = getters.getConversationIndexById(conversationId);
+    TOGGLE_CONVERSATION_FAV(state, { conversationIndex }) {
       if (conversationIndex != -1) {
-        state.conversations[conversationIndex].isFav =
-          state.conversations[conversationIndex].isFav == 1 ? 0 : 1;
+       let index = state.conversations.findIndex((x) => x.index == conversationIndex);
+        state.conversations[index].isFav =
+          state.conversations[index].isFav == 1 ? 0 : 1;
       }
     },
-    SET_ONLINE_STATUS_OF_CONVERSATION(
-      state,
-      { conversationId, isOnline, getters }
-    ) {
-      let conversationIndex = getters.getConversationIndexById(conversationId);
+    SET_ONLINE_STATUS_OF_CONVERSATION(state, { conversationIndex, isOnline }) {
       if (conversationIndex != -1) {
-        state.conversations[conversationIndex].isOnline = isOnline;
+       let index = state.conversations.findIndex((x) => x.index == conversationIndex);
+        state.conversations[index].isOnline = isOnline;
       }
     },
   },
@@ -152,52 +177,45 @@ export default createStore({
     deleteConversations({ commit }) {
       commit("DELETE_CONVERSATIONS");
     },
-    deleteConversation({ commit,getters }, conversationId) {
-      console.log("Action delete conversationId:", conversationId)
+    deleteConversation({ commit }, conversationIndex) {
+      console.log("Action delete conversationIndex:", conversationIndex);
       commit("DELETE_CONVERSATION", {
-        conversationId,
-        getters
+        conversationIndex,
       });
     },
-    setActiveConversationId({ commit }, activeConversationId) {
-      commit("SET_ACTIVE_CONVERSATION_ID", activeConversationId);
+    setActiveConversationIndex({ commit }, activeConversationIndex) {
+      commit("SET_ACTIVE_CONVERSATION_INDEX", activeConversationIndex);
     },
     addConversation({ commit }, conversation) {
       commit("ADD_CONVERSATION", conversation);
     },
     setLastMessageOfConversation(
-      { commit, getters },
-      { conversationId, lastMessage }
+      { commit },
+      { conversationIndex, lastMessage }
     ) {
       commit("SET_LAST_MESSAGE_OF_CONVERSATION", {
-        conversationId,
+        conversationIndex,
         lastMessage,
-        getters,
       });
     },
-    setLastMessageDetailOfConversation({ commit, getters }, lastMessageDetail) {
+    setLastMessageDetailOfConversation({ commit }, lastMessageDetail) {
       commit("SET_LAST_MESSAGE_DETAIL_OF_CONVERSATION", {
         lastMessageDetail,
-        getters,
       });
     },
-    toggleConversationFav({ commit, getters }, conversationId) {
-      commit("TOGGLE_CONVERSATION_FAV", { conversationId, getters });
+    toggleConversationFav({ commit }, conversationIndex) {
+      commit("TOGGLE_CONVERSATION_FAV", { conversationIndex });
     },
-    setOnlineStatusOfConversation(
-      { commit, getters },
-      { conversationId, isOnline }
-    ) {
+    setOnlineStatusOfConversation({ commit }, { conversationIndex, isOnline }) {
       console.log(
         "Set online status of conversation:",
-        conversationId,
+        conversationIndex,
         " is ",
         isOnline
       );
       commit("SET_ONLINE_STATUS_OF_CONVERSATION", {
-        conversationId,
+        conversationIndex,
         isOnline,
-        getters,
       });
     },
     increaseNotificationCount({ commit }) {

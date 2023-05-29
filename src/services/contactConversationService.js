@@ -7,10 +7,13 @@ import contactMessageService from "./contactMessageService";
 import * as apiService from "@/services/apiService";
 import userService from "./userService";
 
-const formatContactConversation = async (conversation) => {
-  let isOnline = socketService.getOnlineStatusOfContact(conversation.id);
+const formatContactConversation = async (conversation, contactIndex) => {
+  console.log("Format:",Store.getters.getContactConversationById(conversation.id)?.index)
+  let index = contactIndex ?? Store.getters.getContactConversationById(conversation.id)?.index;
+  let isOnline = socketService.getOnlineStatusOfContact(index);
   let lastMessageInfo = await getLastMessageDetailsOfChat(conversation.id);
   return {
+    index: index,
     conversationId: conversation.id,
     name: conversation.name,
     isOnline: isOnline,
@@ -93,7 +96,7 @@ const dispatchLastMessageDetail = async (contactConversationId) => {
     contactConversationId
   );
   let payload = {
-    conversationId: contactConversationId,
+    conversationIndex: Store.getters.getContactConversationById(contactConversationId).index,
     lastMessageTimestamp: lastMessageDetail?.date ?? "",
     lastMessage: lastMessageDetail?.message ?? "",
   };
@@ -113,18 +116,19 @@ const setFavoriteOfChat = async (contactConversationId, isFavorite) => {
     isFavorite: isFavorite,
   });
 };
-const setOnlineStatusOfChat = async (contactConversationId, isOnline) => {
+const setOnlineStatusOfChat = async (contactConversationIndex, isOnline) => {
   Store.dispatch("setOnlineStatusOfConversation", {
-    conversationId: contactConversationId,
+    conversationIndex: contactConversationIndex,
     isOnline: isOnline,
   });
 };
-const deleteContact = async (contactConversationId) => {
+const deleteContact = async (contactConversationId ) => {
   try {
     await contactConversationRepo.deleteContactConversation(
       contactConversationId
     );
-    await Store.dispatch("deleteConversation", contactConversationId);
+    let index = Store.getters.getContactConversationById(contactConversationId).index
+    await Store.dispatch("deleteConversation", index);
   } catch (err) {
     console.log("Contact deletion failed!", err);
   }
@@ -173,15 +177,16 @@ const updateContactDetailIfChanged = async (contactConversationId) => {
 const getHashTablesOfConversation = async (contactConversationId) => {
   await contactMessageService.getContactHashTables(contactConversationId);
 };
-const getContactConversationByContactPersonId = async (contactPersonId) => {
-  return await contactConversationRepo.getContactConversationByContactPersonId(
+const getContactConversationByContactPersonIdOfUser = async (userId, contactPersonId) => {
+  return await contactConversationRepo.getContactConversationByContactPersonIdOfUser(userId,
     contactPersonId
   );
 };
 const getContactConversationByContactMail = async (contactMail) => {
   try {
     let contactPerson = await personService.findPersonByEmail(contactMail);
-    return await getContactConversationByContactPersonId(contactPerson.id);
+    let userId = Store.getters.user.id;
+    return await getContactConversationByContactPersonIdOfUser(userId, contactPerson.id);
   } catch (err) {
     throw new Error("Contact mail not found!");
   }
@@ -202,6 +207,6 @@ export default {
   updateContactDetailIfChanged,
   getHashTablesOfConversation,
   getContactConversationByContactMail,
-  getContactConversationByContactPersonId,
+  getContactConversationByContactPersonIdOfUser,
   setOnlineStatusOfChat,
 };

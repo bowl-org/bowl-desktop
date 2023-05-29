@@ -20,6 +20,6 @@ ipcMain.handle("deleteContactConversation", async (event, id) => {
 ipcMain.handle("getContactConversationsByUserId", async (event, userId) => {
   return await contactConversationRepo.getContactConversationsByUserId(userId);
 });
-ipcMain.handle("getContactConversationByContactPersonId", async (event, contactPersonId) => {
-  return await contactConversationRepo.getContactConversationByContactPersonId(contactPersonId);
+ipcMain.handle("getContactConversationByContactPersonIdOfUser", async (event, args) => {
+  return await contactConversationRepo.getContactConversationByContactPersonId(args[0], args[1]);
 });

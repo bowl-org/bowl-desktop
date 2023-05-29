@@ -55,8 +55,8 @@ export default {
   },
   computed: {
     isOnline() {
-      let activeContactConversation = this.$store.getters.getConversationById(
-        this.$store.getters.activeConversationId
+      let activeContactConversation = this.$store.getters.getConversationByIndex(
+        this.$store.getters.activeConversationIndex
       );
       return activeContactConversation?.isOnline;
     },

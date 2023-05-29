@@ -58,7 +58,7 @@ export default {
           apiService.generateAuthHeader(this.$store.getters.token.data)
         )
         .then(async (group) => {
-          groupData.id = group?.id;
+          groupData.groupId = group.data.groupId;
           await groupConversationService.createGroupChat(
             this.$store.getters.user.id,
             groupData

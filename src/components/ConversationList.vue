@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col justify-between items-center overflow-x-hidden">
     <template
-      v-for="(conversation, index) in filteredConversationList"
+      v-for="(conversation,index ) in filteredConversationList"
       :key="conversation"
     >
       <ConversationBox
@@ -15,7 +15,7 @@
         :lastMessageTimestamp="conversation.lastMessageTimestamp"
         :lastMessage="conversation.lastMessage"
         :conversationType="conversation.conversationType"
-        @click="selectConversation(index)"
+        @click="selectConversation(conversation.index, index)"
       />
     </template>
   </div>
@@ -44,46 +44,45 @@ export default {
     console.log("UPDATED");
   },
   methods: {
-    selectConversation(index) {
-      let activeConversationId = this.$store.getters.activeConversationId;
-      let lastActiveIndex = this.$store.getters.conversations.findIndex(
-        (x) => x.conversationId == activeConversationId
-      );
+    selectConversation(index, filteredIndex) {
+      let activeConversationIndex = this.$store.getters.activeConversationIndex;
       console.log("Select conversation index:", index);
-      console.log("Last active index:", lastActiveIndex);
-      console.log("Active conversation id:", activeConversationId);
-      if (lastActiveIndex != -1) {
-        this.$store.getters.conversations[lastActiveIndex].isActive = false;
+      console.log("Active conversation index:", activeConversationIndex);
+      if (activeConversationIndex != -1) {
+        this.$store.getters.conversations[this.$store.getters.getRealIndex(activeConversationIndex)].isActive = false;
       }
-      this.filteredConversationList[index].isActive = true;
+      this.filteredConversationList[filteredIndex].isActive = true;
       this.$store.dispatch(
-        "setActiveConversationId",
-        this.filteredConversationList[index].conversationId
+        "setActiveConversationIndex",
+        this.filteredConversationList[filteredIndex].index
       );
       this.$router.push({
         name: "chat",
-        params: { id: this.$store.getters.activeConversationId },
+        params: { index: this.$store.getters.activeConversationIndex },
       });
     },
     async fetchConversations() {
       let conversations = [];
+      let index = 0;
       let groupConvesations =
         await groupConversationService.getAllGroupConversationsOfUser(
           this.$store.getters.user.id
         );
       for (const groupConversation of groupConvesations) {
-        console.log("Group conversation for each:", groupConversation);
-        conversations.push(await groupConversationService.formatGroupConversation(groupConversation));
+        console.log("Group conversation for each:", groupConversation, "index:", index);
+        conversations.push(await groupConversationService.formatGroupConversation(groupConversation, index));
+        index += 1;
       }
       let contactConversations =
         await contactConversationService.getAllContactChatsOfUser(
           this.$store.getters.user.id
         );
       for (const contactConversation of contactConversations) {
-        console.log("Contact conversation for each:", contactConversation);
+        console.log("Contact conversation for each:", contactConversation, "index:", index);
         conversations.push(
-          await contactConversationService.formatContactConversation(contactConversation)
+          await contactConversationService.formatContactConversation(contactConversation,index )
         );
+        index += 1;
       }
       return conversations;
     },
@@ -103,11 +102,9 @@ export default {
             "Conversation length",
             this.$store.getters.conversations.length
           );
-          let activeConversationId = this.$store.getters.activeConversationId;
-          if (activeConversationId != -1) {
-            this.selectConversation(
-              this.$store.getters.getConversationIndexById(activeConversationId)
-            );
+          let activeConversationIndex = this.$store.getters.activeConversationIndex;
+          if (activeConversationIndex != -1) {
+            this.selectConversation(activeConversationIndex);
           }
         }
       });

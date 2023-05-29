@@ -18,7 +18,7 @@ const findPersonGroup = async (id) => {
 };
 const getPersonGroupsByGroupConversationId = async (groupConversationId) => {
   return queryRunner.allFromPreparedQuery(
-    `SELECT * FROM ${tableName} WHERE groupConversationId `,
+    `SELECT * FROM ${tableName} WHERE groupConversationId = ? `,
     groupConversationId
   );
 };

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="showError"
-    class="bg-slate-300 w-full h-full flex flex-col justify-center items-center"
+    class="bg-slate-300 w-full flex flex-col justify-center items-center"
   >
     <h1 class="text-4xl font-medium p-9">Something went wrong!</h1>
     <h2 class="text-2xl font-medium px-16">{{ errorMsg }}</h2>

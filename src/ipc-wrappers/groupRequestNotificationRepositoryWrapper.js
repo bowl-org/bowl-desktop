@@ -1,6 +1,9 @@
 const findGroupRequestNotificationById = async (id) => {
   return window.ipcRenderer.invoke("findGroupRequestNotificationById", id);
 };
+const findGroupRequestNotificationByGroupId = async (groupId) => {
+  return window.ipcRenderer.invoke("findGroupRequestNotificationByGroupId", groupId);
+};
 const deleteGroupRequestNotification = async (id) => {
   return window.ipcRenderer.invoke(
     "deleteGroupRequestNotification",
@@ -18,6 +21,7 @@ const getAllGroupRequestNotifications = async () => {
 };
 export default {
   findGroupRequestNotificationById,
+  findGroupRequestNotificationByGroupId,
   deleteGroupRequestNotification,
   insertGroupRequestNotification,
   getAllGroupRequestNotifications,

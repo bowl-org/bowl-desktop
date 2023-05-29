@@ -18,8 +18,11 @@ ipcMain.handle("setFavoriteOfGroupConversation", async (event, conversationData)
 ipcMain.handle("deleteGroupConversation", async (event, id) => {
   return await groupConversationRepo.deleteGroupConversation(id);
 });
-ipcMain.handle("findGroupConversation", async (event, id) => {
-  return await groupConversationRepo.findGroupConversation(id);
+ipcMain.handle("findGroupConversationById", async (event, id) => {
+  return await groupConversationRepo.findGroupConversationById(id);
+});
+ipcMain.handle("findGroupConversationByGroupIdOfUser", async (event, groupData) => {
+  return await groupConversationRepo.findGroupConversationByGroupIdOfUser(groupData);
 });
 ipcMain.handle("getGroupConversationsByUserId", async (event, userId) => {
   return await groupConversationRepo.getGroupConversationsByUserId(userId);

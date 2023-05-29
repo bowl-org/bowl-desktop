@@ -21,8 +21,8 @@ export default {
     return {};
   },
   created() {
-    let activeConversation = this.$store.getters.getConversationById(
-      this.$store.getters.activeConversationId
+    let activeConversation = this.$store.getters.getConversationByIndex(
+      this.$store.getters.activeConversationIndex
     );
     if (activeConversation.conversationType == "Group") {
       this.$router.push({ name: "groupinfo" });
