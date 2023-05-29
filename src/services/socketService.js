@@ -147,7 +147,6 @@ const newGroupMemberListener = () => {
         publicKey: data.publicKey,
       };
       await groupConversationService.newGroupMemberJoined(
-        Store.getters.user.id,
         data.groupId,
         personData
       );

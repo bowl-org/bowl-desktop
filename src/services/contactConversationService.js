@@ -9,7 +9,7 @@ import userService from "./userService";
 
 const formatContactConversation = async (conversation, contactIndex) => {
   console.log("Format:",Store.getters.getContactConversationById(conversation.id)?.index)
-  let index = contactIndex ?? Store.getters.getContactConversationById(conversation.id)?.index;
+  let index = contactIndex ?? Store.getters.getContactConversationById(conversation.id)?.index ?? (Store.getters.conversations.length);
   let isOnline = socketService.getOnlineStatusOfContact(index);
   let lastMessageInfo = await getLastMessageDetailsOfChat(conversation.id);
   return {

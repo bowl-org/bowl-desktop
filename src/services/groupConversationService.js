@@ -32,7 +32,7 @@ const getGroupMembersOfGroup = async (groupConversationId) => {
     throw new Error("Get group members of group failed!");
   }
 };
-const newGroupMemberJoined = async (userId, groupId, personData) => {
+const newGroupMemberJoined = async (groupId, personData) => {
   try {
     let person = await personService.findPersonByEmail(personData.email);
     if (person == null) person = await personService.createPerson(personData);
@@ -49,11 +49,37 @@ const newGroupMemberJoined = async (userId, groupId, personData) => {
 };
 const joinGroupConversation = async (userId, groupData, members) => {
   try {
-    // let groupConversation = await groupConversationRepo.findGroupConversationByGroupId(groupId);
-    //
-    createGroupChat(userId, groupData);
+    console.log("Join group:", groupData);
     console.log("Members:", members);
-    // personGroupRepo.
+    let groupConversation = GroupConversation.groupConversationModel;
+    groupConversation.groupId = groupData.groupId;
+    groupConversation.userId = userId;
+    groupConversation.name = groupData.name;
+    groupConversation.description = groupData.description;
+    groupConversation.groupKey = groupData.groupKey;
+
+    let groupChat = await groupConversationRepo.insertGroupConversation(
+      groupConversation
+    );
+    let personGroupData = PersonGroup.personGroupModel;
+    personGroupData.groupConversationId = groupChat.id;
+    personGroupData.personId = (await userService.findUser(userId)).personId;
+    personGroupData.isAdmin = 0;
+    await personGroupRepo.insertPersonGroup(personGroupData);
+    for (const member of members) {
+      let person = await personService.findPersonByEmail(member.email);
+      if (person == null) person = await personService.createPerson(member);
+      personGroupData.personId = person.id;
+      personGroupData.isAdmin = member.isAdmin ? 1 : 0;
+      console.log("Insert member:",personGroupData)
+      await personGroupRepo.insertPersonGroup(personGroupData);
+    }
+
+    Store.dispatch("addConversation", await formatGroupConversation(groupChat));
+    console.log(
+      "Group conversation created:",
+      await formatGroupConversation(groupChat)
+    );
   } catch (err) {
     console.log(err);
     throw new Error("Join group conversation failed!");
@@ -113,7 +139,10 @@ const createGroupChat = async (userId, groupData) => {
 };
 const formatGroupConversation = async (conversation, groupIndex) => {
   let lastMessageInfo = await getLastMessageDetailsOfChat(conversation.id);
-  let index = groupIndex ?? Store.getters.getGroupConversationById(conversation.id)?.index;
+  let index =
+    groupIndex ??
+    Store.getters.getGroupConversationById(conversation.id)?.index ??
+    Store.getters.conversations.length;
   return {
     index: index,
     conversationId: conversation.id,

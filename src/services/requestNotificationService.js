@@ -91,6 +91,7 @@ const acceptRequest = async (requestData) => {
     );
     decreaseNotificationCount();
     let members = await socketService.acceptGroupRequest(req.groupId);
+    console.log("Accept request members:", members);
     await groupConversationService.joinGroupConversation(Store.getters.user.id, req, members);
   }
   console.log("Notification accept:", req);
