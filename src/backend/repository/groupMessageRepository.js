@@ -4,7 +4,7 @@ import queryRunner from "./commons/queryRunner";
 const tableName = "group_messages";
 const insertGroupMessage = async (messageData) => {
   return queryRunner.runPreparedQuery(
-    `INSERT INTO ${tableName} (senderPersonId, groupConversationId, hashTableId, message, messageType, date, time) VALUES (@sernderPersonId, @groupConversationId, @hashTableId, @message, @messageType, @date, @time)`,
+    `INSERT INTO ${tableName} (senderPersonId, groupConversationId, hashTableId, message, messageType, date, time) VALUES (@senderPersonId, @groupConversationId, @hashTableId, @message, @messageType, @date, @time)`,
     messageData
   );
 };
@@ -37,11 +37,15 @@ const getLastGroupMessageByGroupConversationId = async (
   );
 };
 
-export default {
-  insertGroupMessage,
+const getMessageCountByGroupConversationId = async(groupConversationId) => {
+  return queryRunner.getCountWhere(tableName, "groupConversationId = ?", groupConversationId);
+}
+
+export default { insertGroupMessage,
   updateGroupMessage,
   deleteGroupMessage,
   findGroupMessage,
   getGroupMessagesByGroupConversationId,
-  getLastGroupMessageByGroupConversationId
+  getLastGroupMessageByGroupConversationId,
+  getMessageCountByGroupConversationId
 };

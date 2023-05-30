@@ -19,3 +19,6 @@ ipcMain.handle("findGroupMessage", async (event, id) => {
 ipcMain.handle("getLastGroupMessageByGroupConversationId", async (event, groupConversationId) => {
   return await groupMessageRepo.getLastGroupMessageByGroupConversationId(groupConversationId);
 });
+ipcMain.handle("getMessageCountByGroupConversationId", async (event, groupConversationId) => {
+  return await groupMessageRepo.getMessageCountByGroupConversationId(groupConversationId);
+});

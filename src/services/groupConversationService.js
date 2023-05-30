@@ -7,6 +7,7 @@ import Store from "@/store/index";
 import cryptionService from "./cryptionService";
 import userService from "./userService";
 import personService from "./personService";
+import groupMessageService from "./groupMessageService";
 
 const getGroupMembersOfGroup = async (groupConversationId) => {
   try {
@@ -71,7 +72,7 @@ const joinGroupConversation = async (userId, groupData, members) => {
       if (person == null) person = await personService.createPerson(member);
       personGroupData.personId = person.id;
       personGroupData.isAdmin = member.isAdmin ? 1 : 0;
-      console.log("Insert member:",personGroupData)
+      console.log("Insert member:", personGroupData);
       await personGroupRepo.insertPersonGroup(personGroupData);
     }
 
@@ -159,6 +160,7 @@ const formatGroupConversation = async (conversation, groupIndex) => {
 };
 
 const getLastMessageDetailsOfChat = async (groupConversationId) => {
+  console.log("Get last message detail of group chat:", groupConversationId);
   return await groupMessageRepo.getLastGroupMessageByGroupConversationId(
     groupConversationId
   );
@@ -184,7 +186,49 @@ const deleteGroup = async (groupConversationId) => {
     console.log("Group deletion failed!", err);
   }
 };
+// const getGroupConversation = async (groupConversationId) => {
+//   return groupConversationRepo.findGroupConversationById(groupConversationId);
+// };
+const dispatchNewMessage = async (groupConversationId, messageData) => {
+  console.log("Dispatch new Mesage:", messageData);
+  await dispatchLastMessageDetail(groupConversationId);
+  Store.dispatch("addMessage", messageData);
+};
+const dispatchLastMessageDetail = async (groupConversationId) => {
+  let lastMessageDetail = await getLastMessageDetailsOfChat(
+    groupConversationId
+  );
+  console.log("Dispatch last msg detail:", lastMessageDetail);
+  let payload = {
+    conversationIndex:
+      Store.getters.getGroupConversationById(groupConversationId).index,
+    lastMessageTimestamp: lastMessageDetail?.date ?? "",
+    lastMessage: lastMessageDetail?.message ?? "",
+  };
+  console.log("Dispatch last message detail:", payload);
+  Store.dispatch("setLastMessageDetailOfConversation", payload);
+};
+// const getGroupConversation = async (groupConversationId) => {
+//   return groupConversationRepo.findGroupConversationById(groupConversationId);
+// };
+const addMessageToChat = async (messageData) => {
+  try {
+    // let conversation = await getGroupConversation(
+    //   messageData.groupConversationıd
+    // );
+    let senderId = messageData.senderPersonId;
+    console.log("Add message to chat senderId:", senderId);
+    let senderPublicKey = (await personService.getPersonById(senderId))
+      .publicKey;
+    await groupMessageService.addMessage(messageData, senderPublicKey);
+    await dispatchLastMessageDetail(messageData.groupConversationId);
+  } catch (err) {
+    console.log("Add message to chat failed!", err);
+  }
+};
 export default {
+  addMessageToChat,
+  dispatchNewMessage,
   joinGroupConversation,
   getGroupConversationById,
   findGroupConversationByGroupIdOfUser,

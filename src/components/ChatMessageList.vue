@@ -37,6 +37,7 @@ import contactMessageService from "../services/contactMessageService";
 import groupMessageService from "../services/groupMessageService";
 import socketService from "../services/socketService";
 import contactConversationService from "@/services/contactConversationService";
+import userService from "@/services/userService";
 export default {
   name: "ChatMessageList",
   components: {
@@ -97,7 +98,13 @@ export default {
         groupMessageService
           .getGroupMessages(this.$store.getters.activeConversationId)
           .then((messages) => {
-            this.$store.dispatch("setMessages", messages);
+            userService.findUser(this.$store.getters.user.id).then((user) => {
+              let personIdOfUser = user.personId;
+              for (const message of messages) {
+                message.isSenderUser = message.senderPersonId == personIdOfUser ? 1 : 0;
+              }
+              this.$store.dispatch("setMessages", messages);
+            });
           })
           .catch((err) => {
             console.log("Couldn't load messages!");
@@ -113,9 +120,10 @@ export default {
         let msgData;
         if (conversation.conversationType == "Contact")
           msgData = await socketService.sendContactChatMessage(message);
-        else if (conversation.conversationType == "Group")
+        else if (conversation.conversationType == "Group") {
           msgData = await socketService.sendGroupChatMessage(message);
-        else throw new Error("Invalid conversation type!");
+          msgData.isSenderUser = 1;
+        } else throw new Error("Invalid conversation type!");
         this.$store.dispatch("addMessage", msgData);
       } catch (err) {
         console.log("Send message err:", err);

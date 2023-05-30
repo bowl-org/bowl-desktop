@@ -7,6 +7,8 @@ import requestNotificationService from "./requestNotificationService";
 import cryptionService from "./cryptionService.js";
 import groupConversationService from "./groupConversationService";
 import * as apiService from "./apiService";
+import personService from "./personService";
+import userService from "./userService";
 
 let socket;
 const initSocket = () => {
@@ -31,7 +33,7 @@ const initSocket = () => {
 };
 const disconnectFromSocket = async () => {
   await socket.disconnect();
-  socket = null
+  socket = null;
   console.log("Socket connection closed!");
 };
 const onlineChatsHandler = () => {
@@ -72,21 +74,56 @@ const contactChatMessageListener = () => {
         fromEmail
       )
     ).id;
-    if (msgData.contactConversationId == -1) {
-      throw new Error("TODO: Select conversation to receive message");
-    }
+    // if (msgData.contactConversationId == -1) {
+    //   throw new Error("TODO: Select conversation to receive message");
+    // }
 
     await contactConversationService.addMessageToChat(msgData);
     await contactConversationService.dispatchNewMessage(
       msgData.contactConversationId,
       msgData
     );
-    console.log("Received message inserted successfully!: ", msgData.message);
+    console.log(
+      "Received contact message inserted successfully!: ",
+      msgData.message
+    );
   });
 };
 const groupChatMessageListener = () => {
   socket.on("groupChatMessage", async (msgData) => {
-    console.log("Group message received: ", msgData);
+    msgData = JSON.parse(msgData);
+    console.log("Group message received data: ", msgData);
+    let group =
+      await groupConversationService.findGroupConversationByGroupIdOfUser(
+        msgData.groupId
+      );
+    let decryptedMessage = await cryptionService.decryptSym(
+      group.groupKey,
+      msgData.message
+    );
+    msgData.message = decryptedMessage;
+    console.log("Group message received: ", decryptedMessage);
+
+    msgData.isSenderUser = 0;
+
+    let fromEmail = msgData.from;
+
+    msgData.groupConversationId = (
+      await groupConversationService.findGroupConversationByGroupIdOfUser(
+        msgData.groupId
+      )
+    ).id;
+    msgData.senderPersonId = (await personService.findPersonByEmail(fromEmail)).id;
+
+    await groupConversationService.addMessageToChat(msgData);
+    await groupConversationService.dispatchNewMessage(
+      msgData.groupConversationId,
+      msgData
+    );
+    console.log(
+      "Received group message inserted successfully!: ",
+      msgData.message
+    );
   });
 };
 const receiveChatMessageListener = () => {
@@ -332,8 +369,42 @@ const sendContactChatMessage = async (message) => {
   return msgData;
 };
 const sendGroupChatMessage = async (message) => {
-  console.log("sendGroupChatMessage not implemented yet!", message);
-  return;
+  console.log("message sent");
+  let today = new Date();
+  let activeConversationId = Store.getters.activeConversationId;
+  let group = await groupConversationService.getGroupConversationById(
+    activeConversationId
+  );
+  let groupId = group.groupId;
+  // let todaySplit = today.toString().split(" ");
+  let msgData = {
+    // date: todaySplit[2] + " " + todaySplit[1] + " " + todaySplit[3],
+    //In javascript months starts from 0 :)
+    date: `${today.getDate()}/${today.getMonth() + 1}/${today.getFullYear()}`,
+    time:
+      String(today.getHours()).padStart(2, "0") +
+      ":" +
+      String(today.getMinutes()).padStart(2, "0"),
+    messageType: "",
+    message: await cryptionService.encryptSym(group.groupKey, message),
+  };
+  let payload = { ...msgData, groupId: groupId };
+  //Magic to wait calback
+  await new Promise((resolve, reject) => {
+    socket.emit("groupChatMessage", JSON.stringify(payload), (res) => {
+      if (res.status == "ERROR") reject(new Error(res.error));
+      else resolve();
+    });
+  });
+
+  //Unencrypted message
+  msgData.message = message;
+  console.log("user: ", Store.getters.user);
+  msgData.senderPersonId = (await userService.findUser( Store.getters.user.id )).personId;
+  console.log("Sender person id :", msgData.senderPersonId);
+  msgData.groupConversationId = Store.getters.activeConversationId;
+  await groupConversationService.addMessageToChat(msgData);
+  return msgData;
 };
 
 const getOnlineStatusOfContact = (conversationIndex) => {

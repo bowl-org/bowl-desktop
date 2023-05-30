@@ -18,6 +18,9 @@ const getGroupMessagesByGroupConversationId = async (groupConversationId) => {
 const getLastGroupMessageByGroupConversationId = async (groupConversationId) => {
   return ipcRendererHelper.invokeEvent("getLastGroupMessageByGroupConversationId", groupConversationId);
 };
+const getMessageCountByGroupConversationId = async(groupConversationId) => {
+  return ipcRendererHelper.invokeEvent("getMessageCountByGroupConversationId", groupConversationId);
+}
 export default {
   findGroupMessage,
   deleteGroupMessage,
@@ -25,4 +28,5 @@ export default {
   insertGroupMessage,
   getGroupMessagesByGroupConversationId,
   getLastGroupMessageByGroupConversationId,
+  getMessageCountByGroupConversationId
 };

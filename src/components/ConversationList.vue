@@ -104,7 +104,7 @@ export default {
           );
           let activeConversationIndex = this.$store.getters.activeConversationIndex;
           if (activeConversationIndex != -1) {
-            this.selectConversation(activeConversationIndex);
+            this.selectConversation(activeConversationIndex, activeConversationIndex);
           }
         }
       });
