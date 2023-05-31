@@ -1,5 +1,7 @@
+import {initDbConnection} from '../commons/db.js';
 import queryRunner from "../commons/queryRunner.js";
-const up = () => {
+const up = (dbPath) => {
+  initDbConnection(dbPath);
   initAuthToken();
   initContactRequestNotifications();
   initGroupRequestNotifications();

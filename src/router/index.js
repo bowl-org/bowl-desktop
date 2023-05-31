@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+} from "vue-router";
 import SignUp from "@/views/SignUp.vue";
 import LogIn from "@/views/LogIn.vue";
 import ForgotPassword from "@/views/ForgotPassword.vue";
@@ -7,6 +11,8 @@ import UserView from "@/views/UserView.vue";
 import TheSettingsView from "@/views/TheSettingsView.vue";
 
 const routes = [
+  //Redirect undefined paths
+  { path: "/:pathMatch(.*)*", redirect: "/" },
   {
     path: "/",
     name: "userview",
@@ -130,13 +136,14 @@ const routes = [
 ];
 
 const router = createRouter({
-  //mode: 'history',
-  //history: createWebHashHistory(),
-  history: createWebHistory(),
+  history:
+    process.env.NODE_ENV === "production"
+      ? createWebHashHistory() //for electron production build
+      : createWebHistory(),
   routes,
 });
 //
 //Redirect undefined paths
-router.replace({ path: "*", redirect: "/" });
+// router.replace({ path: "*", redirect: "/" });
 
 export default router;

@@ -4,42 +4,19 @@
 </template>
 
 <script>
-
 export default {
   name: "App",
-  components: {
-  },
+  components: {},
   data() {
-    return {
-//      socket: {},
-//      senderData: {},
-//      msgData: {},
-//      messages: [],
-//      status: "online",
-    };
+    return {};
   },
   methods: {
     add() {},
   },
-  //  created(){
-  //    this.socket = io("http://localhost:3000")
-  //    this.senderData = "Mehmet"
-  //    this.msgData = "Merhaba dünya!"
-  //    this.socket.emit("data",{
-  //      sender: this.senderData,
-  //      data: this.msgData
-  //    });
-  //},
-  //  created(){
-  //    setInterval(() =>{
-  //      if(this.status == "online")
-  //        this.status = "offline"
-  //      else
-  //        this.status = "online"
-  //    }, 3000)
-  //  }
+  created() {
+    this.$router.push({ path: "/" });
+  },
 };
-//background-color: #2d202c;
 </script>
 
 <style>

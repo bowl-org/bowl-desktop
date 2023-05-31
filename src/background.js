@@ -10,7 +10,13 @@ const isDevelopment = process.env.NODE_ENV !== "production";
 import "./backend/mainIpcHandler";
 // Init database using migrations
 import initDb from "./backend/repository/migrations/initDb";
-initDb.up()
+let dbPath;
+if (isDevelopment) {
+  dbPath = "./src/backend/db/bowl-chat.db";
+} else {
+  dbPath = path.join(app.getPath("userData"), "bowl-chat.db");
+}
+initDb.up(dbPath);
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -27,14 +33,15 @@ async function createWindow() {
     webPreferences: {
       //Should be false
       nodeIntegration: false,
+      contextIsolation: true,
       //nodeIntegration: process.env.ELECTRON_NODE_INTEGRATION,
-      contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
+      // contextIsolation: !process.env.ELECTRON_NODE_INTEGRATION,
       //Load ipcRenderer
-      preload: path.join(__dirname, "./preload.js")
+      preload: path.join(__dirname, "./preload.js"),
     },
   });
   // Remove upper menu bar
-  //win.removeMenu();
+  if (!isDevelopment) win.removeMenu();
   win.setOpacity(0.98);
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {

@@ -1,4 +1,4 @@
-import db from '../commons/db.js';
+import { db } from '../commons/db.js';
 const runQuery = (query) => {
   return db.exec(query);
 };

@@ -1,4 +1,4 @@
-import db from "./commons/db";
+import { db } from "./commons/db";
 import queryRunner from "./commons/queryRunner";
 
 const tableName = "person_groups";
