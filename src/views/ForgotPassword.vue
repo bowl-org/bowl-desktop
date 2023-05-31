@@ -7,15 +7,26 @@
       Enter your email address to reset your password
     </h2>
     <div class="h-5">
-      <h3 class="font-semibold " :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500' ">
+      <h3
+        class="font-semibold"
+        :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500'"
+      >
         {{ infoMessage }}
       </h3>
     </div>
     <div class="flex flex-col w-96">
-      <UserField class="" FieldType="Email" @fieldData="getEmailInp" @keyup.enter="resetPassword"/>
+      <UserField
+        class=""
+        FieldType="Email"
+        @fieldData="getEmailInp"
+        @keyup.enter="resetPassword"
+      />
+      <LoadingSpinner :showLoading="showLoading" />
       <button
         @click="resetPassword()"
         class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
+        :class="showLoading ? 'contrast-50 hover:contrast-50' : ''"
+        :disabled="showLoading"
       >
         Reset Password
       </button>
@@ -34,7 +45,8 @@
 </template>
 <script>
 import UserField from "@/components/UserField.vue";
-import * as forgotPasswordService from "@/services/forgotPasswordService"
+import * as forgotPasswordService from "@/services/forgotPasswordService";
+import LoadingSpinner from "@/components/LoadingSpinner";
 
 export default {
   name: "ForgotPassword",
@@ -44,28 +56,36 @@ export default {
       validEmail: false,
       invalidEmail: false,
       infoMessage: "",
-      responseStatus: ""
+      responseStatus: "",
+      showLoading: false,
     };
   },
   components: {
     UserField,
+    LoadingSpinner,
   },
   methods: {
     getEmailInp(emailInp) {
       this.emailData = emailInp;
     },
-    resetPassword(){
-      forgotPasswordService.resetPassword({email: this.emailData})
+    resetPassword() {
+      this.showLoading = true;
+      forgotPasswordService
+        .resetPassword({ email: this.emailData })
         .then((res) => {
           this.infoMessage = res.data.msg;
           this.responseStatus = res.data.status;
           console.log(res.data);
-        }).catch((err) => {
+        })
+        .catch((err) => {
           this.infoMessage = err.response.data.msg;
           this.responseStatus = err.response.data.status;
           console.log(this.infoMessage, this.responseStatus);
+        })
+        .finally(() => {
+          this.showLoading = false;
         });
-    }
+    },
   },
 };
 </script>

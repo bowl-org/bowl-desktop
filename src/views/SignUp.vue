@@ -1,45 +1,54 @@
 <template>
   <div class="bg-neutral-300 grow flex flex-col justify-center items-center">
-      <h1 class="text-6xl text-center font-medium light-purple">Sign Up</h1>
-      <h2 class="font-medium m-4 mt-10">
-        Fill your information to sign up now!
-      </h2>
-      <div class="h-5">
-        <h3 class="font-semibold " :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500' ">
-          {{ infoMessage }}
-        </h3>
-      </div>
-    <div class="flex flex-col w-96 ">
+    <h1 class="text-6xl text-center font-medium light-purple">Sign Up</h1>
+    <h2 class="font-medium m-4 mt-10">Fill your information to sign up now!</h2>
+    <div class="h-5">
+      <h3
+        class="font-semibold"
+        :class="responseStatus == 'FAILURE' ? 'text-red-500' : 'text-green-500'"
+      >
+        {{ infoMessage }}
+      </h3>
+    </div>
+    <div class="flex flex-col w-96">
       <UserField FieldType="Name" @fieldData="getNameInp" />
       <UserField FieldType="Email" @fieldData="getEmailInp" />
-      <UserField FieldType="Password" @fieldData="getPasswdInp" @keyup.enter="signUp"/>
+      <UserField
+        FieldType="Password"
+        @fieldData="getPasswdInp"
+        @keyup.enter="signUp"
+      />
+      <LoadingSpinner :showLoading="showLoading" />
       <button
         @click="signUp()"
         class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
+        :class="showLoading ? 'contrast-50 hover:contrast-50' : ''"
+        :disabled="showLoading"
       >
         Sign Up
       </button>
-      <div class="log-in-info-container flex justify-center mu-5 ">
-        <p class="text-black ">Do you have an account?</p>
+      <div class="log-in-info-container flex justify-center mu-5">
+        <p class="text-black">Do you have an account?</p>
         <router-link to="/login">
           <p
-            class="hover:underline underline-offset-4  ml-2 light-purple font-medium"
+            class="hover:underline underline-offset-4 ml-2 light-purple font-medium"
           >
             Log in here
           </p>
         </router-link>
-
       </div>
     </div>
   </div>
 </template>
 <script>
 import UserField from "@/components/UserField.vue";
-import signUpService from "@/services/signUpService"
+import signUpService from "@/services/signUpService";
+import LoadingSpinner from "@/components/LoadingSpinner";
 export default {
   name: "SignUp",
   components: {
     UserField,
+    LoadingSpinner,
   },
   data() {
     return {
@@ -48,6 +57,7 @@ export default {
       passwdData: "",
       infoMessage: "",
       responseStatus: "",
+      showLoading: false,
     };
   },
   methods: {
@@ -61,23 +71,29 @@ export default {
       this.nameData = nameInp;
     },
     signUp() {
+      this.showLoading = true;
       let userData = {
         name: this.nameData,
         email: this.emailData,
-        password: this.passwdData
-      }
-      signUpService.signUp(userData)
+        password: this.passwdData,
+      };
+      signUpService
+        .signUp(userData)
         .then((res) => {
           this.infoMessage = res.data.msg;
           this.responseStatus = res.data.status;
           console.log(res.data);
-        }).catch((err) => {
-          console.log("ERR:",err);
+        })
+        .catch((err) => {
+          console.log("ERR:", err);
           this.infoMessage = err.response.data.msg;
           this.responseStatus = err.response.data.status;
           console.log(this.infoMessage, this.responseStatus);
+        })
+        .finally(() => {
+          this.showLoading = false;
         });
-    }
+    },
   },
 };
 </script>

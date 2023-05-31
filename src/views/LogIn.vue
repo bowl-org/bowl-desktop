@@ -38,9 +38,12 @@
           </p>
         </router-link>
       </div>
+      <LoadingSpinner :showLoading="showLoading"/>
       <button
         @click="logIn()"
         class="hover:contrast-125 drop-shadow-xl btn-gradient text-neutral-300 font-semibold rounded-xl p-4 m-5"
+        :class="showLoading ? 'contrast-50 hover:contrast-50' : ''"
+        :disabled="showLoading"
       >
         Log In
       </button>
@@ -68,6 +71,7 @@ import UserField from "@/components/UserField.vue";
 import logInService from "@/services/logInService";
 import User from "@/backend/models/user";
 import authTokenService from "@/services/authTokenService";
+import LoadingSpinner from "@/components/LoadingSpinner";
 export default {
   name: "LogIn",
   data() {
@@ -78,10 +82,12 @@ export default {
       rememberMe: false,
       infoMessage: "",
       responseStatus: "",
+      showLoading: false
     };
   },
   components: {
     UserField,
+    LoadingSpinner
   },
   created() {
     logInService
@@ -108,6 +114,7 @@ export default {
       this.emailData = emailInp;
     },
     logIn() {
+      this.showLoading = true;
       let loginUser = User.userModel;
       loginUser.email = this.emailData;
       loginUser.password = this.passwdData;
@@ -130,6 +137,7 @@ export default {
           });
         })
         .catch((err) => {
+          this.showLoading = false;
           console.log(err);
           this.infoMessage = err.response.data.msg;
           this.responseStatus = err.response.data.status;
