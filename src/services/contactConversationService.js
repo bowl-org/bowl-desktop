@@ -89,7 +89,8 @@ const getLastMessageDetailsOfChat = async (contactConversationId) => {
 const dispatchNewMessage = async (contactConversationId, messageData) => {
   console.log("Dispatch new Mesage:", messageData);
   await dispatchLastMessageDetail(contactConversationId);
-  Store.dispatch("addMessage", messageData);
+  if(Store.getters.activeConversationId == contactConversationId)
+    Store.dispatch("addMessage", messageData);
 };
 const dispatchLastMessageDetail = async (contactConversationId) => {
   let lastMessageDetail = await getLastMessageDetailsOfChat(

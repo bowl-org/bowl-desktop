@@ -193,6 +193,8 @@ const dispatchNewMessage = async (groupConversationId, messageData) => {
   console.log("Dispatch new Mesage:", messageData);
   await dispatchLastMessageDetail(groupConversationId);
   Store.dispatch("addMessage", messageData);
+  if(Store.getters.activeConversationId == groupConversationId)
+    Store.dispatch("addMessage", messageData);
 };
 const dispatchLastMessageDetail = async (groupConversationId) => {
   let lastMessageDetail = await getLastMessageDetailsOfChat(
