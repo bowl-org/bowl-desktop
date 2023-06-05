@@ -192,8 +192,7 @@ const deleteGroup = async (groupConversationId) => {
 const dispatchNewMessage = async (groupConversationId, messageData) => {
   console.log("Dispatch new Mesage:", messageData);
   await dispatchLastMessageDetail(groupConversationId);
-  Store.dispatch("addMessage", messageData);
-  if(Store.getters.activeConversationId == groupConversationId)
+  if(Store.getters.activeConversationIndex == Store.getters.getGroupConversationById(groupConversationId).index)
     Store.dispatch("addMessage", messageData);
 };
 const dispatchLastMessageDetail = async (groupConversationId) => {

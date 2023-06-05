@@ -89,7 +89,7 @@ const getLastMessageDetailsOfChat = async (contactConversationId) => {
 const dispatchNewMessage = async (contactConversationId, messageData) => {
   console.log("Dispatch new Mesage:", messageData);
   await dispatchLastMessageDetail(contactConversationId);
-  if(Store.getters.activeConversationId == contactConversationId)
+  if(Store.getters.activeConversationIndex == Store.getters.getContactConversationById(contactConversationId).index)
     Store.dispatch("addMessage", messageData);
 };
 const dispatchLastMessageDetail = async (contactConversationId) => {
